@@ -45,18 +45,18 @@ export function HeroContent() {
     offset: ['start start', 'end start'],
   })
 
-  const headlineScale   = useTransform(scrollYProgress, [0, 0.50], [1, 0.7])
-  const headlineOpacity = useTransform(scrollYProgress, [0, 0.50], [1, 0])
-  const subtextOpacity  = useTransform(scrollYProgress, [0, 0.50], [1, 0])
-  const orbScale        = useTransform(scrollYProgress, [0, 0.50], [1, 2])
-  const heroContentY    = useTransform(scrollYProgress, [0, 0.50], [0, -80])
-  const logoY           = useTransform(scrollYProgress, [0, 0.50], [0, -40])
+  const headlineScale   = useTransform(scrollYProgress, [0, 0.60], [1, 0.7])
+  const headlineOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0])
+  const subtextOpacity  = useTransform(scrollYProgress, [0, 0.40], [1, 0])
+  const orbScale        = useTransform(scrollYProgress, [0, 0.60], [1, 2])
+  const heroContentY    = useTransform(scrollYProgress, [0, 0.60], [0, -80])
+  const logoY           = useTransform(scrollYProgress, [0, 0.55], [0, -40])
   const logoOpacity     = useTransform(scrollYProgress, [0, 0.50], [1, 0])
-  const cardX           = useTransform(scrollYProgress, [0, 0.50], [0, 150])
+  const cardX           = useTransform(scrollYProgress, [0, 0.55], [0, 150])
   const cardOpacity     = useTransform(scrollYProgress, [0, 0.50], [1, 0])
 
   return (
-    <div ref={ref} className="relative h-[250vh] bg-transparent">
+    <div ref={ref} className="relative h-[150vh] bg-transparent">
     <div className="sticky top-0 h-screen overflow-hidden bg-transparent">
       {/* Ocean/graphite ambient gradients */}
       <motion.div
