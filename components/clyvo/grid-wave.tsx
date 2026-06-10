@@ -4,8 +4,8 @@ import { useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-const COLS = 28
-const ROWS = 28
+const COLS = 48
+const ROWS = 48
 const SPACING = 1.4
 
 function WaveTiles() {
@@ -59,7 +59,7 @@ export default function GridWave() {
       style={{ zIndex: 0 }}
     >
       <Canvas
-        camera={{ position: [0, 18, 22], fov: 50 }}
+        camera={{ position: [0, 22, 18], fov: 65 }}
         style={{ background: 'transparent' }}
         gl={{ alpha: true, antialias: false }}
       >
