@@ -39,10 +39,10 @@ export function CommandCenterScene() {
 
       <div className="relative mx-auto max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, ease: EASE_CINEMATIC }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.7, ease: EASE_CINEMATIC }}
           className="mb-12 md:mb-16"
         >
           <span className="font-inter font-medium text-[11px] uppercase tracking-[0.18em] text-white/35">
@@ -62,10 +62,10 @@ export function CommandCenterScene() {
           {CLIENT_TYPES.map((c, i) => (
             <motion.div
               key={c.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: EASE_CINEMATIC }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: i * 0.06, ease: EASE_CINEMATIC }}
               className="rounded-xl border border-white/[0.10] bg-[#0d0d0d] p-6 transition-all duration-300 hover:border-white/[0.15] hover:-translate-y-[3px] will-change-transform md:p-7"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.10]">
@@ -84,10 +84,10 @@ export function CommandCenterScene() {
 
         {/* Ideal fit banner */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: EASE_CINEMATIC }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.7, delay: 0.12, ease: EASE_CINEMATIC }}
           className="mt-6 rounded-xl border border-white/[0.10] bg-[#0d0d0d] px-6 py-8 md:mt-8 md:px-8 md:py-10"
           style={{ borderLeft: '2px solid rgba(255,255,255,0.20)' }}
         >

@@ -37,22 +37,17 @@ function WaveTiles() {
           position={[tile.x, 0, tile.z]}
         >
           <boxGeometry args={[1.1, 0.08, 1.1]} />
-          <meshPhysicalMaterial
-            color="#1c1c1c"
-            emissive="#000000"
-            emissiveIntensity={0}
-            metalness={0.95}
-            roughness={0.05}
-            reflectivity={1}
-            clearcoat={1}
-            clearcoatRoughness={0.1}
+          <meshStandardMaterial
+            color="#C0C0C0"
+            metalness={0.8}
+            roughness={0.2}
           />
         </mesh>
       ))}
       <ambientLight intensity={0.3} color="#ffffff" />
       <pointLight position={[0, 20, 0]} intensity={3} color="#ffffff" />
       <pointLight position={[0, 10, 10]} intensity={2} color="#e0e0e0" />
-      <directionalLight position={[5, 10, 5]} intensity={1.5} color="#ffffff" />
+      <directionalLight position={[15, 20, 10]} intensity={2} color="#ffffff" />
     </>
   )
 }

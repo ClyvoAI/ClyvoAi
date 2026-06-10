@@ -45,16 +45,19 @@ export function HeroContent() {
     offset: ['start start', 'end start'],
   })
 
-  const headlineScale   = useTransform(scrollYProgress, [0, 0.35], [1, 0.92])
-  const headlineOpacity = useTransform(scrollYProgress, [0, 0.40], [1, 0])
-  const subtextOpacity  = useTransform(scrollYProgress, [0, 0.25], [1, 0])
-  const orbScale        = useTransform(scrollYProgress, [0, 0.50], [1, 1.20])
-  const heroContentY    = useTransform(scrollYProgress, [0, 0.50], [0, -60])
+  const headlineScale   = useTransform(scrollYProgress, [0, 0.50], [1, 0.7])
+  const headlineOpacity = useTransform(scrollYProgress, [0, 0.50], [1, 0])
+  const subtextOpacity  = useTransform(scrollYProgress, [0, 0.50], [1, 0])
+  const orbScale        = useTransform(scrollYProgress, [0, 0.50], [1, 2])
+  const heroContentY    = useTransform(scrollYProgress, [0, 0.50], [0, -80])
   const logoY           = useTransform(scrollYProgress, [0, 0.50], [0, -40])
   const logoOpacity     = useTransform(scrollYProgress, [0, 0.50], [1, 0])
+  const cardX           = useTransform(scrollYProgress, [0, 0.50], [0, 150])
+  const cardOpacity     = useTransform(scrollYProgress, [0, 0.50], [1, 0])
 
   return (
-    <div ref={ref} className="relative min-h-screen overflow-hidden bg-transparent">
+    <div ref={ref} className="relative h-[250vh] bg-transparent">
+    <div className="sticky top-0 h-screen overflow-hidden bg-transparent">
       {/* Ocean/graphite ambient gradients */}
       <motion.div
         style={{ scale: orbScale }}
@@ -145,12 +148,16 @@ export function HeroContent() {
       >
         {/* Badge */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: E }}
           className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-white/[0.06] px-4 py-2 backdrop-blur-sm"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[#00E5FF] animate-pulse" />
+          <motion.span
+            className="h-1.5 w-1.5 rounded-full bg-[#00E5FF]"
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+          />
           <span className="font-inter text-xs font-medium text-white/50 tracking-[0.15em]">
             Custom AI Agency · B2B
           </span>
@@ -239,6 +246,56 @@ export function HeroContent() {
         </motion.div>
       </motion.div>
 
+      {/* Floating AI status card — desktop only */}
+      <motion.div
+        style={{ x: cardX, opacity: cardOpacity }}
+        className="pointer-events-none absolute right-8 top-1/2 hidden w-72 -translate-y-1/2 md:right-16 md:block"
+      >
+        <motion.div
+          animate={{ y: [0, -20, 0], rotate: [-2, 2, -2] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-xl"
+          style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6)' }}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-syne text-sm font-semibold text-white">AI System Active</span>
+            <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
+          </div>
+
+          <div className="mt-4 space-y-2.5">
+            {['Lead qualification', 'Data sync', 'Workflow trigger'].map((label, i) => (
+              <div key={label} className="flex items-center gap-2.5">
+                <motion.span
+                  className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#10B981]"
+                  animate={{ opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
+                />
+                <span className="font-inter text-xs font-light text-white/50">{label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Mini bar chart */}
+          <div className="mt-4 flex h-12 items-end gap-1.5">
+            {[40, 70, 50, 90, 60, 80, 45].map((h, i) => (
+              <motion.div
+                key={i}
+                className="flex-1 rounded-sm"
+                style={{ background: 'rgba(0,229,255,0.35)' }}
+                initial={{ height: '10%' }}
+                animate={{ height: `${h}%` }}
+                transition={{ duration: 1.2, delay: i * 0.1, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+              />
+            ))}
+          </div>
+
+          <div className="mt-4 border-t border-white/[0.08] pt-3">
+            <span className="font-syne text-xl font-extrabold text-white">12</span>
+            <span className="ml-1.5 font-inter text-xs font-light text-white/40">processes automated</span>
+          </div>
+        </motion.div>
+      </motion.div>
+
       {/* Scroll indicator — desktop only */}
       <div className="absolute bottom-10 right-10 hidden items-end gap-3 md:flex">
         <span
@@ -263,6 +320,7 @@ export function HeroContent() {
           </motion.div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollBackground } from '@/components/clyvo/scroll-background'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -43,5 +44,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  return <>{children}</>
+  return (
+    <>
+      <ScrollBackground />
+      {children}
+    </>
+  )
 }

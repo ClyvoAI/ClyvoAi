@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'motion/react'
-import { EASE_CINEMATIC } from '@/lib/utils'
+import { staggerContainer, staggerItem, STAGGER_VIEWPORT } from '@/lib/utils'
 import { MessageSquareOff, Building2 } from 'lucide-react'
 
 const ALTERNATIVES = [
@@ -24,16 +24,17 @@ export function ProblemScene() {
     <section id="solutions-scene" className="relative w-full overflow-hidden px-4 py-14 sm:px-6 md:px-8 md:py-32">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent" />
 
-      <div className="relative mx-auto max-w-6xl">
+      <motion.div
+        className="relative mx-auto max-w-6xl"
+        initial="hidden"
+        whileInView="show"
+        viewport={STAGGER_VIEWPORT}
+        variants={staggerContainer}
+      >
         <div className="grid items-start gap-12 lg:grid-cols-[1fr_440px] lg:gap-16">
 
           {/* Left */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.6, ease: EASE_CINEMATIC }}
-          >
+          <motion.div variants={staggerItem}>
             <span className="font-inter font-medium text-[11px] uppercase tracking-[0.18em] text-white/35">
               The Problem
             </span>
@@ -48,13 +49,10 @@ export function ProblemScene() {
 
           {/* Right — cards */}
           <div className="space-y-4">
-            {ALTERNATIVES.map((alt, i) => (
+            {ALTERNATIVES.map((alt) => (
               <motion.div
                 key={alt.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: 0.12 * i, ease: EASE_CINEMATIC }}
+                variants={staggerItem}
                 className="rounded-xl border border-white/[0.10] bg-[#0d0d0d] p-6 transition-all duration-300 hover:border-white/[0.15] hover:-translate-y-[3px] md:p-7"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.10]">
@@ -71,10 +69,7 @@ export function ProblemScene() {
 
         {/* Bottom banner */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: EASE_CINEMATIC }}
+          variants={staggerItem}
           className="mt-12 w-full rounded-xl border border-white/[0.10] bg-[#0d0d0d] p-6 text-center md:mt-16 md:p-12"
         >
           <p className="font-syne text-xl font-bold text-white sm:text-2xl md:text-3xl">
@@ -83,7 +78,7 @@ export function ProblemScene() {
             alternative.
           </p>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   )
 }
