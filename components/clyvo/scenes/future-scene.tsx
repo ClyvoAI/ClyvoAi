@@ -55,7 +55,7 @@ export function FutureScene() {
 
         <h2
           className="mt-5 font-syne font-extrabold tracking-[-0.03em] text-white"
-          style={{ fontSize: 'clamp(1.9rem, 5.5vw, 4rem)', lineHeight: 1.08 }}
+          style={{ fontSize: 'clamp(1.9rem, 5.5vw, 4rem)', lineHeight: 1.08, fontFeatureSettings: "'ss01'" }}
         >
           {HEADLINE_WORDS.map((word, i) => (
             <motion.span

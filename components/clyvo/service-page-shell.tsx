@@ -121,7 +121,7 @@ export function ServicePageShell({
           </div>
           <h2
             className="mb-14 text-center font-syne font-bold text-white"
-            style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em', fontFeatureSettings: "'ss01'" }}
           >
             What We Build For You
           </h2>
@@ -166,7 +166,7 @@ export function ServicePageShell({
           </div>
           <h2
             className="mb-14 text-center font-syne font-bold text-white"
-            style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em', fontFeatureSettings: "'ss01'" }}
           >
             How We Build It
           </h2>
@@ -212,7 +212,7 @@ export function ServicePageShell({
           </div>
           <h2
             className="mb-14 text-center font-syne font-bold text-white"
-            style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)', letterSpacing: '-0.03em', fontFeatureSettings: "'ss01'" }}
           >
             What You Can Expect
           </h2>
@@ -249,7 +249,7 @@ export function ServicePageShell({
         <div className="relative z-10 mx-auto max-w-2xl">
           <h2
             className="mb-5 font-syne font-bold text-white"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.04em' }}
+            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '-0.04em', fontFeatureSettings: "'ss01'" }}
           >
             Ready to get started?
           </h2>

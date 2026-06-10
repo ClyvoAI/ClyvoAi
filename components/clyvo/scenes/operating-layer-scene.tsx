@@ -95,7 +95,7 @@ export function OperatingLayerScene() {
           <span className="font-inter font-medium text-[11px] uppercase tracking-[0.18em] text-white/35">
             How It Works
           </span>
-          <h2 className="mt-4 text-balance font-syne text-2xl font-bold tracking-[-0.03em] text-white sm:text-3xl md:text-5xl">
+          <h2 className="mt-4 text-balance font-syne text-2xl font-bold tracking-[-0.03em] text-white sm:text-3xl md:text-5xl" style={{ fontFeatureSettings: "'ss01'" }}>
             A process built for results, not risk.
           </h2>
           <p className="mt-4 max-w-xl font-inter text-sm font-light leading-[1.75] text-white/45 md:text-base">

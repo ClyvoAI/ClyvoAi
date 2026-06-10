@@ -19,7 +19,7 @@ export function GlobalBackground() {
   const [canvasReady, setCanvasReady] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => setCanvasReady(true), 500)
+    const t = setTimeout(() => setCanvasReady(true), 800)
     return () => clearTimeout(t)
   }, [])
 

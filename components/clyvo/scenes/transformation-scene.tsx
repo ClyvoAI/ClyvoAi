@@ -94,7 +94,7 @@ export function TransformationScene() {
           What We Build
         </motion.span>
 
-        <h2 className="mt-4 font-syne text-2xl font-bold tracking-[-0.03em] text-white sm:text-3xl md:text-5xl">
+        <h2 className="mt-4 font-syne text-2xl font-bold tracking-[-0.03em] text-white sm:text-3xl md:text-5xl" style={{ fontFeatureSettings: "'ss01'" }}>
           {['Five', 'capabilities.', 'Infinite', 'applications.'].map((word, i) => (
             <motion.span
               key={word}

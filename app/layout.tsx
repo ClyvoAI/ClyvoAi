@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Syne, Inter, JetBrains_Mono } from 'next/font/google'
+import { Syne, Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { AppLoader } from '@/components/clyvo/app-loader'
@@ -23,6 +23,14 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
   variable: '--font-mono',
+  display: 'swap',
+})
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['700'],
+  style: ['italic'],
+  variable: '--font-playfair',
   display: 'swap',
 })
 
@@ -57,7 +65,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable}`} style={{ background: '#000000' }}>
+    <html lang="en" className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable} ${playfairDisplay.variable}`} style={{ background: '#000000' }}>
       <body className="text-white antialiased" style={{ background: '#000000', minHeight: '100vh' }}>
         <GoogleAnalytics />
         <Providers>

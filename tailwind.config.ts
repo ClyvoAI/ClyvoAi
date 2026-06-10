@@ -29,9 +29,10 @@ const config: Config = {
         "glass-border":      "rgba(255,255,255,0.08)",
       },
       fontFamily: {
-        syne:  ["var(--font-syne)",  "system-ui", "sans-serif"],
-        inter: ["var(--font-inter)", "system-ui", "sans-serif"],
-        mono:  ["var(--font-mono)",  "JetBrains Mono", "monospace"],
+        syne:     ["var(--font-syne)",     "system-ui", "sans-serif"],
+        inter:    ["var(--font-inter)",    "system-ui", "sans-serif"],
+        mono:     ["var(--font-mono)",     "JetBrains Mono", "monospace"],
+        playfair: ["var(--font-playfair)", "Georgia", "serif"],
         display: ["var(--font-syne)",  "system-ui", "sans-serif"],
         sans:    ["var(--font-inter)", "system-ui", "sans-serif"],
         serif:   ["var(--font-syne)",  "system-ui", "sans-serif"],

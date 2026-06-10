@@ -54,9 +54,8 @@ export function HeroContent() {
   const logoOpacity     = useTransform(scrollYProgress, [0, 0.50], [1, 0])
 
   return (
-    <div ref={ref} className="relative min-h-screen overflow-hidden">
+    <div ref={ref} className="relative min-h-screen overflow-hidden bg-transparent">
       {/* Ocean/graphite ambient gradients */}
-      <div className="pointer-events-none absolute inset-0" style={{ background: '#000000' }} />
       <motion.div
         style={{ scale: orbScale }}
         className="pointer-events-none absolute inset-0 will-change-transform"
@@ -166,7 +165,7 @@ export function HeroContent() {
             textShadow: '0 0 80px rgba(0,229,255,0.30)',
           }}
         >
-          <span className="block whitespace-normal md:whitespace-nowrap">
+          <span className="block whitespace-normal font-playfair font-bold italic md:whitespace-nowrap">
             {WORDS.filter(w => w.line === 0).map((w, i) => (
               <motion.span
                 key={w.text}
