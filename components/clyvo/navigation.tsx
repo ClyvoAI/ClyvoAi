@@ -119,7 +119,7 @@ export function Navigation() {
 
           {/* CTA + mobile toggle */}
           <div className="flex items-center gap-3">
-            <a href="#contact" className="btn-primary hidden md:inline-flex">
+            <a href="#contact" className="btn-primary hidden md:inline-flex" style={{ fontSize: '10px', padding: '10px 16px' }}>
               Book a Discovery Call
             </a>
             <button

@@ -131,7 +131,7 @@ export function ContactForm() {
         <p className="font-inter text-sm text-red-600">{error}</p>
       )}
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-3">
         <button type="submit" disabled={status === 'loading'} className="btn-primary"
           style={{ opacity: status === 'loading' ? 0.7 : 1 }}>
           {status === 'loading'
