@@ -104,6 +104,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  width: fit-content;
 }
 .btn-primary:hover { background: #2A2A2A; transform: translateY(-1px); }
 .btn-primary:active { transform: scale(0.98); }
