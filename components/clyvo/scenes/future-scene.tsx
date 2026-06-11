@@ -12,7 +12,7 @@ const ACCENTS = new Set(['+', '='])
 
 export function FutureScene() {
   return (
-    <section id="contact" className="relative overflow-hidden section-padding" style={{ background: '#EDE6D6' }}>
+    <section id="contact" className="relative overflow-hidden section-padding" style={{ background: '#EDE6D6', paddingBottom: '4rem' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
       <div className="pointer-events-none absolute inset-0" style={{
         background: 'radial-gradient(ellipse 60% 50% at 50% 30%, rgba(201,168,76,0.07) 0%, transparent 70%)',

@@ -45,7 +45,7 @@ export function TransformationScene() {
 
   return (
     <section ref={sectionRef} id="services" className="relative overflow-hidden"
-      style={{ height: isMobile ? 'auto' : '100vh', background: '#EDE6D6' }}>
+      style={{ height: isMobile ? 'auto' : 'auto', paddingBottom: '5rem', background: '#EDE6D6' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
 
       <div className="relative px-6 pb-10 pt-20 md:px-16 md:pt-24">
