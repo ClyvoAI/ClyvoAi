@@ -190,12 +190,19 @@ interface BeamsProps {
 
 export default function BeamsBackground() {
   return (
-    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+    <div style={{
+      position: 'fixed', top: 0, left: 0,
+      width: '100vw', height: '100vh',
+      pointerEvents: 'none', zIndex: 0,
+    }}>
       <Canvas
         dpr={[1, 1.5]}
         frameloop="always"
-        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'block' }}
         gl={{ antialias: false, powerPreference: 'high-performance' }}
+        style={{ width: '100vw', height: '100vh' }}
+        onCreated={({ gl }) => {
+          gl.setSize(window.innerWidth, window.innerHeight)
+        }}
       >
         <BeamsScene
           beamWidth={3}
