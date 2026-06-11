@@ -115,7 +115,7 @@ function DirLight({ position, color }: { position: [number,number,number]; color
     cam.top = 24; cam.bottom = -24; cam.left = -24; cam.right = 24; cam.far = 64
     dir.current.shadow.bias = -0.004
   }, [])
-  return <directionalLight ref={dir} color={color} intensity={1} position={position} />
+  return <directionalLight ref={dir} color={color} intensity={0.6} position={position} />
 }
 
 // ─── Main Beams scene ─────────────────────────────────────────────────────────
@@ -168,7 +168,7 @@ gl_FragColor.rgb-=randomNoise/15.*uNoiseIntensity;`,
     <group rotation={[0, 0, degToRad(rotation)]}>
       <PlaneNoise ref={meshRef} material={beamMaterial} count={beamNumber} width={beamWidth} height={beamHeight} />
       <DirLight color={lightColor} position={[0, 3, 10]} />
-      <ambientLight intensity={1} />
+      <ambientLight intensity={0.3} />
       <color attach="background" args={['#000000']} />
       <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={30} />
     </group>
@@ -190,8 +190,11 @@ interface BeamsProps {
 
 export default function BeamsBackground() {
   return (
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-      <Canvas dpr={[1, 1.5]} frameloop="always" style={{ width: '100%', height: '100%' }}
+    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
+      <Canvas
+        dpr={[1, 1.5]}
+        frameloop="always"
+        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'block' }}
         gl={{ antialias: false, powerPreference: 'high-performance' }}
       >
         <BeamsScene
