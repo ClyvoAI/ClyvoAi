@@ -1,8 +1,5 @@
 'use client'
-
 import Image from 'next/image'
-
-const LOGO_FILTER = 'brightness(0) saturate(100%)'
 
 const LINKS = {
   Services: [
@@ -24,12 +21,46 @@ const LINKS = {
   ],
 }
 
+const SOCIALS = [
+  {
+    label: 'Email',
+    href: 'mailto:clyvoai@gmail.com',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="20" height="16" x="2" y="4" rx="2"/>
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/clyvo_ai?igsh=cjFjam0xZDF2cnBs',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/clyvo-ai/',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+        <rect width="4" height="12" x="2" y="9"/>
+        <circle cx="4" cy="4" r="2"/>
+      </svg>
+    ),
+  },
+]
+
 export function Footer() {
   return (
     <footer style={{ background: '#1A1A1A', color: '#F5F0E8' }} className="relative">
       {/* Gold top rule */}
       <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)', opacity: 0.4 }} />
-
       <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
         <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
           {/* Brand */}
@@ -48,8 +79,25 @@ export function Footer() {
               style={{ color: '#C9A84C' }}>
               Book a Discovery Call →
             </a>
+            {/* Social icons */}
+            <div className="mt-6 flex items-center gap-4">
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target={s.href.startsWith('mailto') ? undefined : '_blank'}
+                  rel={s.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+                  aria-label={s.label}
+                  style={{ color: 'rgba(245,240,232,0.35)' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#C9A84C')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(245,240,232,0.35)')}
+                  className="transition-colors"
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
           </div>
-
           {/* Link columns */}
           {Object.entries(LINKS).map(([group, links]) => (
             <div key={group}>
@@ -71,7 +119,6 @@ export function Footer() {
             </div>
           ))}
         </div>
-
         {/* Bottom bar */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row"
           style={{ borderColor: 'rgba(201,168,76,0.15)' }}>
