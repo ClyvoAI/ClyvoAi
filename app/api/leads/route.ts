@@ -20,7 +20,7 @@ async function sendLeadNotification(lead: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Clyvo AI <onboarding@resend.dev>',
+      from: 'Clyvo AI <noreply@clyvoai.in>',
       to: 'clyvoai@gmail.com',
       subject: `New Lead: ${lead.name}${lead.company ? ` — ${lead.company}` : ''}`,
       html: `
