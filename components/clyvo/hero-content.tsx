@@ -38,7 +38,7 @@ export function HeroContent() {
   const logoY          = useTransform(scrollYProgress, [0, 0.5], [0, -30])
 
   return (
-    <section ref={ref} className="relative w-full overflow-hidden" style={{ height: '100vh', background: '#F5F0E8' }}>
+    <section ref={ref} className="relative w-full" style={{ height: '100vh', background: '#F5F0E8', overflow: 'clip' }}>
       {/* Subtle grid */}
       <div className="hero-grid pointer-events-none absolute inset-0 opacity-60" />
 
@@ -53,7 +53,7 @@ export function HeroContent() {
       }} />
 
       {/* Fine particles — desktop only */}
-      <div className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block">
+      <div className="pointer-events-none absolute inset-0 hidden md:block" style={{ overflow: 'clip' }}>
         {PARTICLES.map((p, i) => (
           <span key={i} className="absolute rounded-full" style={{
             left: p.left, bottom: p.bottom, width: p.size, height: p.size,
@@ -71,11 +71,7 @@ export function HeroContent() {
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           className="flex h-36 w-36 items-center justify-center"
-          style={{
-            ...GLASS,
-            borderRadius: '50%',
-            boxShadow: '0 0 60px rgba(201,168,76,0.15)',
-          }}
+          style={{ ...GLASS, borderRadius: '50%', boxShadow: '0 0 60px rgba(201,168,76,0.15)' }}
         >
           <Image src="/logo.png" alt="Clyvo AI" width={56} height={56}
             style={{ objectFit: 'contain', filter: LOGO_FILTER, opacity: 0.7 }} />
@@ -96,20 +92,21 @@ export function HeroContent() {
           <span className="eyebrow">Custom AI Agency · B2B</span>
         </motion.div>
 
-        {/* Headline */}
-        <h1 style={{ fontSize: 'clamp(2.8rem, 9vw, 9.5rem)', lineHeight: 0.95, letterSpacing: '-0.03em' }}>
-          <span className="block headline-luxury overflow-hidden">
+        {/* Headline — fixed line-height and removed overflow-hidden to prevent clipping */}
+        <h1 style={{ fontSize: 'clamp(2.8rem, 9vw, 9.5rem)', lineHeight: 1.05, letterSpacing: '-0.03em', paddingBottom: '0.08em' }}>
+          <span className="block headline-luxury" style={{ overflow: 'visible', paddingBottom: '0.04em' }}>
             {['Custom', 'AI.'].map((w, i) => (
               <motion.span key={w} className="mr-[0.15em] inline-block last:mr-0"
+                style={{ overflow: 'visible' }}
                 initial={{ clipPath: 'inset(0 100% 0 0)' }} animate={{ clipPath: 'inset(0 0% 0 0)' }}
                 transition={{ duration: 1.1, delay: 0.5 + i * 0.12, ease: EASE }}
               >{w}</motion.span>
             ))}
           </span>
-          <span className="block headline-luxury text-[#1A1A1A]/15 overflow-hidden"
-            style={{ fontSize: '0.92em' }}>
+          <span className="block headline-luxury" style={{ fontSize: '0.92em', color: 'rgba(26,26,26,0.15)', overflow: 'visible', paddingBottom: '0.04em' }}>
             {['Real', 'Results.'].map((w, i) => (
               <motion.span key={w} className="mr-[0.15em] inline-block last:mr-0"
+                style={{ overflow: 'visible' }}
                 initial={{ clipPath: 'inset(0 100% 0 0)' }} animate={{ clipPath: 'inset(0 0% 0 0)' }}
                 transition={{ duration: 1.1, delay: 0.75 + i * 0.12, ease: EASE }}
               >{w}</motion.span>

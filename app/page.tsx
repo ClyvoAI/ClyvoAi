@@ -15,7 +15,7 @@ const FutureScene         = dynamic(() => import('@/components/clyvo/scenes/futu
 
 export default function Home() {
   return (
-    <main className="relative overflow-x-hidden" style={{ background: '#F5F0E8' }}>
+    <main className="relative" style={{ background: '#F5F0E8' }}>
       <GlobalBackground />
       <CursorGlow />
       <ScrollDots />
