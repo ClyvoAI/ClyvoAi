@@ -73,139 +73,172 @@ body {
   transform: translateY(-2px);
 }
 
-/* Glass card --- 3D floating cuboid */
+/* ================================================================
+   Glass card -- 3D Ice Cube / Glass Block
+   ================================================================ */
 .glass-card {
   position: relative;
+  /* Semi-transparent ice/glass surface */
   background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.50) 0%,
-    rgba(255, 255, 255, 0.30) 40%,
-    rgba(245, 240, 232, 0.35) 100%
+    145deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 30%,
+    rgba(245, 240, 232, 0.30) 70%,
+    rgba(255, 255, 255, 0.40) 100%
   );
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-top: 1px solid rgba(255, 255, 255, 0.9);
-  border-left: 1px solid rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.3);
-  border-right: 1px solid rgba(201, 168, 76, 0.2);
-  border-radius: 4px;
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  /* Glass edge borders -- top/left brighter (light source), bottom/right darker */
+  border: none;
+  border-top: 2px solid rgba(255, 255, 255, 0.95);
+  border-left: 2px solid rgba(255, 255, 255, 0.85);
+  border-bottom: 2px solid rgba(201, 168, 76, 0.25);
+  border-right: 2px solid rgba(201, 168, 76, 0.18);
+  border-radius: 6px;
+  /* Multi-layer shadow for floating depth */
   box-shadow:
-    /* floating shadow on surface below */
-    0 25px 50px -12px rgba(26, 26, 26, 0.15),
-    0 12px 24px -8px rgba(201, 168, 76, 0.08),
-    /* soft ambient */
-    0 4px 6px rgba(26, 26, 26, 0.04),
-    /* inner top highlight (glass reflection) */
-    inset 0 2px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -2px 4px rgba(201, 168, 76, 0.06),
-    /* inner side glow */
-    inset 2px 0 0 rgba(255, 255, 255, 0.5);
+    /* ground shadow -- makes it look elevated */
+    0 30px 60px -15px rgba(26, 26, 26, 0.25),
+    0 15px 30px -10px rgba(26, 26, 26, 0.15),
+    /* warm ambient glow */
+    0 5px 15px rgba(201, 168, 76, 0.06),
+    /* top-edge glass reflection */
+    inset 0 3px 0 rgba(255, 255, 255, 0.95),
+    /* left-edge glass reflection */
+    inset 3px 0 0 rgba(255, 255, 255, 0.6),
+    /* bottom inner shadow (ice depth) */
+    inset 0 -4px 12px rgba(201, 168, 76, 0.06),
+    /* right inner shadow (ice depth) */
+    inset -4px 0 12px rgba(201, 168, 76, 0.04);
   transform-style: preserve-3d;
   animation: glass-float 7s ease-in-out infinite;
   will-change: transform;
-  transition: box-shadow 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+  transition: box-shadow 0.6s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.3s ease;
   overflow: visible;
+  /* Glossy surface sheen */
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
 }
 
-/* Reflective sheen moving across surface */
-.glass-card > *:first-child {
-  position: relative;
-  z-index: 1;
-}
-
-/* Cuboid bottom face --- thick glass edge */
+/* ---- BOTTOM FACE of the cube ---- */
 .glass-card::after {
   content: '';
   position: absolute;
-  bottom: -14px;
-  left: 6px;
-  right: -4px;
-  height: 14px;
+  bottom: -20px;
+  left: 8px;
+  right: -6px;
+  height: 20px;
   background: linear-gradient(
     to bottom,
-    rgba(201, 168, 76, 0.18) 0%,
-    rgba(201, 168, 76, 0.08) 40%,
-    rgba(201, 168, 76, 0.02) 100%
+    rgba(201, 168, 76, 0.22) 0%,
+    rgba(201, 168, 76, 0.10) 30%,
+    rgba(201, 168, 76, 0.03) 100%
   );
-  border-radius: 0 0 4px 4px;
-  border-right: 1px solid rgba(201, 168, 76, 0.12);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.08);
-  transform: skewX(-2deg);
+  border-radius: 0 0 6px 6px;
+  border-right: 2px solid rgba(201, 168, 76, 0.10);
+  border-bottom: 2px solid rgba(201, 168, 76, 0.06);
+  transform: skewX(-3deg);
+  transform-origin: top left;
   pointer-events: none;
-  opacity: 1;
-  transition: bottom 0.5s ease, opacity 0.5s ease, height 0.5s ease;
+  transition: all 0.6s cubic-bezier(0.16,1,0.3,1);
 }
 
-/* Cuboid right face --- thick glass edge */
+/* ---- RIGHT FACE of the cube ---- */
 .glass-card::before {
   content: '';
   position: absolute;
-  top: 6px;
-  right: -14px;
-  bottom: -8px;
-  width: 14px;
+  top: 8px;
+  right: -20px;
+  bottom: -12px;
+  width: 20px;
   background: linear-gradient(
     to right,
-    rgba(201, 168, 76, 0.16) 0%,
-    rgba(201, 168, 76, 0.06) 40%,
-    rgba(201, 168, 76, 0.01) 100%
+    rgba(201, 168, 76, 0.20) 0%,
+    rgba(201, 168, 76, 0.08) 30%,
+    rgba(201, 168, 76, 0.02) 100%
   );
-  border-radius: 0 4px 4px 0;
-  border-right: 1px solid rgba(201, 168, 76, 0.08);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.10);
-  transform: skewY(-2deg);
+  border-radius: 0 6px 6px 0;
+  border-right: 2px solid rgba(201, 168, 76, 0.06);
+  border-bottom: 2px solid rgba(201, 168, 76, 0.08);
+  transform: skewY(-3deg);
+  transform-origin: top left;
   pointer-events: none;
-  opacity: 1;
-  transition: right 0.5s ease, opacity 0.5s ease, width 0.5s ease;
+  transition: all 0.6s cubic-bezier(0.16,1,0.3,1);
 }
 
-/* Stagger floats so cards move independently */
-.glass-card:nth-child(2) { animation-delay: -1.8s; }
-.glass-card:nth-child(3) { animation-delay: -3.5s; }
-.glass-card:nth-child(4) { animation-delay: -0.9s; }
-.glass-card:nth-child(5) { animation-delay: -2.6s; }
-.glass-card:nth-child(6) { animation-delay: -4.2s; }
+/* Stagger floats -- each card bobs independently */
+.glass-card:nth-child(1) { animation-delay: 0s; }
+.glass-card:nth-child(2) { animation-delay: -1.4s; }
+.glass-card:nth-child(3) { animation-delay: -3.2s; }
+.glass-card:nth-child(4) { animation-delay: -0.7s; }
+.glass-card:nth-child(5) { animation-delay: -2.4s; }
+.glass-card:nth-child(6) { animation-delay: -4.1s; }
 
-/* Hover: lift higher, flatten, dramatic shadow */
+/* Hover -- snap flat, lift high, dramatic shadow */
 .glass-card:hover {
   animation-play-state: paused;
-  transform: perspective(600px) rotateX(0deg) rotateY(0deg) translateY(-18px) scale(1.02);
+  transform: perspective(500px) rotateX(0deg) rotateY(0deg) translateY(-22px) translateZ(20px) scale(1.03);
   box-shadow:
-    0 40px 80px -16px rgba(26, 26, 26, 0.22),
-    0 20px 40px -8px rgba(201, 168, 76, 0.12),
-    0 8px 16px rgba(26, 26, 26, 0.06),
-    inset 0 2px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -2px 4px rgba(201, 168, 76, 0.08),
-    inset 2px 0 0 rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.95);
-  border-bottom-color: rgba(201, 168, 76, 0.45);
-  border-right-color: rgba(201, 168, 76, 0.35);
+    0 50px 100px -20px rgba(26, 26, 26, 0.30),
+    0 25px 50px -10px rgba(26, 26, 26, 0.18),
+    0 10px 20px rgba(201, 168, 76, 0.08),
+    inset 0 3px 0 rgba(255, 255, 255, 0.98),
+    inset 3px 0 0 rgba(255, 255, 255, 0.7),
+    inset 0 -4px 12px rgba(201, 168, 76, 0.08),
+    inset -4px 0 12px rgba(201, 168, 76, 0.06);
+  border-top-color: rgba(255, 255, 255, 1);
+  border-left-color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: rgba(201, 168, 76, 0.35);
+  border-right-color: rgba(201, 168, 76, 0.28);
 }
 .glass-card:hover::after {
-  bottom: -18px;
-  height: 18px;
-  opacity: 0.6;
+  bottom: -26px;
+  height: 26px;
+  opacity: 0.5;
+  transform: skewX(-4deg);
 }
 .glass-card:hover::before {
-  right: -18px;
-  width: 18px;
-  opacity: 0.6;
+  right: -26px;
+  width: 26px;
+  opacity: 0.5;
+  transform: skewY(-4deg);
 }
 
-/* 3D floating keyframes --- pronounced rotation + bob */
+/* === 3D floating animation -- dramatic tilt + bob === */
 @keyframes glass-float {
-  0%   { transform: perspective(600px) rotateX(3deg) rotateY(-2deg) translateY(0px); }
-  25%  { transform: perspective(600px) rotateX(1deg) rotateY(1deg) translateY(-8px); }
-  50%  { transform: perspective(600px) rotateX(-1.5deg) rotateY(2.5deg) translateY(-14px); }
-  75%  { transform: perspective(600px) rotateX(2deg) rotateY(-1deg) translateY(-5px); }
-  100% { transform: perspective(600px) rotateX(3deg) rotateY(-2deg) translateY(0px); }
+  0%   {
+    transform: perspective(500px) rotateX(4deg) rotateY(-3deg) translateY(0px) translateZ(0px);
+  }
+  25%  {
+    transform: perspective(500px) rotateX(1.5deg) rotateY(1.5deg) translateY(-10px) translateZ(8px);
+  }
+  50%  {
+    transform: perspective(500px) rotateX(-2deg) rotateY(3.5deg) translateY(-18px) translateZ(14px);
+  }
+  75%  {
+    transform: perspective(500px) rotateX(2.5deg) rotateY(-1.5deg) translateY(-6px) translateZ(4px);
+  }
+  100% {
+    transform: perspective(500px) rotateX(4deg) rotateY(-3deg) translateY(0px) translateZ(0px);
+  }
 }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .glass-card { animation: none; transform: none; }
-  .glass-card:hover { transform: translateY(-6px) scale(1.01); }
+  .glass-card {
+    animation: none;
+    transform: perspective(500px) rotateX(2deg) rotateY(-1.5deg);
+  }
+  .glass-card:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
 }
 
 /* â”€â”€ Section glass orb backgrounds â”€â”€ */
@@ -416,23 +449,23 @@ button, a { cursor: pointer; }
     bottom: 5%;
     left: -15%;
   }
-  /* 3D float scaled for mobile */
+  /* 3D ice cube scaled for mobile */
   .glass-card {
     animation-duration: 8s;
   }
   .glass-card::after {
-    height: 10px;
-    bottom: -10px;
+    height: 14px;
+    bottom: -14px;
   }
   .glass-card::before {
-    width: 10px;
-    right: -10px;
+    width: 14px;
+    right: -14px;
   }
   @keyframes glass-float {
-    0%   { transform: perspective(600px) rotateX(2deg) rotateY(-1.5deg) translateY(0px); }
-    25%  { transform: perspective(600px) rotateX(0.8deg) rotateY(0.8deg) translateY(-6px); }
-    50%  { transform: perspective(600px) rotateX(-1deg) rotateY(1.5deg) translateY(-10px); }
-    75%  { transform: perspective(600px) rotateX(1.2deg) rotateY(-0.8deg) translateY(-4px); }
-    100% { transform: perspective(600px) rotateX(2deg) rotateY(-1.5deg) translateY(0px); }
+    0%   { transform: perspective(500px) rotateX(3deg) rotateY(-2deg) translateY(0px) translateZ(0px); }
+    25%  { transform: perspective(500px) rotateX(1deg) rotateY(1deg) translateY(-7px) translateZ(5px); }
+    50%  { transform: perspective(500px) rotateX(-1.5deg) rotateY(2.5deg) translateY(-12px) translateZ(10px); }
+    75%  { transform: perspective(500px) rotateX(2deg) rotateY(-1deg) translateY(-4px) translateZ(3px); }
+    100% { transform: perspective(500px) rotateX(3deg) rotateY(-2deg) translateY(0px) translateZ(0px); }
   }
 }
