@@ -33,6 +33,15 @@ const SOCIALS = [
     ),
   },
   {
+    label: 'WhatsApp',
+    href: 'https://wa.me/919581074763',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+      </svg>
+    ),
+  },
+  {
     label: 'Instagram',
     href: 'https://www.instagram.com/clyvo_ai?igsh=cjFjam0xZDF2cnBs',
     icon: (
@@ -59,7 +68,6 @@ const SOCIALS = [
 export function Footer() {
   return (
     <footer style={{ background: '#1A1A1A', color: '#F5F0E8' }} className="relative">
-      {/* Gold top rule */}
       <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, #C9A84C, transparent)', opacity: 0.4 }} />
       <div className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
         <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
@@ -98,6 +106,7 @@ export function Footer() {
               ))}
             </div>
           </div>
+
           {/* Link columns */}
           {Object.entries(LINKS).map(([group, links]) => (
             <div key={group}>
@@ -119,6 +128,7 @@ export function Footer() {
             </div>
           ))}
         </div>
+
         {/* Bottom bar */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t pt-8 sm:flex-row"
           style={{ borderColor: 'rgba(201,168,76,0.15)' }}>
