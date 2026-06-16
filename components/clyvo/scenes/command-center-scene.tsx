@@ -6,14 +6,6 @@ import { Building, Building2, Landmark, Check } from 'lucide-react'
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, margin: '-80px' } as const
 
-const GLASS = {
-  background: 'rgba(255,255,255,0.45)',
-  backdropFilter: 'blur(12px)',
-  WebkitBackdropFilter: 'blur(12px)',
-  border: '1px solid rgba(201,168,76,0.18)',
-  boxShadow: '0 8px 32px rgba(26,26,26,0.06)',
-}
-
 const CLIENT_TYPES = [
   { icon: Building,  range: '10–200 employees',     title: 'SMBs',        description: 'Automate operations, reduce manual work, and compete with larger players using AI.' },
   { icon: Building2, range: '200–2,000 employees',   title: 'Mid-Market',  description: 'Custom AI that integrates cleanly into your existing enterprise systems.' },
@@ -29,7 +21,7 @@ const IDEAL_TRAITS = [
 
 export function CommandCenterScene() {
   return (
-    <section id="about" className="relative section-padding" style={{ background: '#EDE6D6' }}>
+    <section id="about" className="relative section-padding section-has-glass" style={{ background: '#EDE6D6' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
       <div className="mx-auto max-w-6xl">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
@@ -48,19 +40,7 @@ export function CommandCenterScene() {
           {CLIENT_TYPES.map((c, i) => (
             <motion.div key={c.title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={VP} transition={{ duration: 0.8, delay: i * 0.1, ease: EASE }}
-              className="p-8 transition-all duration-300"
-              style={{ ...GLASS }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-4px)'
-                e.currentTarget.style.boxShadow = '0 16px 40px rgba(26,26,26,0.10)'
-                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(26,26,26,0.06)'
-                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.18)'
-              }}
-            >
+              className="glass-card p-8">
               <div className="flex h-10 w-10 items-center justify-center"
                 style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}>
                 <c.icon className="h-4 w-4 text-[#C9A84C]" />
@@ -74,11 +54,8 @@ export function CommandCenterScene() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-          className="mt-6 p-8 md:p-10"
-          style={{
-            ...GLASS,
-            borderLeft: '3px solid #C9A84C',
-          }}>
+          className="mt-6 glass-card p-8 md:p-10"
+          style={{ borderLeft: '3px solid #C9A84C' }}>
           <span className="eyebrow">Your Ideal Fit</span>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">
             {IDEAL_TRAITS.map((trait) => (

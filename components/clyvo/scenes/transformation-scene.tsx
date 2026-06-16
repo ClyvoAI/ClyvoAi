@@ -10,14 +10,6 @@ import { useIsMobile } from '@/lib/device'
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, margin: '-60px' } as const
 
-const GLASS = {
-  background: 'rgba(255,255,255,0.45)',
-  backdropFilter: 'blur(12px)',
-  WebkitBackdropFilter: 'blur(12px)',
-  border: '1px solid rgba(201,168,76,0.18)',
-  boxShadow: '0 8px 32px rgba(26,26,26,0.06)',
-}
-
 const SERVICES = [
   { num: '01', icon: Bot,      title: 'AI Chatbots & Assistants',        description: 'Custom-trained agents for support, sales qualification, and onboarding — integrated into your existing platforms.' },
   { num: '02', icon: Workflow, title: 'Workflow & Process Automation',   description: 'End-to-end automation of repetitive processes — lead routing, document handling, approvals, data entry elimination.' },
@@ -52,8 +44,8 @@ export function TransformationScene() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="services" className="relative overflow-hidden"
-      style={{ height: isMobile ? 'auto' : 'auto', paddingBottom: '5rem', background: '#EDE6D6' }}>
+    <section ref={sectionRef} id="services" className="relative overflow-hidden section-has-glass"
+      style={{ paddingBottom: '5rem', background: '#EDE6D6' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
 
       <div className="relative px-6 pb-10 pt-20 md:px-16 md:pt-24">
@@ -88,18 +80,8 @@ function ServiceCard({ s, index, fullWidth = false }: { s: typeof SERVICES[0]; i
     <motion.div
       initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={VP} transition={{ duration: 0.7, delay: index * 0.07, ease: EASE }}
-      className={`flex shrink-0 flex-col p-8 transition-all duration-300 ${fullWidth ? 'w-full' : 'w-[340px]'}`}
-      style={{ ...GLASS, minHeight: fullWidth ? undefined : 320 }}
-      onMouseEnter={e => {
-        e.currentTarget.style.transform = 'translateY(-6px)'
-        e.currentTarget.style.boxShadow = '0 20px 48px rgba(26,26,26,0.12)'
-        e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.transform = 'translateY(0)'
-        e.currentTarget.style.boxShadow = '0 8px 32px rgba(26,26,26,0.06)'
-        e.currentTarget.style.borderColor = 'rgba(201,168,76,0.18)'
-      }}
+      className={`glass-card flex shrink-0 flex-col p-8 ${fullWidth ? 'w-full' : 'w-[340px]'}`}
+      style={{ minHeight: fullWidth ? undefined : 320 }}
     >
       <span className="font-syne text-2xl font-bold text-[#C9A84C]/40">{s.num}</span>
       <div className="mt-5 flex h-10 w-10 items-center justify-center"

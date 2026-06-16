@@ -6,14 +6,6 @@ import { MessageSquareOff, Building2 } from 'lucide-react'
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, margin: '-80px' } as const
 
-const GLASS = {
-  background: 'rgba(255,255,255,0.45)',
-  backdropFilter: 'blur(12px)',
-  WebkitBackdropFilter: 'blur(12px)',
-  border: '1px solid rgba(201,168,76,0.18)',
-  boxShadow: '0 8px 32px rgba(26,26,26,0.06)',
-}
-
 const ALTERNATIVES = [
   { icon: MessageSquareOff, title: 'Generic AI Tools',
     description: "ChatGPT and off-the-shelf platforms weren't built for your processes, your data, or the way your business actually runs." },
@@ -23,7 +15,7 @@ const ALTERNATIVES = [
 
 export function ProblemScene() {
   return (
-    <section id="solutions" className="relative w-full section-padding" style={{ background: '#F5F0E8' }}>
+    <section id="solutions" className="relative w-full section-padding section-has-glass" style={{ background: '#F5F0E8' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
       <div className="mx-auto max-w-6xl">
         <div className="grid items-start gap-16 lg:grid-cols-[1fr_460px]">
@@ -39,8 +31,6 @@ export function ProblemScene() {
             <p className="mt-6 font-inter text-base font-light leading-[1.85] text-[#4A4A4A]">
               Most B2B teams are stuck choosing between two bad options — neither designed around how their business actually operates.
             </p>
-
-            {/* Bottom statement */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={VP} transition={{ duration: 0.9, delay: 0.4, ease: EASE }}
               className="mt-12 border-l-2 pl-6" style={{ borderColor: '#C9A84C' }}>
@@ -57,18 +47,7 @@ export function ProblemScene() {
             {ALTERNATIVES.map((alt, i) => (
               <motion.div key={alt.title} initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={VP} transition={{ duration: 0.8, delay: i * 0.15, ease: EASE }}
-                className="p-8 transition-all duration-300"
-                style={{ ...GLASS }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px)'
-                  e.currentTarget.style.boxShadow = '0 16px 40px rgba(26,26,26,0.10)'
-                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(26,26,26,0.06)'
-                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.18)'
-                }}
+                className="glass-card p-8"
               >
                 <div className="flex h-10 w-10 items-center justify-center"
                   style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}>

@@ -7,14 +7,6 @@ import { ArrowRight, Hammer, RefreshCw } from 'lucide-react'
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, margin: '-80px' } as const
 
-const GLASS = {
-  background: 'rgba(255,255,255,0.45)',
-  backdropFilter: 'blur(12px)',
-  WebkitBackdropFilter: 'blur(12px)',
-  border: '1px solid rgba(201,168,76,0.18)',
-  boxShadow: '0 8px 32px rgba(26,26,26,0.06)',
-}
-
 const STATS = [
   { value: 500, suffix: '+', label: 'Clients Served' },
   { value: 98,  suffix: '%', label: 'Satisfaction' },
@@ -43,13 +35,13 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 const PLAN = [
-  { icon: Hammer,    title: 'Setup Fee',        note: 'Priced per project',      description: 'A one-time investment covering everything from discovery through to live deployment.', deliverables: ['Discovery & scoping', 'Solution design', 'Development & testing', 'Deployment & handover'] },
-  { icon: RefreshCw, title: 'Monthly Retainer', note: 'Ongoing partnership',     description: 'Your AI system running, improving, and adapting to your business as it evolves.', deliverables: ['Monitoring & maintenance', 'Model updates & retraining', 'New feature development', 'Priority support'] },
+  { icon: Hammer,    title: 'Setup Fee',        note: 'Priced per project',   description: 'A one-time investment covering everything from discovery through to live deployment.', deliverables: ['Discovery & scoping', 'Solution design', 'Development & testing', 'Deployment & handover'] },
+  { icon: RefreshCw, title: 'Monthly Retainer', note: 'Ongoing partnership',  description: 'Your AI system running, improving, and adapting to your business as it evolves.', deliverables: ['Monitoring & maintenance', 'Model updates & retraining', 'New feature development', 'Priority support'] },
 ]
 
 export function ImpactScene() {
   return (
-    <section id="pricing" className="relative section-padding" style={{ background: '#F5F0E8' }}>
+    <section id="pricing" className="relative section-padding section-has-glass" style={{ background: '#F5F0E8' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
       <div className="mx-auto max-w-6xl">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
@@ -64,7 +56,6 @@ export function ImpactScene() {
           </p>
         </motion.div>
 
-        {/* Stats */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.8, ease: EASE }}
           className="mb-16 grid grid-cols-3 gap-8 py-12"
@@ -77,24 +68,11 @@ export function ImpactScene() {
           ))}
         </motion.div>
 
-        {/* Glass Cards */}
         <div className="grid gap-6 sm:grid-cols-2">
           {PLAN.map((p, i) => (
             <motion.div key={p.title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={VP} transition={{ duration: 0.8, delay: i * 0.1, ease: EASE }}
-              className="p-8 md:p-10 transition-all duration-300"
-              style={{ ...GLASS }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-4px)'
-                e.currentTarget.style.boxShadow = '0 16px 40px rgba(26,26,26,0.10)'
-                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(26,26,26,0.06)'
-                e.currentTarget.style.borderColor = 'rgba(201,168,76,0.18)'
-              }}
-            >
+              className="glass-card p-8 md:p-10">
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center"
                   style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}>
