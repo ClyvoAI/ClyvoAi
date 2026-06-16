@@ -89,7 +89,7 @@ export function HeroContent() {
               >{w}</motion.span>
             ))}
           </span>
-          <span className="block headline-luxury" style={{ fontSize: '0.92em', color: 'rgba(26,26,26,0.30)', overflow: 'visible' }}>
+          <span className="block headline-luxury" style={{ fontSize: '0.92em', color: 'rgba(26,26,26,0.70)', overflow: 'visible' }}>
             {['Real', 'Results.'].map((w, i) => (
               <motion.span key={w} className="mr-[0.15em] inline-block last:mr-0"
                 style={{ overflow: 'visible', display: 'inline-block' }}
@@ -106,7 +106,7 @@ export function HeroContent() {
           transition={{ duration: 0.8, delay: 1.1, ease: EASE }}
           className="mt-8 max-w-md"
         >
-          <p className="font-inter text-base font-light leading-[1.8] text-[#1A1A1A]/65">
+          <p className="font-inter text-base font-light leading-[1.8] text-[#1A1A1A]/85">
             We build end-to-end AI systems for B2B businesses — from scratch, for your exact operations.
           </p>
           <p className="mt-3 hidden font-inter text-[11px] uppercase tracking-[0.2em] text-[#C9A84C]/70 sm:block">
