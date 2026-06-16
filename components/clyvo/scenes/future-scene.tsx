@@ -28,7 +28,7 @@ export function FutureScene() {
 
       <div className="relative mx-auto max-w-6xl">
         {/* Header */}
-        <div className="mb-16 text-center">
+        <div className="mb-10 md:mb-16 text-center">
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={VP} transition={{ duration: 0.7, ease: EASE }}>
             <div className="flex justify-center">
@@ -37,7 +37,7 @@ export function FutureScene() {
             <span className="eyebrow">What&apos;s Next</span>
           </motion.div>
 
-          <h2 className="mt-8 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.5rem)' }}>
+          <h2 className="mt-5 md:mt-8 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.5rem)' }}>
             {WORDS.map((word, i) => (
               <motion.span key={i}
                 className={`mr-[0.2em] inline-block last:mr-0 ${ACCENTS.has(word) ? 'text-gold' : ''}`}
@@ -56,11 +56,11 @@ export function FutureScene() {
         </div>
 
         {/* Two-column: form + info */}
-        <div className="grid gap-12 lg:grid-cols-[1fr_380px]">
+        <div className="grid gap-8 lg:gap-12 lg:grid-cols-[1fr_380px]">
           {/* Form — glass */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={VP} transition={{ duration: 0.8, ease: EASE }}
-            style={{ ...GLASS, padding: 40 }}>
+            style={{ ...GLASS }} className="p-6 md:p-10">
             <h3 className="font-syne text-lg font-semibold text-[#1A1A1A]">Book Your Discovery Call</h3>
             <p className="mt-2 font-inter text-sm font-light text-[#8A8A8A]">Free 45-minute consultation · No commitment</p>
             <div className="mt-8">
@@ -71,7 +71,7 @@ export function FutureScene() {
           {/* Info panel — glass */}
           <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={VP} transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
-            className="flex flex-col gap-8 p-8"
+            className="flex flex-col gap-6 md:gap-8 p-6 md:p-8"
             style={{ ...GLASS }}>
             {[
               { num: '01', title: 'Free consultation', desc: 'A 45-minute call to understand your needs — no pitch, no pressure.' },

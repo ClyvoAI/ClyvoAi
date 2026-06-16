@@ -18,7 +18,7 @@ export function ProblemScene() {
     <section id="solutions" className="relative w-full section-padding section-has-glass" style={{ background: '#F5F0E8' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
       <div className="mx-auto max-w-6xl">
-        <div className="grid items-start gap-16 lg:grid-cols-[1fr_460px]">
+        <div className="grid items-start gap-8 lg:gap-16 lg:grid-cols-[1fr_460px]">
 
           {/* Left */}
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
@@ -33,7 +33,7 @@ export function ProblemScene() {
             </p>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={VP} transition={{ duration: 0.9, delay: 0.4, ease: EASE }}
-              className="mt-12 border-l-2 pl-6" style={{ borderColor: '#C9A84C' }}>
+              className="mt-8 md:mt-12 border-l-2 pl-6" style={{ borderColor: '#C9A84C' }}>
               <p className="font-playfair text-xl font-semibold italic text-[#1A1A1A]">
                 Clyvo AI is the{' '}
                 <span style={{ color: '#C9A84C' }}>sharp, expert, custom</span>{' '}

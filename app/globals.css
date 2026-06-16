@@ -297,6 +297,22 @@ button, a { cursor: pointer; }
     padding: 13px 24px;
   }
   .section-padding {
-    padding: 4rem 1.25rem;
+    padding: 3rem 1.25rem;
+  }
+  .headline-luxury {
+    line-height: 1.15;
+  }
+  /* Reduce glass orb sizes on mobile to prevent overflow */
+  .section-has-glass::before {
+    width: 280px;
+    height: 280px;
+    top: -5%;
+    right: -10%;
+  }
+  .section-has-glass::after {
+    width: 240px;
+    height: 240px;
+    bottom: 5%;
+    left: -15%;
   }
 }

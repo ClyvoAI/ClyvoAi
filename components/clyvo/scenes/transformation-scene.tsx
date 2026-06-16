@@ -56,11 +56,11 @@ export function TransformationScene() {
   }, [isMobile])
 
   return (
-    <section ref={sectionRef} id="services" className="relative section-has-glass"
-      style={{ paddingBottom: '5rem', background: '#EDE6D6' }}>
+    <section ref={sectionRef} id="services" className="relative section-has-glass pb-12 md:pb-20"
+      style={{ background: '#EDE6D6' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
 
-      <div className="relative px-6 pb-10 pt-20 md:px-16 md:pt-24">
+      <div className="relative px-5 pb-8 pt-16 md:px-16 md:pb-10 md:pt-24">
         <div className="section-divider" />
         <span className="eyebrow">What We Build</span>
         <h2 className="mt-6 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
@@ -72,7 +72,7 @@ export function TransformationScene() {
       </div>
 
       {isMobile ? (
-        <div className="flex flex-col gap-4 px-6 pb-16">
+        <div className="flex flex-col gap-3 px-5 pb-8">
           {SERVICES.map((s, i) => <ServiceCard key={s.num} s={s} index={i} fullWidth />)}
         </div>
       ) : (
@@ -92,7 +92,7 @@ function ServiceCard({ s, index, fullWidth = false }: { s: typeof SERVICES[0]; i
     <motion.div
       initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={VP} transition={{ duration: 0.7, delay: index * 0.07, ease: EASE }}
-      className={`glass-card flex shrink-0 flex-col p-8 ${fullWidth ? 'w-full' : 'w-[340px]'}`}
+      className={`glass-card flex shrink-0 flex-col p-6 md:p-8 ${fullWidth ? 'w-full' : 'w-[340px]'}`}
       style={{ minHeight: fullWidth ? undefined : 320 }}
     >
       <span className="font-syne text-2xl font-bold text-[#C9A84C]/40">{s.num}</span>

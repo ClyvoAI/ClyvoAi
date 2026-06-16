@@ -24,7 +24,7 @@ function StepItem({ progress, step, index, total }: { progress: MotionValue<numb
   const doneOp = useTransform(progress, (v) => (v > e + 0.05 ? 1 : 0))
 
   return (
-    <div className="relative grid items-start gap-4 py-8 first:pt-0 sm:gap-8 sm:py-10 sm:grid-cols-[80px_1fr]"
+    <div className="relative grid items-start gap-3 py-6 first:pt-0 sm:gap-8 sm:py-10 sm:grid-cols-[80px_1fr]"
       style={{ borderTop: '1px solid rgba(201,168,76,0.15)' }}>
       <style>{`div:first-child { border-top: none; }`}</style>
       <motion.div className="absolute -left-[1.375rem] top-10 hidden h-2.5 w-2.5 rounded-full sm:block"
@@ -54,7 +54,7 @@ export function OperatingLayerScene() {
       <div className="mx-auto max-w-5xl">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.9, ease: EASE }}
-          className="mb-16">
+          className="mb-10 md:mb-16">
           <div className="section-divider" />
           <span className="eyebrow">How It Works</span>
           <h2 className="mt-6 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
@@ -65,7 +65,7 @@ export function OperatingLayerScene() {
           </p>
         </motion.div>
 
-        <div className="flex gap-12 sm:gap-16">
+        <div className="flex gap-6 sm:gap-16">
           <div className="relative hidden shrink-0 flex-col items-center sm:flex" style={{ width: 2 }}>
             <div className="absolute inset-0 rounded-full" style={{ background: 'rgba(201,168,76,0.15)' }} />
             <motion.div className="absolute top-0 w-full rounded-full will-change-transform"

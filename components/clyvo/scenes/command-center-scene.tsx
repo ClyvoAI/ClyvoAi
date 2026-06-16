@@ -25,7 +25,7 @@ export function CommandCenterScene() {
       <div className="gold-rule absolute inset-x-0 top-0" />
       <div className="mx-auto max-w-6xl">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={VP} transition={{ duration: 0.9, ease: EASE }} className="mb-16">
+          viewport={VP} transition={{ duration: 0.9, ease: EASE }} className="mb-10 md:mb-16">
           <div className="section-divider" />
           <span className="eyebrow">Who We Work With</span>
           <h2 className="mt-6 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
@@ -40,7 +40,7 @@ export function CommandCenterScene() {
           {CLIENT_TYPES.map((c, i) => (
             <motion.div key={c.title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={VP} transition={{ duration: 0.8, delay: i * 0.1, ease: EASE }}
-              className="glass-card p-8">
+              className="glass-card p-6 md:p-8">
               <div className="flex h-10 w-10 items-center justify-center"
                 style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}>
                 <c.icon className="h-4 w-4 text-[#C9A84C]" />
@@ -54,7 +54,7 @@ export function CommandCenterScene() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-          className="mt-6 glass-card p-8 md:p-10"
+          className="mt-4 md:mt-6 glass-card p-6 md:p-10"
           style={{ borderLeft: '3px solid #C9A84C' }}>
           <span className="eyebrow">Your Ideal Fit</span>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">

@@ -28,7 +28,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
     requestAnimationFrame(tick)
   }, [inView, value])
   return (
-    <span ref={ref} className="font-playfair font-bold italic" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#1A1A1A' }}>
+    <span ref={ref} className="font-playfair font-bold italic" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', color: '#1A1A1A' }}>
       {count}{suffix}
     </span>
   )
@@ -45,7 +45,7 @@ export function ImpactScene() {
       <div className="gold-rule absolute inset-x-0 top-0" />
       <div className="mx-auto max-w-6xl">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={VP} transition={{ duration: 0.9, ease: EASE }} className="mb-16">
+          viewport={VP} transition={{ duration: 0.9, ease: EASE }} className="mb-10 md:mb-16">
           <div className="section-divider" />
           <span className="eyebrow">Pricing</span>
           <h2 className="mt-6 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
@@ -58,7 +58,7 @@ export function ImpactScene() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.8, ease: EASE }}
-          className="mb-16 grid grid-cols-3 gap-8 py-12"
+          className="mb-10 md:mb-16 grid grid-cols-3 gap-4 md:gap-8 py-8 md:py-12"
           style={{ borderTop: '1px solid rgba(201,168,76,0.25)', borderBottom: '1px solid rgba(201,168,76,0.25)' }}>
           {STATS.map((s) => (
             <div key={s.label} className="text-center">
@@ -98,7 +98,7 @@ export function ImpactScene() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-          className="mt-12 flex flex-col items-center gap-5 text-center">
+          className="mt-8 md:mt-12 flex flex-col items-center gap-5 text-center">
           <p className="font-inter text-sm font-light text-[#8A8A8A]">
             No fixed package tiers. Every solution is scoped to your real problem.
           </p>
