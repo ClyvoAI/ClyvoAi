@@ -13,6 +13,7 @@ async function sendLeadNotification(lead: {
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) return
 
+  // Internal notification to Clyvo AI
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -67,6 +68,63 @@ async function sendLeadNotification(lead: {
       `,
     }),
   })
+
+  // Confirmation email to the user
+  await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'Clyvo AI <noreply@clyvoai.in>',
+      to: lead.email,
+      subject: `We've received your message, ${lead.name.split(' ')[0]}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #f5f0e8;">
+          <div style="background: #1a1a1a; padding: 20px 24px; border-radius: 4px 4px 0 0;">
+            <h1 style="color: #c9a84c; font-size: 18px; margin: 0; letter-spacing: 0.05em;">CLYVO AI</h1>
+          </div>
+          <div style="background: #ffffff; padding: 32px 24px; border-radius: 0 0 4px 4px;">
+            <h2 style="color: #1a1a1a; font-size: 22px; margin: 0 0 16px; font-family: Georgia, serif; font-style: italic;">
+              Thanks for reaching out, ${lead.name.split(' ')[0]}.
+            </h2>
+            <p style="color: #4a4a4a; font-size: 15px; line-height: 1.7; margin: 0 0 16px;">
+              We've received your message and will review your details shortly. A member of our team will be in touch within <strong>1 business day</strong> to schedule your free discovery call.
+            </p>
+            <p style="color: #4a4a4a; font-size: 15px; line-height: 1.7; margin: 0 0 32px;">
+              In the meantime, feel free to explore what we build at <a href="https://clyvoai.in" style="color: #c9a84c; text-decoration: none;">clyvoai.in</a>.
+            </p>
+            <div style="border-top: 1px solid #f0ebe0; padding-top: 24px;">
+              <p style="color: #8a8a8a; font-size: 13px; margin: 0 0 4px;">What happens next:</p>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+                <tr>
+                  <td style="padding: 8px 0; color: #c9a84c; font-size: 12px; font-weight: bold; width: 24px;">01</td>
+                  <td style="padding: 8px 0; color: #1a1a1a; font-size: 14px;">We review your needs and prepare questions</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #c9a84c; font-size: 12px; font-weight: bold;">02</td>
+                  <td style="padding: 8px 0; color: #1a1a1a; font-size: 14px;">We reach out to schedule a 45-min discovery call</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #c9a84c; font-size: 12px; font-weight: bold;">03</td>
+                  <td style="padding: 8px 0; color: #1a1a1a; font-size: 14px;">We scope a custom AI solution for your operations</td>
+                </tr>
+              </table>
+            </div>
+            <div style="margin-top: 32px;">
+              <a href="https://clyvoai.in" style="background: #1a1a1a; color: #f5f0e8; padding: 12px 24px; text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">
+                Visit Clyvo AI →
+              </a>
+            </div>
+          </div>
+          <p style="text-align: center; color: #8a8a8a; font-size: 11px; margin-top: 16px;">
+            © ${new Date().getFullYear()} Clyvo AI · clyvoai.in
+          </p>
+        </div>
+      `,
+    }),
+  })
 }
 
 export async function POST(req: NextRequest) {
@@ -99,7 +157,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to save lead' }, { status: 500 })
     }
 
-    // Send email notification (non-blocking — don't fail the request if email fails)
+    // Send both emails (non-blocking — don't fail the request if email fails)
     sendLeadNotification({ name, email, company, employees, message }).catch(err =>
       console.error('Email notification error:', err)
     )
