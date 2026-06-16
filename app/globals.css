@@ -73,63 +73,91 @@ body {
   transform: translateY(-2px);
 }
 
-/* Glass card — 3D floating cuboid */
+/* Glass card --- 3D floating cuboid */
 .glass-card {
   position: relative;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.72) 0%,
-    rgba(255, 255, 255, 0.48) 50%,
-    rgba(245, 240, 232, 0.60) 100%
+    rgba(255, 255, 255, 0.50) 0%,
+    rgba(255, 255, 255, 0.30) 40%,
+    rgba(245, 240, 232, 0.35) 100%
   );
-  backdrop-filter: blur(20px) saturate(200%);
-  -webkit-backdrop-filter: blur(20px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.25);
-  border-right: 1px solid rgba(201, 168, 76, 0.15);
-  border-radius: 3px;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-left: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+  border-right: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 4px;
   box-shadow:
-    0 2px 4px rgba(201, 168, 76, 0.08),
-    0 8px 24px rgba(26, 26, 26, 0.08),
-    0 24px 48px rgba(26, 26, 26, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(201, 168, 76, 0.08);
+    /* floating shadow on surface below */
+    0 25px 50px -12px rgba(26, 26, 26, 0.15),
+    0 12px 24px -8px rgba(201, 168, 76, 0.08),
+    /* soft ambient */
+    0 4px 6px rgba(26, 26, 26, 0.04),
+    /* inner top highlight (glass reflection) */
+    inset 0 2px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(201, 168, 76, 0.06),
+    /* inner side glow */
+    inset 2px 0 0 rgba(255, 255, 255, 0.5);
   transform-style: preserve-3d;
   animation: glass-float 7s ease-in-out infinite;
   will-change: transform;
   transition: box-shadow 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+  overflow: visible;
 }
 
-/* Cuboid bottom face */
+/* Reflective sheen moving across surface */
+.glass-card > *:first-child {
+  position: relative;
+  z-index: 1;
+}
+
+/* Cuboid bottom face --- thick glass edge */
 .glass-card::after {
   content: '';
   position: absolute;
-  bottom: -7px;
-  left: 4px;
-  right: -2px;
-  height: 7px;
-  background: linear-gradient(to bottom, rgba(201,168,76,0.14), rgba(201,168,76,0.03));
-  border-radius: 0 0 3px 3px;
-  transform: skewX(-1.2deg);
+  bottom: -14px;
+  left: 6px;
+  right: -4px;
+  height: 14px;
+  background: linear-gradient(
+    to bottom,
+    rgba(201, 168, 76, 0.18) 0%,
+    rgba(201, 168, 76, 0.08) 40%,
+    rgba(201, 168, 76, 0.02) 100%
+  );
+  border-radius: 0 0 4px 4px;
+  border-right: 1px solid rgba(201, 168, 76, 0.12);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.08);
+  transform: skewX(-2deg);
   pointer-events: none;
-  opacity: 0.8;
-  transition: bottom 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+  transition: bottom 0.5s ease, opacity 0.5s ease, height 0.5s ease;
 }
 
-/* Cuboid right face */
+/* Cuboid right face --- thick glass edge */
 .glass-card::before {
   content: '';
   position: absolute;
-  top: 4px;
-  right: -7px;
-  bottom: -2px;
-  width: 7px;
-  background: linear-gradient(to right, rgba(201,168,76,0.12), rgba(201,168,76,0.02));
-  border-radius: 0 3px 3px 0;
-  transform: skewY(-1.2deg);
+  top: 6px;
+  right: -14px;
+  bottom: -8px;
+  width: 14px;
+  background: linear-gradient(
+    to right,
+    rgba(201, 168, 76, 0.16) 0%,
+    rgba(201, 168, 76, 0.06) 40%,
+    rgba(201, 168, 76, 0.01) 100%
+  );
+  border-radius: 0 4px 4px 0;
+  border-right: 1px solid rgba(201, 168, 76, 0.08);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.10);
+  transform: skewY(-2deg);
   pointer-events: none;
-  opacity: 0.8;
-  transition: right 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+  transition: right 0.5s ease, opacity 0.5s ease, width 0.5s ease;
 }
 
 /* Stagger floats so cards move independently */
@@ -139,34 +167,45 @@ body {
 .glass-card:nth-child(5) { animation-delay: -2.6s; }
 .glass-card:nth-child(6) { animation-delay: -4.2s; }
 
-/* Hover: lift, flatten, deeper shadow */
+/* Hover: lift higher, flatten, dramatic shadow */
 .glass-card:hover {
   animation-play-state: paused;
-  transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateY(-12px) scale(1.02);
+  transform: perspective(600px) rotateX(0deg) rotateY(0deg) translateY(-18px) scale(1.02);
   box-shadow:
-    0 6px 12px rgba(201, 168, 76, 0.14),
-    0 20px 50px rgba(26, 26, 26, 0.14),
-    0 50px 100px rgba(26, 26, 26, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(201, 168, 76, 0.14);
+    0 40px 80px -16px rgba(26, 26, 26, 0.22),
+    0 20px 40px -8px rgba(201, 168, 76, 0.12),
+    0 8px 16px rgba(26, 26, 26, 0.06),
+    inset 0 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px rgba(201, 168, 76, 0.08),
+    inset 2px 0 0 rgba(255, 255, 255, 0.6);
   border-color: rgba(255, 255, 255, 0.95);
-  border-bottom-color: rgba(201, 168, 76, 0.4);
+  border-bottom-color: rgba(201, 168, 76, 0.45);
+  border-right-color: rgba(201, 168, 76, 0.35);
 }
-.glass-card:hover::after { bottom: -10px; opacity: 0.5; }
-.glass-card:hover::before { right: -10px; opacity: 0.5; }
+.glass-card:hover::after {
+  bottom: -18px;
+  height: 18px;
+  opacity: 0.6;
+}
+.glass-card:hover::before {
+  right: -18px;
+  width: 18px;
+  opacity: 0.6;
+}
 
+/* 3D floating keyframes --- pronounced rotation + bob */
 @keyframes glass-float {
-  0%   { transform: perspective(800px) rotateX(1.5deg) rotateY(-1deg) translateY(0px); }
-  25%  { transform: perspective(800px) rotateX(0.5deg) rotateY(0.5deg) translateY(-6px); }
-  50%  { transform: perspective(800px) rotateX(-0.5deg) rotateY(1deg) translateY(-10px); }
-  75%  { transform: perspective(800px) rotateX(0.8deg) rotateY(-0.5deg) translateY(-4px); }
-  100% { transform: perspective(800px) rotateX(1.5deg) rotateY(-1deg) translateY(0px); }
+  0%   { transform: perspective(600px) rotateX(3deg) rotateY(-2deg) translateY(0px); }
+  25%  { transform: perspective(600px) rotateX(1deg) rotateY(1deg) translateY(-8px); }
+  50%  { transform: perspective(600px) rotateX(-1.5deg) rotateY(2.5deg) translateY(-14px); }
+  75%  { transform: perspective(600px) rotateX(2deg) rotateY(-1deg) translateY(-5px); }
+  100% { transform: perspective(600px) rotateX(3deg) rotateY(-2deg) translateY(0px); }
 }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .glass-card { animation: none; transform: none; }
-  .glass-card:hover { transform: translateY(-4px) scale(1.01); }
+  .glass-card:hover { transform: translateY(-6px) scale(1.01); }
 }
 
 /* â”€â”€ Section glass orb backgrounds â”€â”€ */
@@ -377,15 +416,23 @@ button, a { cursor: pointer; }
     bottom: 5%;
     left: -15%;
   }
-  /* Subtler 3D float on mobile for performance */
+  /* 3D float scaled for mobile */
   .glass-card {
     animation-duration: 8s;
   }
+  .glass-card::after {
+    height: 10px;
+    bottom: -10px;
+  }
+  .glass-card::before {
+    width: 10px;
+    right: -10px;
+  }
   @keyframes glass-float {
-    0%   { transform: perspective(800px) rotateX(1deg) rotateY(-0.5deg) translateY(0px); }
-    25%  { transform: perspective(800px) rotateX(0.3deg) rotateY(0.3deg) translateY(-4px); }
-    50%  { transform: perspective(800px) rotateX(-0.3deg) rotateY(0.5deg) translateY(-7px); }
-    75%  { transform: perspective(800px) rotateX(0.5deg) rotateY(-0.3deg) translateY(-3px); }
-    100% { transform: perspective(800px) rotateX(1deg) rotateY(-0.5deg) translateY(0px); }
+    0%   { transform: perspective(600px) rotateX(2deg) rotateY(-1.5deg) translateY(0px); }
+    25%  { transform: perspective(600px) rotateX(0.8deg) rotateY(0.8deg) translateY(-6px); }
+    50%  { transform: perspective(600px) rotateX(-1deg) rotateY(1.5deg) translateY(-10px); }
+    75%  { transform: perspective(600px) rotateX(1.2deg) rotateY(-0.8deg) translateY(-4px); }
+    100% { transform: perspective(600px) rotateX(2deg) rotateY(-1.5deg) translateY(0px); }
   }
 }
