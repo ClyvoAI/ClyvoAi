@@ -41,7 +41,9 @@ body {
   font-weight: 700;
   font-style: italic;
   letter-spacing: -0.02em;
-  line-height: 1.05;
+  line-height: 1.12;
+  overflow: visible;
+  padding-bottom: 0.05em;
   color: var(--ink);
 }
 

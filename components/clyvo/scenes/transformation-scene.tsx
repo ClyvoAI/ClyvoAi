@@ -29,19 +29,37 @@ export function TransformationScene() {
   const isMobile   = useIsMobile()
 
   useEffect(() => {
-    if (window.innerWidth < 768) return
+    if (typeof window === 'undefined' || window.innerWidth < 768) return
+
     gsap.registerPlugin(ScrollTrigger)
-    const section = sectionRef.current, track = trackRef.current
+    const section = sectionRef.current
+    const track = trackRef.current
     if (!section || !track) return
-    const ctx = gsap.context(() => {
-      const getAmt = () => -(track.scrollWidth - window.innerWidth + 96)
-      gsap.to(track, {
-        x: getAmt, ease: 'none',
-        scrollTrigger: { trigger: section, pin: true, scrub: 1, start: 'top top', end: () => `+=${Math.abs(getAmt())}`, invalidateOnRefresh: true },
-      })
-    }, section)
-    return () => ctx.revert()
-  }, [])
+
+    // Small delay to ensure layout is complete
+    const timer = setTimeout(() => {
+      const ctx = gsap.context(() => {
+        const getAmt = () => -(track.scrollWidth - window.innerWidth + 96)
+        gsap.to(track, {
+          x: getAmt,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            pin: true,
+            anticipatePin: 1,
+            scrub: 1.5,
+            start: 'top top',
+            end: () => `+=${Math.abs(getAmt())}`,
+            invalidateOnRefresh: true,
+            refreshPriority: -1,
+          },
+        })
+      }, section)
+      return () => ctx.revert()
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [isMobile])
 
   return (
     <section ref={sectionRef} id="services" className="relative overflow-hidden section-has-glass"
