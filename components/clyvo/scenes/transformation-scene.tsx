@@ -30,39 +30,33 @@ export function TransformationScene() {
 
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth < 768) return
-
     gsap.registerPlugin(ScrollTrigger)
     const section = sectionRef.current
     const track = trackRef.current
     if (!section || !track) return
 
-    // Small delay to ensure layout is complete
     const timer = setTimeout(() => {
-      const ctx = gsap.context(() => {
-        const getAmt = () => -(track.scrollWidth - window.innerWidth + 96)
-        gsap.to(track, {
-          x: getAmt,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: section,
-            pin: true,
-            anticipatePin: 1,
-            scrub: 1.5,
-            start: 'top top',
-            end: () => `+=${Math.abs(getAmt())}`,
-            invalidateOnRefresh: true,
-            refreshPriority: -1,
-          },
-        })
-      }, section)
-      return () => ctx.revert()
-    }, 100)
+      const getAmt = () => -(track.scrollWidth - window.innerWidth + 96)
+      const st = ScrollTrigger.create({
+        trigger: section,
+        pin: true,
+        anticipatePin: 1,
+        scrub: 2,
+        start: 'top top',
+        end: () => `+=${Math.abs(getAmt())}`,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          gsap.set(track, { x: getAmt() * self.progress })
+        },
+      })
+      return () => st.kill()
+    }, 200)
 
     return () => clearTimeout(timer)
   }, [isMobile])
 
   return (
-    <section ref={sectionRef} id="services" className="relative overflow-hidden section-has-glass"
+    <section ref={sectionRef} id="services" className="relative section-has-glass"
       style={{ paddingBottom: '5rem', background: '#EDE6D6' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
 
@@ -82,7 +76,7 @@ export function TransformationScene() {
           {SERVICES.map((s, i) => <ServiceCard key={s.num} s={s} index={i} fullWidth />)}
         </div>
       ) : (
-        <div className="overflow-visible px-10 md:px-16">
+        <div className="px-10 md:px-16" style={{ overflow: 'visible' }}>
           <div ref={trackRef} className="flex gap-6 will-change-transform" style={{ width: 'max-content' }}>
             {SERVICES.map((s, i) => <ServiceCard key={s.num} s={s} index={i} />)}
             <div className="w-16 shrink-0" />

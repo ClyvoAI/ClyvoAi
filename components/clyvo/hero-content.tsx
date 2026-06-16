@@ -16,16 +16,6 @@ const GLASS = {
   boxShadow: '0 8px 40px rgba(26,26,26,0.08)',
 }
 
-const PARTICLES = Array.from({ length: 20 }, (_, i) => {
-  const seed = (i * 9301 + 49297) % 233280
-  const rand = seed / 233280
-  return {
-    left: `${(i * 41) % 100}%`, bottom: `${(rand * 80).toFixed(2)}%`,
-    size: 1 + (i % 3) * 0.3, duration: `${12 + (i % 6) * 2}s`,
-    delay: `${(i % 9) * -1.5}s`, opacity: 0.04 + (i % 4) * 0.02,
-  }
-})
-
 export function HeroContent() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
@@ -52,18 +42,7 @@ export function HeroContent() {
         background: 'radial-gradient(ellipse at center, transparent 50%, rgba(245,240,232,0.7) 100%)',
       }} />
 
-      {/* Fine particles — desktop only */}
-      <div className="pointer-events-none absolute inset-0 hidden md:block" style={{ overflow: 'clip' }}>
-        {PARTICLES.map((p, i) => (
-          <span key={i} className="absolute rounded-full" style={{
-            left: p.left, bottom: p.bottom, width: p.size, height: p.size,
-            background: '#C9A84C', opacity: p.opacity,
-            animation: `particle-rise ${p.duration} ${p.delay} linear infinite`,
-          }} />
-        ))}
-      </div>
-
-      {/* Logo orb — desktop only */}
+      {/* Logo orb — desktop only, no particles (removed for performance) */}
       <motion.div style={{ y: logoY, opacity: logoOpacity }}
         className="pointer-events-none absolute top-24 right-[8%] hidden md:block"
       >
@@ -92,22 +71,30 @@ export function HeroContent() {
           <span className="eyebrow">Custom AI Agency · B2B</span>
         </motion.div>
 
-        {/* Headline — fixed line-height and removed overflow-hidden to prevent clipping */}
-        <h1 style={{ fontSize: 'clamp(2.8rem, 9vw, 9.5rem)', lineHeight: 1.05, letterSpacing: '-0.03em', paddingBottom: '0.08em' }}>
-          <span className="block headline-luxury" style={{ overflow: 'visible', paddingBottom: '0.04em' }}>
+        {/* Headline */}
+        <h1 style={{
+          fontSize: 'clamp(2.8rem, 9vw, 9.5rem)',
+          lineHeight: 1.08,
+          letterSpacing: '-0.03em',
+          paddingBottom: '0.1em',
+          overflow: 'visible',
+        }}>
+          <span className="block headline-luxury" style={{ overflow: 'visible' }}>
             {['Custom', 'AI.'].map((w, i) => (
               <motion.span key={w} className="mr-[0.15em] inline-block last:mr-0"
-                style={{ overflow: 'visible' }}
-                initial={{ clipPath: 'inset(0 100% 0 0)' }} animate={{ clipPath: 'inset(0 0% 0 0)' }}
+                style={{ overflow: 'visible', display: 'inline-block' }}
+                initial={{ clipPath: 'inset(0 100% 0 -10%)' }}
+                animate={{ clipPath: 'inset(0 0% 0 -10%)' }}
                 transition={{ duration: 1.1, delay: 0.5 + i * 0.12, ease: EASE }}
               >{w}</motion.span>
             ))}
           </span>
-          <span className="block headline-luxury" style={{ fontSize: '0.92em', color: 'rgba(26,26,26,0.15)', overflow: 'visible', paddingBottom: '0.04em' }}>
+          <span className="block headline-luxury" style={{ fontSize: '0.92em', color: 'rgba(26,26,26,0.15)', overflow: 'visible' }}>
             {['Real', 'Results.'].map((w, i) => (
               <motion.span key={w} className="mr-[0.15em] inline-block last:mr-0"
-                style={{ overflow: 'visible' }}
-                initial={{ clipPath: 'inset(0 100% 0 0)' }} animate={{ clipPath: 'inset(0 0% 0 0)' }}
+                style={{ overflow: 'visible', display: 'inline-block' }}
+                initial={{ clipPath: 'inset(0 100% 0 -10%)' }}
+                animate={{ clipPath: 'inset(0 0% 0 -10%)' }}
                 transition={{ duration: 1.1, delay: 0.75 + i * 0.12, ease: EASE }}
               >{w}</motion.span>
             ))}
