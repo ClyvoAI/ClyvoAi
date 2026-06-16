@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -35,7 +35,7 @@ body {
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
-/* ── Luxury serif headline ── */
+/* â”€â”€ Luxury serif headline â”€â”€ */
 .headline-luxury {
   font-family: var(--font-playfair);
   font-weight: 700;
@@ -47,7 +47,7 @@ body {
   color: var(--ink);
 }
 
-/* ── Eyebrow label ── */
+/* â”€â”€ Eyebrow label â”€â”€ */
 .eyebrow {
   font-family: var(--font-inter);
   font-size: 10px;
@@ -57,11 +57,11 @@ body {
   color: var(--gold);
 }
 
-/* ── Gold accent text ── */
+/* â”€â”€ Gold accent text â”€â”€ */
 .text-gold { color: var(--gold); }
 .text-ink  { color: var(--ink); }
 
-/* ── Luxury card (solid) ── */
+/* â”€â”€ Luxury card (solid) â”€â”€ */
 .luxury-card {
   background: var(--surface);
   border-radius: 2px;
@@ -73,7 +73,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* ── Glass card ── */
+/* â”€â”€ Glass card â”€â”€ */
 .glass-card {
   background: linear-gradient(
     135deg,
@@ -107,7 +107,7 @@ body {
   border-bottom-color: rgba(201, 168, 76, 0.35);
 }
 
-/* ── Section glass orb backgrounds ── */
+/* â”€â”€ Section glass orb backgrounds â”€â”€ */
 .section-has-glass {
   position: relative;
   isolation: isolate;
@@ -143,17 +143,17 @@ body {
   z-index: 1;
 }
 
-/* ── Gold rule divider ── */
+/* â”€â”€ Gold rule divider â”€â”€ */
 .gold-rule {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
   opacity: 0.4;
 }
 
-/* ── Thin border ── */
+/* â”€â”€ Thin border â”€â”€ */
 .luxury-border { border: 1px solid rgba(201,168,76,0.2); }
 
-/* ── Nav ── */
+/* â”€â”€ Nav â”€â”€ */
 .nav-luxury {
   background: rgba(245,240,232,0.85);
   backdrop-filter: blur(20px) saturate(180%);
@@ -161,7 +161,7 @@ body {
   border-bottom: 1px solid rgba(201,168,76,0.15);
 }
 
-/* ── Button primary — dark ink ── */
+/* â”€â”€ Button primary â€” dark ink â”€â”€ */
 .btn-primary {
   background: var(--ink);
   color: #F5F0E8;
@@ -181,7 +181,7 @@ body {
 .btn-primary:hover { background: #2A2A2A; transform: translateY(-1px); }
 .btn-primary:active { transform: scale(0.98); }
 
-/* ── Button ghost — gold border ── */
+/* â”€â”€ Button ghost â€” gold border â”€â”€ */
 .btn-ghost {
   background: transparent;
   color: var(--ink);
@@ -197,12 +197,12 @@ body {
 }
 .btn-ghost:hover { border-color: var(--gold); background: rgba(201,168,76,0.04); }
 
-/* ── Section padding ── */
+/* â”€â”€ Section padding â”€â”€ */
 .section-padding { padding: 7rem 2rem; }
 @media (min-width: 768px) { .section-padding { padding: 9rem 4rem; } }
 @media (min-width: 1280px) { .section-padding { padding: 11rem 6rem; } }
 
-/* ── Horizontal rule decoration ── */
+/* â”€â”€ Horizontal rule decoration â”€â”€ */
 .section-divider {
   width: 40px;
   height: 1px;
@@ -210,7 +210,7 @@ body {
   margin: 1.5rem 0;
 }
 
-/* ── Hero grid (very subtle) ── */
+/* â”€â”€ Hero grid (very subtle) â”€â”€ */
 .hero-grid {
   background-image:
     linear-gradient(rgba(26,26,26,0.03) 1px, transparent 1px),
@@ -218,11 +218,11 @@ body {
   background-size: 80px 80px;
 }
 
-/* ── Scroll dots ── */
+/* â”€â”€ Scroll dots â”€â”€ */
 .scroll-dot-active { background: var(--ink); transform: scale(1.5); }
 .scroll-dot { background: rgba(26,26,26,0.2); }
 
-/* ── Shimmer (loader) ── */
+/* â”€â”€ Shimmer (loader) â”€â”€ */
 .shimmer-bar {
   background: rgba(26,26,26,0.04);
   overflow: hidden;
@@ -263,7 +263,7 @@ body {
 button, a { cursor: pointer; }
 .will-change-transform { will-change: transform; }
 
-/* ── Luxury prose ── */
+/* â”€â”€ Luxury prose â”€â”€ */
 .prose-luxury p {
   font-family: var(--font-inter);
   font-size: 16px;
@@ -272,10 +272,10 @@ button, a { cursor: pointer; }
   color: var(--ink-light);
 }
 
-/* ── Timeline line ── */
+/* â”€â”€ Timeline line â”€â”€ */
 .timeline-line { background: rgba(201,168,76,0.3); }
 
-/* ── gradient-label override for gold ── */
+/* â”€â”€ gradient-label override for gold â”€â”€ */
 .gradient-label {
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
   -webkit-background-clip: text;

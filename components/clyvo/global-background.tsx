@@ -1,7 +1,5 @@
-'use client'
+﻿'use client'
 
-// Static background orbs — no animation, no blur filter
-// Animated blur filters on fixed elements cause scroll jank on all devices
 export function GlobalBackground() {
   return (
     <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
