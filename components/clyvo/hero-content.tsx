@@ -6,8 +6,15 @@ import { motion, useScroll, useTransform } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 
 const EASE = [0.16, 1, 0.3, 1] as const
-
 const LOGO_FILTER = 'brightness(0) saturate(100%)'
+
+const GLASS = {
+  background: 'rgba(245,240,232,0.55)',
+  backdropFilter: 'blur(16px)',
+  WebkitBackdropFilter: 'blur(16px)',
+  border: '1px solid rgba(201,168,76,0.22)',
+  boxShadow: '0 8px 40px rgba(26,26,26,0.08)',
+}
 
 const PARTICLES = Array.from({ length: 20 }, (_, i) => {
   const seed = (i * 9301 + 49297) % 233280
@@ -65,8 +72,7 @@ export function HeroContent() {
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           className="flex h-36 w-36 items-center justify-center"
           style={{
-            background: 'radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%)',
-            border: '1px solid rgba(201,168,76,0.25)',
+            ...GLASS,
             borderRadius: '50%',
             boxShadow: '0 0 60px rgba(201,168,76,0.15)',
           }}
@@ -146,12 +152,7 @@ export function HeroContent() {
         <motion.div
           animate={{ y: [0, -14, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-          style={{
-            background: 'rgba(245,240,232,0.95)',
-            border: '1px solid rgba(201,168,76,0.2)',
-            boxShadow: '0 8px 40px rgba(26,26,26,0.08)',
-            padding: '20px 24px', width: 260,
-          }}
+          style={{ ...GLASS, padding: '20px 24px', width: 260 }}
         >
           <div className="flex items-center justify-between">
             <span className="font-syne text-[13px] font-semibold text-[#1A1A1A]">AI System Active</span>

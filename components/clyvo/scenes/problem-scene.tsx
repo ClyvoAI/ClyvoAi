@@ -6,6 +6,14 @@ import { MessageSquareOff, Building2 } from 'lucide-react'
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, margin: '-80px' } as const
 
+const GLASS = {
+  background: 'rgba(255,255,255,0.45)',
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)',
+  border: '1px solid rgba(201,168,76,0.18)',
+  boxShadow: '0 8px 32px rgba(26,26,26,0.06)',
+}
+
 const ALTERNATIVES = [
   { icon: MessageSquareOff, title: 'Generic AI Tools',
     description: "ChatGPT and off-the-shelf platforms weren't built for your processes, your data, or the way your business actually runs." },
@@ -44,15 +52,26 @@ export function ProblemScene() {
             </motion.div>
           </motion.div>
 
-          {/* Right — cards */}
+          {/* Right — glass cards */}
           <div className="space-y-4">
             {ALTERNATIVES.map((alt, i) => (
               <motion.div key={alt.title} initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
                 viewport={VP} transition={{ duration: 0.8, delay: i * 0.15, ease: EASE }}
-                className="luxury-card p-8"
+                className="p-8 transition-all duration-300"
+                style={{ ...GLASS }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                  e.currentTarget.style.boxShadow = '0 16px 40px rgba(26,26,26,0.10)'
+                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.4)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(26,26,26,0.06)'
+                  e.currentTarget.style.borderColor = 'rgba(201,168,76,0.18)'
+                }}
               >
                 <div className="flex h-10 w-10 items-center justify-center"
-                  style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.04)' }}>
+                  style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}>
                   <alt.icon className="h-4 w-4 text-[#C9A84C]" />
                 </div>
                 <h3 className="mt-5 font-syne text-base font-semibold text-[#1A1A1A]">{alt.title}</h3>

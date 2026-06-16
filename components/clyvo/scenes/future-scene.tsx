@@ -7,6 +7,14 @@ import { ContactForm } from '@/components/clyvo/contact-form'
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, amount: 0.2 } as const
 
+const GLASS = {
+  background: 'rgba(255,255,255,0.45)',
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)',
+  border: '1px solid rgba(201,168,76,0.18)',
+  boxShadow: '0 8px 32px rgba(26,26,26,0.06)',
+}
+
 const WORDS = ['Your', 'industry', 'knowledge', '+', 'our', 'AI', 'expertise', '=', 'real', 'results.']
 const ACCENTS = new Set(['+', '='])
 
@@ -49,10 +57,10 @@ export function FutureScene() {
 
         {/* Two-column: form + info */}
         <div className="grid gap-12 lg:grid-cols-[1fr_380px]">
-          {/* Form */}
+          {/* Form — glass */}
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={VP} transition={{ duration: 0.8, ease: EASE }}
-            style={{ background: '#FFFFFF', padding: 40, boxShadow: '0 4px 20px rgba(26,26,26,0.06)' }}>
+            style={{ ...GLASS, padding: 40 }}>
             <h3 className="font-syne text-lg font-semibold text-[#1A1A1A]">Book Your Discovery Call</h3>
             <p className="mt-2 font-inter text-sm font-light text-[#8A8A8A]">Free 45-minute consultation · No commitment</p>
             <div className="mt-8">
@@ -60,10 +68,11 @@ export function FutureScene() {
             </div>
           </motion.div>
 
-          {/* Info panel */}
+          {/* Info panel — glass */}
           <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={VP} transition={{ duration: 0.8, delay: 0.15, ease: EASE }}
-            className="flex flex-col gap-8">
+            className="flex flex-col gap-8 p-8"
+            style={{ ...GLASS }}>
             {[
               { num: '01', title: 'Free consultation', desc: 'A 45-minute call to understand your needs — no pitch, no pressure.' },
               { num: '02', title: 'Custom proposal',   desc: 'We scope a solution tailored to your exact operations and budget.' },
