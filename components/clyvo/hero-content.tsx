@@ -28,7 +28,7 @@ export function HeroContent() {
   const logoY          = useTransform(scrollYProgress, [0, 0.5], [0, -30])
 
   return (
-    <section ref={ref} className="relative w-full" style={{ height: '100vh', background: '#F5F0E8', overflow: 'clip' }}>
+    <section ref={ref} className="relative w-full h-[78vh] md:h-screen" style={{ background: '#F5F0E8', overflow: 'clip' }}>
       {/* Subtle grid */}
       <div className="hero-grid pointer-events-none absolute inset-0 opacity-60" />
 
@@ -59,7 +59,7 @@ export function HeroContent() {
 
       {/* Main content */}
       <motion.div style={{ opacity: contentOpacity, y: contentY }}
-        className="absolute bottom-0 left-0 w-full pb-20 pl-6 sm:pl-10 md:pl-16 lg:pl-24 will-change-transform"
+        className="absolute bottom-0 left-0 w-full pb-10 md:pb-20 pl-6 sm:pl-10 md:pl-16 lg:pl-24 will-change-transform"
       >
         {/* Eyebrow */}
         <motion.div
