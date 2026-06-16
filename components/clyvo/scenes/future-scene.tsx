@@ -79,7 +79,7 @@ export function FutureScene() {
               { num: '03', title: 'Fast delivery',     desc: 'Most projects go live in 4–8 weeks. No bloated timelines.' },
             ].map(item => (
               <div key={item.num} className="flex gap-5">
-                <span className="font-playfair text-xl font-bold italic text-[#C9A84C]/60">{item.num}</span>
+                <span className="font-playfair text-xl font-bold italic text-[#C9A84C]/75">{item.num}</span>
                 <div>
                   <h4 className="font-syne text-sm font-semibold text-[#1A1A1A]">{item.title}</h4>
                   <p className="mt-1 font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">{item.desc}</p>

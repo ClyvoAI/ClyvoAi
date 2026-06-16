@@ -95,7 +95,7 @@ function ServiceCard({ s, index, fullWidth = false }: { s: typeof SERVICES[0]; i
       className={`glass-card flex shrink-0 flex-col p-6 md:p-8 ${fullWidth ? 'w-full' : 'w-[340px]'}`}
       style={{ minHeight: fullWidth ? undefined : 320 }}
     >
-      <span className="font-syne text-2xl font-bold text-[#C9A84C]/40">{s.num}</span>
+      <span className="font-syne text-2xl font-bold text-[#C9A84C]/60">{s.num}</span>
       <div className="mt-5 flex h-10 w-10 items-center justify-center"
         style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}>
         <s.icon className="h-4 w-4 text-[#C9A84C]" />
