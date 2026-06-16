@@ -1,10 +1,8 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { motion } from 'motion/react'
 import { Bot, Workflow, Brain, Phone, Plug } from 'lucide-react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useIsMobile } from '@/lib/device'
 
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -24,39 +22,34 @@ const SERVICE_HREFS: Record<string, string> = {
 }
 
 export function TransformationScene() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const trackRef   = useRef<HTMLDivElement>(null)
-  const isMobile   = useIsMobile()
+  const trackRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
 
+  // Convert vertical mousewheel → horizontal scroll when cursor is on the track
   useEffect(() => {
     if (typeof window === 'undefined' || window.innerWidth < 768) return
-    gsap.registerPlugin(ScrollTrigger)
-    const section = sectionRef.current
     const track = trackRef.current
-    if (!section || !track) return
+    if (!track) return
 
-    const timer = setTimeout(() => {
-      const getAmt = () => -(track.scrollWidth - window.innerWidth + 96)
-      const st = ScrollTrigger.create({
-        trigger: section,
-        pin: true,
-        anticipatePin: 1,
-        scrub: 2,
-        start: 'top top',
-        end: () => `+=${Math.abs(getAmt())}`,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          gsap.set(track, { x: getAmt() * self.progress })
-        },
-      })
-      return () => st.kill()
-    }, 200)
+    const onWheel = (e: WheelEvent) => {
+      // Only hijack if there's room to scroll horizontally
+      const maxScroll = track.scrollWidth - track.clientWidth
+      const atStart = track.scrollLeft <= 0 && e.deltaY < 0
+      const atEnd = track.scrollLeft >= maxScroll - 1 && e.deltaY > 0
 
-    return () => clearTimeout(timer)
+      // If at either edge, let normal page scroll happen
+      if (atStart || atEnd) return
+
+      e.preventDefault()
+      track.scrollLeft += e.deltaY
+    }
+
+    track.addEventListener('wheel', onWheel, { passive: false })
+    return () => track.removeEventListener('wheel', onWheel)
   }, [isMobile])
 
   return (
-    <section ref={sectionRef} id="services" className="relative section-has-glass pb-12 md:pb-20"
+    <section id="services" className="relative section-has-glass pb-12 md:pb-20"
       style={{ background: '#EDE6D6' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
 
@@ -76,11 +69,23 @@ export function TransformationScene() {
           {SERVICES.map((s, i) => <ServiceCard key={s.num} s={s} index={i} fullWidth />)}
         </div>
       ) : (
-        <div className="px-10 md:px-16" style={{ overflow: 'visible' }}>
-          <div ref={trackRef} className="flex gap-6 will-change-transform" style={{ width: 'max-content' }}>
-            {SERVICES.map((s, i) => <ServiceCard key={s.num} s={s} index={i} />)}
-            <div className="w-16 shrink-0" />
-          </div>
+        <div
+          ref={trackRef}
+          className="flex gap-6 px-10 pb-6 md:px-16"
+          style={{
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            scrollBehavior: 'smooth',
+            /* Hide scrollbar but keep functionality */
+            scrollbarWidth: 'none',         /* Firefox */
+            msOverflowStyle: 'none',        /* IE/Edge */
+          }}
+        >
+          <style>{`
+            #services div[class*="flex gap-6"]::-webkit-scrollbar { display: none; }
+          `}</style>
+          {SERVICES.map((s, i) => <ServiceCard key={s.num} s={s} index={i} />)}
+          <div className="w-4 shrink-0" />
         </div>
       )}
     </section>
