@@ -15,7 +15,6 @@ interface Project {
   blurb: string
   services: string[]
   accent: string
-  accentTint: string
   icon: IconName
   image: string | null
   url: string
@@ -26,7 +25,7 @@ interface Project {
  *
  * To go live with real assets:
  * - set `image` to a real screenshot path (e.g. "/portfolio/yusuf-bhai.jpg")
- *   to replace the icon placeholder for that card
+ *   to show it above the description instead of just the icon badge
  * - set `url` to the client's live site to enable the "View site" CTA
  *
  * No invented stats (conversion %, enrollments, etc.) on purpose.
@@ -41,7 +40,6 @@ const PROJECTS: Project[] = [
     blurb: 'Online catalog and storefront for a heritage attar and perfume house.',
     services: ['Web design', 'E-commerce'],
     accent: '#7C5CFC',
-    accentTint: '#F1EEFE',
     icon: 'bottle',
     image: null,
     url: '',
@@ -53,7 +51,6 @@ const PROJECTS: Project[] = [
     blurb: 'Course catalog and admissions enquiry funnel for a coaching academy.',
     services: ['Web design', 'Lead capture'],
     accent: '#127A6E',
-    accentTint: '#E8F5F3',
     icon: 'cap',
     image: null,
     url: '',
@@ -65,7 +62,6 @@ const PROJECTS: Project[] = [
     blurb: 'Membership info and class-booking presence for a fitness studio.',
     services: ['Web design', 'Booking'],
     accent: '#E2542E',
-    accentTint: '#FCEAE5',
     icon: 'dumbbell',
     image: null,
     url: '',
@@ -77,15 +73,14 @@ const PROJECTS: Project[] = [
     blurb: 'Digital menu and ordering presence for a home-kitchen brand.',
     services: ['Web design', 'Menu & ordering'],
     accent: '#C8870B',
-    accentTint: '#FBF1E0',
     icon: 'pot',
     image: null,
     url: '',
   },
 ]
 
-function ProjectIcon({ icon, accent }: { icon: IconName; accent: string }) {
-  const props = { viewBox: '0 0 100 100', width: 40, height: 40, 'aria-hidden': true } as const
+function ProjectIcon({ icon, accent, size = 40 }: { icon: IconName; accent: string; size?: number }) {
+  const props = { viewBox: '0 0 100 100', width: size, height: size, 'aria-hidden': true } as const
   switch (icon) {
     case 'bottle':
       return (
@@ -138,10 +133,27 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <motion.article
       initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={VP} transition={{ duration: 0.8, delay: index * 0.1, ease: EASE }}
-      className="luxury-card p-6 sm:p-7"
+      className="glass-card p-6 md:p-8"
     >
-      <div className="relative mb-6 h-40 overflow-hidden rounded-sm" style={{ backgroundColor: project.accentTint }}>
-        {project.image ? (
+      <div className="flex items-center gap-4">
+        <div
+          className="flex h-11 w-11 shrink-0 items-center justify-center"
+          style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}
+        >
+          <ProjectIcon icon={project.icon} accent={project.accent} size={22} />
+        </div>
+        <div>
+          <h3 id={headingId} className="font-syne text-base font-semibold text-[#1A1A1A]">
+            {project.client}
+          </h3>
+          <span className="font-inter text-[10px] uppercase tracking-[0.15em] text-[#C9A84C]/70">
+            {project.industry}
+          </span>
+        </div>
+      </div>
+
+      {project.image && (
+        <div className="relative mt-5 h-36 overflow-hidden rounded-sm">
           <Image
             src={project.image}
             alt={`${project.client} site preview`}
@@ -149,50 +161,37 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             sizes="(min-width: 640px) 50vw, 100vw"
             className="object-cover"
           />
-        ) : (
-          <div className="flex h-full items-center justify-center">
-            <ProjectIcon icon={project.icon} accent={project.accent} />
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      <p className="mb-2 font-inter text-[10px] uppercase tracking-[0.15em]" style={{ color: project.accent }}>
-        {project.industry}
-      </p>
-
-      <h3 id={headingId} className="mb-2 font-syne text-base font-semibold text-[#1A1A1A]">
-        {project.client}
-      </h3>
-
-      <p className="mb-4 font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">
+      <p className="mt-5 font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">
         {project.blurb}
       </p>
 
-      <ul className="mb-5 flex flex-wrap gap-2">
+      <ul className="mt-5 space-y-2">
         {project.services.map((service) => (
-          <li
-            key={service}
-            className="font-inter text-[11px]"
-            style={{ background: 'rgba(26,26,26,0.05)', color: '#4A4A4A', padding: '4px 10px' }}
-          >
+          <li key={service} className="flex items-center gap-2.5 font-inter text-sm font-light text-[#4A4A4A]">
+            <span className="h-1 w-4 shrink-0" style={{ background: '#C9A84C', opacity: 0.5 }} />
             {service}
           </li>
         ))}
       </ul>
 
-      {project.url ? (
-        <a
-          href={project.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-describedby={headingId}
-          className="inline-flex items-center gap-1 font-inter text-[11px] uppercase tracking-[0.12em] text-[#C9A84C] transition-opacity hover:opacity-70"
-        >
-          View site <span aria-hidden="true">→</span>
-        </a>
-      ) : (
-        <span className="font-inter text-sm text-[#8A8A8A]">Case study coming soon</span>
-      )}
+      <div className="mt-5 border-t pt-4" style={{ borderColor: 'rgba(201,168,76,0.15)' }}>
+        {project.url ? (
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-describedby={headingId}
+            className="inline-flex items-center gap-1 font-inter text-[11px] uppercase tracking-[0.12em] text-[#C9A84C] transition-opacity hover:opacity-70"
+          >
+            View site <span aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <span className="font-inter text-xs text-[#8A8A8A]">Case study coming soon</span>
+        )}
+      </div>
     </motion.article>
   )
 }
