@@ -9,6 +9,7 @@ import { ScrollDots }       from '@/components/clyvo/scroll-dots'
 const ProblemScene        = dynamic(() => import('@/components/clyvo/scenes/problem-scene').then(m => ({ default: m.ProblemScene })))
 const TransformationScene = dynamic(() => import('@/components/clyvo/scenes/transformation-scene').then(m => ({ default: m.TransformationScene })))
 const PortfolioScene      = dynamic(() => import('@/components/clyvo/scenes/portfolio-scene').then(m => ({ default: m.PortfolioScene })))
+const TestimonialScene    = dynamic(() => import('@/components/clyvo/scenes/testimonial-scene').then(m => ({ default: m.TestimonialScene })))
 const OperatingLayerScene = dynamic(() => import('@/components/clyvo/scenes/operating-layer-scene').then(m => ({ default: m.OperatingLayerScene })))
 const CommandCenterScene  = dynamic(() => import('@/components/clyvo/scenes/command-center-scene').then(m => ({ default: m.CommandCenterScene })))
 const ImpactScene         = dynamic(() => import('@/components/clyvo/scenes/impact-scene').then(m => ({ default: m.ImpactScene })))
@@ -28,6 +29,7 @@ export default function Home() {
         <div id="solutions"><ProblemScene /></div>
         <div id="services"><TransformationScene /></div>
         <PortfolioScene />
+        <TestimonialScene />
         <div id="how-it-works"><OperatingLayerScene /></div>
         <div id="about"><CommandCenterScene /></div>
         <div id="pricing"><ImpactScene /></div>

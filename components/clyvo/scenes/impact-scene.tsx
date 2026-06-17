@@ -3,17 +3,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'motion/react'
 import { ArrowRight, Hammer, RefreshCw } from 'lucide-react'
+import type { RatingStats } from '@/lib/testimonials'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, margin: '-80px' } as const
 
-const STATS = [
-  { value: 500, suffix: '+', label: 'Clients Served' },
-  { value: 98,  suffix: '%', label: 'Satisfaction' },
-  { value: 3,   suffix: 'x', label: 'Average ROI' },
+// Real, verifiable numbers only — see /components/clyvo/scenes/portfolio-scene.tsx
+// for the actual client list. Don't add a number here you can't point to.
+const BASE_STATS = [
+  { value: 4,   suffix: '',  label: 'Local Businesses Built', decimals: 0 },
+  { value: 100, suffix: '%', label: 'Custom-Built, No Templates', decimals: 0 },
 ]
 
-function Counter({ value, suffix }: { value: number; suffix: string }) {
+function Counter({ value, suffix, decimals = 0 }: { value: number; suffix: string; decimals?: number }) {
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
   const [count, setCount] = useState(0)
@@ -22,16 +24,30 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
     const start = performance.now()
     const tick = (now: number) => {
       const p = Math.min((now - start) / 1400, 1)
-      setCount(Math.round(p * value))
+      setCount(Number((p * value).toFixed(decimals)))
       if (p < 1) requestAnimationFrame(tick)
     }
     requestAnimationFrame(tick)
-  }, [inView, value])
+  }, [inView, value, decimals])
   return (
     <span ref={ref} className="font-playfair font-bold italic" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', color: '#1A1A1A' }}>
-      {count}{suffix}
+      {count.toFixed(decimals)}{suffix}
     </span>
   )
+}
+
+// Fetches the live average rating from approved testimonials. Returns
+// null until there's at least one approved testimonial — the stats
+// grid below only adds the third column once this resolves to a value.
+function useAverageRating() {
+  const [stats, setStats] = useState<RatingStats | null>(null)
+  useEffect(() => {
+    fetch('/api/testimonials')
+      .then((res) => res.json())
+      .then((data) => setStats(data.stats ?? null))
+      .catch(() => setStats(null))
+  }, [])
+  return stats
 }
 
 const PLAN = [
@@ -40,6 +56,11 @@ const PLAN = [
 ]
 
 export function ImpactScene() {
+  const ratingStats = useAverageRating()
+  const STATS = ratingStats
+    ? [...BASE_STATS, { value: ratingStats.average, suffix: '★', label: `Avg. Rating (${ratingStats.count})`, decimals: 1 }]
+    : BASE_STATS
+
   return (
     <section id="pricing" className="relative section-padding section-has-glass" style={{ background: '#F5F0E8' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
@@ -58,11 +79,11 @@ export function ImpactScene() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.8, ease: EASE }}
-          className="mb-10 md:mb-16 grid grid-cols-3 gap-4 md:gap-8 py-8 md:py-12"
+          className={`mb-10 md:mb-16 grid gap-4 md:gap-8 py-8 md:py-12 ${STATS.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}
           style={{ borderTop: '1px solid rgba(201,168,76,0.25)', borderBottom: '1px solid rgba(201,168,76,0.25)' }}>
           {STATS.map((s) => (
             <div key={s.label} className="text-center">
-              <Counter value={s.value} suffix={s.suffix} />
+              <Counter value={s.value} suffix={s.suffix} decimals={s.decimals} />
               <p className="mt-2 font-inter text-[10px] uppercase tracking-[0.2em] text-[#C9A84C]">{s.label}</p>
             </div>
           ))}
