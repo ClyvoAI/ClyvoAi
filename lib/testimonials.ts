@@ -1,3 +1,5 @@
+import { supabase } from '@/lib/supabase'
+
 export type Satisfaction = 1 | 2 | 3 | 4 | 5
 
 export const SATISFACTION_EMOJI: Record<Satisfaction, { emoji: string; label: string }> = {
@@ -32,26 +34,45 @@ export interface RatingStats {
   count: number
 }
 
-/**
- * ⚠️ TEMPORARY in-memory store — NOT durable.
- *
- * This array resets on every deploy and every serverless cold start.
- * It exists only so the rest of the feature (rating/emoji inputs, the
- * /feedback submission page, the public testimonial section, and the
- * live "Avg. Rating" stat on the pricing section) is wired and testable
- * right now, end to end.
- *
- * Once you share what's behind /api/leads, swap the three functions
- * below for real queries against that same database. Nothing else in
- * the app needs to change — every other file only calls these three
- * functions, never touches storage directly.
- */
-const TEMP_STORE: Testimonial[] = []
+// Row shape as stored in Supabase — snake_case, matching your `leads` table convention
+interface TestimonialRow {
+  id: string
+  name: string
+  company: string | null
+  rating: number
+  satisfaction: number
+  quote: string
+  approved: boolean
+  created_at: string
+}
+
+function rowToTestimonial(row: TestimonialRow): Testimonial {
+  return {
+    id: row.id,
+    name: row.name,
+    company: row.company ?? '',
+    rating: row.rating as Testimonial['rating'],
+    satisfaction: row.satisfaction as Satisfaction,
+    quote: row.quote,
+    approved: row.approved,
+    createdAt: row.created_at,
+  }
+}
+
+// ---- Public-facing reads (used by testimonial-scene.tsx + impact-scene.tsx) ----
 
 export async function getApprovedTestimonials(): Promise<Testimonial[]> {
-  return TEMP_STORE.filter((t) => t.approved).sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  )
+  const { data, error } = await supabase
+    .from('testimonials')
+    .select('*')
+    .eq('approved', true)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Supabase error (getApprovedTestimonials):', error)
+    return []
+  }
+  return (data as TestimonialRow[]).map(rowToTestimonial)
 }
 
 export async function getAverageRating(): Promise<RatingStats | null> {
@@ -61,17 +82,48 @@ export async function getAverageRating(): Promise<RatingStats | null> {
   return { average: Math.round((sum / approved.length) * 10) / 10, count: approved.length }
 }
 
+// ---- Public write (used by app/feedback/page.tsx via POST /api/testimonials) ----
+
 export async function createTestimonial(input: NewTestimonialInput): Promise<Testimonial> {
-  const testimonial: Testimonial = {
-    id: typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${Date.now()}`,
-    name: input.name.trim(),
-    company: input.company?.trim() ?? '',
-    rating: input.rating,
-    satisfaction: input.satisfaction,
-    quote: input.quote.trim(),
-    approved: false, // gated — approved manually before it's public
-    createdAt: new Date().toISOString(),
+  const { data, error } = await supabase
+    .from('testimonials')
+    .insert([{
+      name: input.name.trim(),
+      company: input.company?.trim() || null,
+      rating: input.rating,
+      satisfaction: input.satisfaction,
+      quote: input.quote.trim(),
+      approved: false, // gated — flipped via the admin endpoints below
+      created_at: new Date().toISOString(),
+    }])
+    .select()
+    .single()
+
+  if (error) throw new Error(error.message)
+  return rowToTestimonial(data as TestimonialRow)
+}
+
+// ---- Admin-only operations (used by the admin API routes, secret-header gated) ----
+
+export async function getAllTestimonials(): Promise<Testimonial[]> {
+  const { data, error } = await supabase
+    .from('testimonials')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Supabase error (getAllTestimonials):', error)
+    return []
   }
-  TEMP_STORE.push(testimonial)
-  return testimonial
+  return (data as TestimonialRow[]).map(rowToTestimonial)
+}
+
+export async function setTestimonialApproval(id: string, approved: boolean): Promise<void> {
+  const { error } = await supabase.from('testimonials').update({ approved }).eq('id', id)
+  if (error) throw new Error(error.message)
+}
+
+export async function deleteTestimonial(id: string): Promise<void> {
+  const { error } = await supabase.from('testimonials').delete().eq('id', id)
+  if (error) throw new Error(error.message)
 }
