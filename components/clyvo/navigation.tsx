@@ -23,6 +23,7 @@ const SERVICES = [
 ]
 
 const NAV_LINKS = [
+  { href: '#work',        label: 'Work' },
   { href: '#how-it-works',label: 'How It Works' },
   { href: '#pricing',     label: 'Pricing' },
   { href: '#about',       label: 'About' },

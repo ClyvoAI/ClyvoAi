@@ -10,6 +10,7 @@ const LINKS = {
     { label: 'System Integrations', href: '/services/system-integrations' },
   ],
   Company: [
+    { label: 'Our Work',     href: '#work' },
     { label: 'How It Works', href: '#how-it-works' },
     { label: 'Pricing',      href: '#pricing' },
     { label: 'About',        href: '#about' },
