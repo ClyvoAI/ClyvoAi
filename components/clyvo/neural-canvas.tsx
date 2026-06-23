@@ -61,7 +61,7 @@ export function NeuralCanvas() {
         if (a === b) continue
         const dx = nodes[a].x - nodes[b].x, dy = nodes[a].y - nodes[b].y
         if (dx*dx + dy*dy < EDGE_DIST * EDGE_DIST) {
-          pkts.push({ a, b, t: 0, speed: 0.006 + Math.random() * 0.010 })
+          pkts.push({ a, b, t: 0, speed: 0.012 + Math.random() * 0.018 })
           return
         }
       }
@@ -114,18 +114,18 @@ export function NeuralCanvas() {
         if (!na || !nb) continue
         const px = na.x + (nb.x - na.x) * p.t
         const py = na.y + (nb.y - na.y) * p.t
-        // Halo
-        const g = ctx.createRadialGradient(px, py, 0, px, py, 5)
-        g.addColorStop(0,   `rgba(${PKT_CORE},0.92)`)
-        g.addColorStop(0.5, `rgba(${PKT_HALO},0.35)`)
+        // Halo — tight, 3px max so it reads as moving data not floating bubble
+        const g = ctx.createRadialGradient(px, py, 0, px, py, 3)
+        g.addColorStop(0,   `rgba(${PKT_CORE},0.85)`)
+        g.addColorStop(0.6, `rgba(${PKT_HALO},0.20)`)
         g.addColorStop(1,   'transparent')
         ctx.beginPath()
-        ctx.arc(px, py, 5, 0, 6.283)
+        ctx.arc(px, py, 3, 0, 6.283)
         ctx.fillStyle = g
         ctx.fill()
         // Hard dot
         ctx.beginPath()
-        ctx.arc(px, py, 1.4, 0, 6.283)
+        ctx.arc(px, py, 1.2, 0, 6.283)
         ctx.fillStyle = `rgba(${PKT_CORE},1)`
         ctx.fill()
       }

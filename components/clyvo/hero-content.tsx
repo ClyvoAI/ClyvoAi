@@ -85,7 +85,7 @@ export function HeroContent() {
   const taskIdx   = useCyclingTasks()
   const [processed, setProcessed] = useState(12)
   useEffect(() => {
-    const id = setInterval(() => setProcessed(p => p + 1), 4700)
+    const id = setInterval(() => setProcessed(p => Math.min(p + 1, 20)), 4700)
     return () => clearInterval(id)
   }, [])
 
@@ -198,9 +198,9 @@ export function HeroContent() {
           {/* Live metric row */}
           <div className="mt-3 grid grid-cols-3 gap-2">
             {[
-              { label: 'Latency', value: `${latency.toFixed(0)}ms`, color: latency < 50 ? '#10B981' : '#C9A84C' },
-              { label: 'Accuracy', value: `${accuracy.toFixed(1)}%`, color: '#C9A84C' },
-              { label: 'req/min', value: throughput.toFixed(0), color: '#C9A84C' },
+              { label: 'Latency',  value: `${latency.toFixed(0)}ms`,     color: '#C9A84C' },
+              { label: 'Accuracy', value: `${accuracy.toFixed(1)}%`,      color: '#C9A84C' },
+              { label: 'req/min',  value: throughput.toFixed(0),           color: '#C9A84C' },
             ].map(m => (
               <div key={m.label} className="rounded-sm px-2 py-1.5 text-center"
                 style={{ background: 'rgba(26,26,26,0.04)', border: '1px solid rgba(201,168,76,0.12)' }}>
