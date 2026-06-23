@@ -1,11 +1,11 @@
 import dynamic from 'next/dynamic'
-import { Navigation }        from '@/components/clyvo/navigation'
-import { HeroContent }       from '@/components/clyvo/hero-content'
-import { Footer }            from '@/components/clyvo/footer'
-import { GlobalBackground }  from '@/components/clyvo/global-background'
-import { CursorGlow }        from '@/components/clyvo/cursor-glow'
-import { ScrollDots }        from '@/components/clyvo/scroll-dots'
-import { SectionConnector }  from '@/components/clyvo/section-connector'
+import { Navigation }       from '@/components/clyvo/navigation'
+import { HeroContent }      from '@/components/clyvo/hero-content'
+import { Footer }           from '@/components/clyvo/footer'
+import { GlobalBackground } from '@/components/clyvo/global-background'
+import { CursorGlow }       from '@/components/clyvo/cursor-glow'
+import { ScrollDots }       from '@/components/clyvo/scroll-dots'
+import { SectionConnector } from '@/components/clyvo/section-connector'
 
 const ProblemScene        = dynamic(() => import('@/components/clyvo/scenes/problem-scene').then(m => ({ default: m.ProblemScene })))
 const TransformationScene = dynamic(() => import('@/components/clyvo/scenes/transformation-scene').then(m => ({ default: m.TransformationScene })))
@@ -40,11 +40,15 @@ export default function Home() {
 
         <PortfolioScene />
 
-        <SectionConnector fromLabel="Selected Work" toLabel="Client Feedback" />
+        {/*
+          TestimonialScene renders null when no testimonials are approved.
+          The connector AFTER it is therefore merged: Portfolio → How It Works.
+          When testimonials exist, TestimonialScene renders between them and
+          both labels make sense contextually.
+        */}
+        <SectionConnector fromLabel="Selected Work" toLabel="How It Works" />
 
         <TestimonialScene />
-
-        <SectionConnector fromLabel="Client Feedback" toLabel="How It Works" />
 
         <div id="how-it-works"><OperatingLayerScene /></div>
 
