@@ -53,9 +53,9 @@ export function Navigation() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
-          background: scrolled ? 'rgba(245,240,232,0.92)' : 'rgba(10,12,18,0.55)',
-          backdropFilter: scrolled ? 'blur(20px)' : 'blur(12px)',
-          borderBottom: scrolled ? '1px solid rgba(201,168,76,0.15)' : '1px solid rgba(255,255,255,0.06)',
+          background: scrolled ? 'rgba(245,240,232,0.96)' : 'rgba(245,240,232,0.92)',
+          backdropFilter: 'blur(20px)',
+          borderBottom: scrolled ? '1px solid rgba(201,168,76,0.15)' : '1px solid rgba(201,168,76,0.10)',
         }}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:px-10">
@@ -65,7 +65,7 @@ export function Navigation() {
           {/* Logo */}
           <a href="/" className="flex items-center gap-3 group">
             <LogoBadge size={26} />
-            <span className="font-syne text-sm font-semibold tracking-[0.08em] uppercase" style={{ color: scrolled ? '#1A1A1A' : 'rgba(245,240,232,0.90)' }}>
+            <span className="font-syne text-sm font-semibold tracking-[0.08em] text-[#1A1A1A] uppercase">
               Clyvo <span style={{ color: '#C9A84C' }}>AI</span>
             </span>
           </a>
@@ -76,8 +76,7 @@ export function Navigation() {
             <div ref={dropRef} className="relative">
               <button
                 onClick={() => setDropOpen(!dropOpen)}
-                className="flex items-center gap-1 px-4 py-2 font-inter text-[12px] font-medium uppercase tracking-[0.10em] transition-colors"
-                style={{ color: scrolled ? 'rgba(26,26,26,0.60)' : 'rgba(245,240,232,0.65)' }}
+                className="flex items-center gap-1 px-4 py-2 font-inter text-[12px] font-medium uppercase tracking-[0.10em] text-[#1A1A1A]/60 transition-colors hover:text-[#1A1A1A]"
               >
                 Solutions <ChevronDown className={`h-3 w-3 transition-transform ${dropOpen ? 'rotate-180' : ''}`} />
               </button>
@@ -114,8 +113,7 @@ export function Navigation() {
 
             {NAV_LINKS.map((l) => (
               <a key={l.href} href={l.href}
-                className="px-4 py-2 font-inter text-[12px] font-medium uppercase tracking-[0.10em] transition-colors"
-                style={{ color: scrolled ? 'rgba(26,26,26,0.60)' : 'rgba(245,240,232,0.65)' }}
+                className="px-4 py-2 font-inter text-[12px] font-medium uppercase tracking-[0.10em] text-[#1A1A1A]/60 transition-colors hover:text-[#1A1A1A]"
               >
                 {l.label}
               </a>
@@ -129,8 +127,7 @@ export function Navigation() {
           {/* Mobile toggle */}
           <div className="flex items-center gap-3">
             <button
-              className="flex h-10 w-10 items-center justify-center md:hidden transition-colors"
-              style={{ color: scrolled ? 'rgba(26,26,26,0.60)' : 'rgba(245,240,232,0.70)' }}
+              className="flex h-10 w-10 items-center justify-center text-[#1A1A1A]/60 hover:text-[#1A1A1A] md:hidden"
               onClick={() => setMobileOpen(true)}
             >
               <Menu className="h-5 w-5" />

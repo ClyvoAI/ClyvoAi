@@ -4,7 +4,6 @@ import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 import { HeroBackground } from '@/components/clyvo/hero-background'
-import { NeuralCanvas }   from '@/components/clyvo/neural-canvas'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -75,11 +74,6 @@ export function HeroContent() {
     >
       {/* ── Metallic cracked wall + centered favicon reactor ── */}
       <HeroBackground />
-
-      {/* Neural canvas — reduced opacity on dark background */}
-      <div style={{ opacity: 0.28 }} className="absolute inset-0">
-        <NeuralCanvas />
-      </div>
 
       {/* ── Main text content — bottom-left, light on dark ── */}
       <motion.div
