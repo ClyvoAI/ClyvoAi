@@ -482,11 +482,12 @@ button, a { cursor: pointer; }
   }
 }
 /* ================================================================
-   CYBERPUNK GLOW â€” APPEND THIS ENTIRE BLOCK TO THE BOTTOM OF globals.css
-   DO NOT REPLACE globals.css â€” APPEND ONLY
+/* ================================================================
+   NEON GOLD GLOW SYSTEM
+   Electric amber-gold — same hue family as brand gold #C9A84C,
+   pushed to neon saturation. Cohesive, not clashing.
    ================================================================ */
 
-/* â”€â”€ GlobalBackground orb drift keyframes â”€â”€ */
 @keyframes orb-drift-a {
   0%,100% { transform: translate(0, 0) scale(1.00); }
   33%      { transform: translate(-6vw, 4vh) scale(1.08); }
@@ -504,63 +505,61 @@ button, a { cursor: pointer; }
   80%      { transform: translate(-2vw, -7vh) scale(1.04); }
 }
 
-/* â”€â”€ Glass card: visible neon ring + shadow on cream â”€â”€
-   Cream background kills subtlety. 0.10 opacity is invisible.
-   These values are calibrated for light backgrounds.
-*/
+/* Glass card — neon amber ring at rest */
 .glass-card {
   box-shadow:
     0 30px 60px -15px rgba(26, 26, 26, 0.14),
     0 15px 30px -10px rgba(26, 26, 26, 0.08),
-    0 0 0 1px rgba(0, 200, 255, 0.25),
-    0 0 20px rgba(0, 200, 255, 0.18),
-    0 0 50px rgba(0, 180, 255, 0.10),
-    inset 0 2px 0 rgba(255, 255, 255, 0.70),
-    inset 2px 0 0 rgba(255, 255, 255, 0.40),
-    inset 0 -1px 8px rgba(255, 255, 255, 0.10),
+    0 0 0 1px rgba(255, 175, 0, 0.30),
+    0 0 18px rgba(255, 175, 0, 0.18),
+    0 0 45px rgba(220, 130, 0, 0.10),
+    inset 0 2px 0 rgba(255, 240, 180, 0.75),
+    inset 2px 0 0 rgba(255, 230, 150, 0.40),
+    inset 0 -1px 8px rgba(255, 200, 80, 0.08),
     inset -1px 0 8px rgba(255, 255, 255, 0.06);
 }
 
+/* Glass card — full neon burst on hover */
 .glass-card:hover {
   box-shadow:
     0 50px 100px -20px rgba(26, 26, 26, 0.18),
     0 25px 50px -10px rgba(26, 26, 26, 0.12),
-    0 0 0 1.5px rgba(0, 210, 255, 0.60),
-    0 0 30px rgba(0, 210, 255, 0.35),
-    0 0 70px rgba(0, 200, 255, 0.20),
-    0 0 120px rgba(100, 0, 255, 0.10),
-    inset 0 2px 0 rgba(255, 255, 255, 0.85),
-    inset 2px 0 0 rgba(255, 255, 255, 0.55),
-    inset 0 -1px 12px rgba(0, 220, 255, 0.08),
-    inset -1px 0 12px rgba(255, 255, 255, 0.08);
-  border-top-color: rgba(0, 220, 255, 0.40);
-  border-left-color: rgba(0, 220, 255, 0.25);
+    0 0 0 1.5px rgba(255, 190, 0, 0.70),
+    0 0 28px rgba(255, 180, 0, 0.40),
+    0 0 60px rgba(255, 150, 0, 0.22),
+    0 0 100px rgba(200, 100, 0, 0.12),
+    inset 0 2px 0 rgba(255, 245, 200, 0.90),
+    inset 2px 0 0 rgba(255, 230, 150, 0.60),
+    inset 0 -1px 12px rgba(255, 210, 80, 0.12),
+    inset -1px 0 12px rgba(255, 240, 180, 0.08);
+  border-top-color: rgba(255, 200, 50, 0.50);
+  border-left-color: rgba(255, 190, 0, 0.30);
 }
 
-/* Section ambient orbs â€” on the section itself so they're
-   not covered by opaque backgrounds like GlobalBackground is */
+/* Section ambient orbs — warm amber top-right, burnt-gold bottom-left */
 .section-has-glass::before {
-  background: radial-gradient(circle, rgba(0, 210, 255, 0.22) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(255, 175, 0, 0.20) 0%, transparent 65%);
   filter: blur(60px);
 }
 .section-has-glass::after {
-  background: radial-gradient(circle, rgba(120, 0, 255, 0.16) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(200, 100, 0, 0.14) 0%, transparent 65%);
   filter: blur(70px);
 }
 
+/* Divider lines — gold neon gradient */
 .gold-rule {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(0, 210, 255, 0.6),
-    rgba(201, 168, 76, 0.8),
-    rgba(0, 210, 255, 0.6),
+    rgba(255, 190, 0, 0.70),
+    rgba(255, 220, 80, 0.90),
+    rgba(255, 190, 0, 0.70),
     transparent
   );
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
-/* Scanline texture â€” fixed overlay, z-index above everything */
+/* Scanline texture — barely visible warm grain */
 body::after {
   content: '';
   position: fixed;
@@ -570,8 +569,8 @@ body::after {
     0deg,
     transparent,
     transparent 3px,
-    rgba(0, 200, 255, 0.015) 3px,
-    rgba(0, 200, 255, 0.015) 4px
+    rgba(255, 180, 0, 0.012) 3px,
+    rgba(255, 180, 0, 0.012) 4px
   );
   pointer-events: none;
 }
