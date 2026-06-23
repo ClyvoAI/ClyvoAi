@@ -3,90 +3,138 @@
 import { motion } from 'motion/react'
 
 /**
- * Hero background using the real cracked metallic photo.
- * PREREQUISITE: copy cracked-metal.jpg → public/cracked-metal.jpg
- * PREREQUISITE: copy cube_neon_blue_glow_1024.png → public/logo-reactor.png
+ * PREREQUISITES:
+ *  public/cracked-metal.jpg   — the cracked metallic surface photo
+ *  public/logo-reactor.png    — cube_neon_blue_glow_1024.png renamed
  */
 export function HeroBackground() {
+  // Hole position — center of the photo's diamond pattern
+  const HOLE_X = '50%'
+  const HOLE_Y = '40%'
+
   return (
     <div className="absolute inset-0 overflow-hidden" aria-hidden="true" style={{ isolation: 'isolate' }}>
 
-      {/* 1 — Real cracked metallic photo */}
+      {/* 1 — Pure dark base — visible through the hole */}
+      <div style={{ position: 'absolute', inset: 0, background: '#080A10' }} />
+
+      {/* 2 — Cracked wall photo WITH radial mask punching a hole at diamond center
+          mask fades:  solid wall → crumbling edge → void at center
+          hue-rotate removed (was killing sharpness), contrast boosted instead  */}
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: "url('/cracked-metal.jpg')",
         backgroundSize: 'cover',
-        backgroundPosition: 'center 40%',
-        filter: 'brightness(0.38) saturate(0.75) hue-rotate(195deg)',
-        // brightness: darken it so text is legible
-        // saturate: pull back the colour so reactor blue dominates
-        // hue-rotate: shift remaining colour toward blue-steel to unify with reactor glow
+        backgroundPosition: `${HOLE_X} ${HOLE_Y}`,
+        filter: 'brightness(0.46) contrast(1.28) saturate(0.55)',
+        // Hole mask: transparent center (the void) → opaque wall
+        WebkitMaskImage: `radial-gradient(ellipse 32% 38% at ${HOLE_X} ${HOLE_Y},
+          transparent 0%,
+          transparent 38%,
+          rgba(0,0,0,0.35) 50%,
+          rgba(0,0,0,0.75) 60%,
+          black 72%)`,
+        maskImage: `radial-gradient(ellipse 32% 38% at ${HOLE_X} ${HOLE_Y},
+          transparent 0%,
+          transparent 38%,
+          rgba(0,0,0,0.35) 50%,
+          rgba(0,0,0,0.75) 60%,
+          black 72%)`,
       }} />
 
-      {/* 2 — Reactor light bleed — illuminates the cracks around the cube */}
+      {/* 3 — Energy light pouring through the hole from behind
+          This sells the "something blasted through from the other side" read */}
       <div style={{
-        position: 'absolute', top: '38%', left: '58%',
+        position: 'absolute', top: HOLE_Y, left: HOLE_X,
         transform: 'translate(-50%, -50%)',
-        width: 700, height: 700, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(0,155,255,0.22) 0%, rgba(0,85,195,0.10) 38%, rgba(0,38,115,0.05) 62%, transparent 78%)',
-        filter: 'blur(30px)',
-        animation: 'reactor-bg-pulse 2.8s ease-in-out infinite',
+        width: 600, height: 600, borderRadius: '50%',
+        background: `radial-gradient(circle,
+          rgba(0,180,255,0.35) 0%,
+          rgba(0,120,220,0.18) 30%,
+          rgba(0,60,160,0.08) 55%,
+          transparent 72%)`,
+        filter: 'blur(22px)',
+        animation: 'hole-pulse 2.6s ease-in-out infinite',
       }} />
+      {/* Tight hot core glow */}
       <div style={{
-        position: 'absolute', top: '38%', left: '58%',
+        position: 'absolute', top: HOLE_Y, left: HOLE_X,
         transform: 'translate(-50%, -50%)',
-        width: 340, height: 340, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(70,195,255,0.18) 0%, rgba(0,135,255,0.08) 52%, transparent 78%)',
-        filter: 'blur(14px)',
-        animation: 'reactor-bg-pulse 2.8s ease-in-out infinite 0.7s',
+        width: 280, height: 280, borderRadius: '50%',
+        background: `radial-gradient(circle,
+          rgba(120,220,255,0.28) 0%,
+          rgba(0,170,255,0.14) 45%,
+          transparent 72%)`,
+        filter: 'blur(10px)',
+        animation: 'hole-pulse 2.6s ease-in-out infinite 0.5s',
       }} />
 
-      {/* 3 — Edge vignette — focuses eye to centre */}
+      {/* 4 — Jagged light rays from the breach (thin SVG spokes, no rings) */}
+      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}>
+        <defs>
+          <radialGradient id="ray-fade" cx="50%" cy="40%" r="50%" gradientUnits="userSpaceOnUse"
+            gradientTransform="translate(0,0) scale(1.44 0.9)">
+            <stop offset="0%"   stopColor="rgba(80,200,255,0.55)" />
+            <stop offset="40%"  stopColor="rgba(0,150,255,0.18)" />
+            <stop offset="100%" stopColor="rgba(0,80,200,0)" />
+          </radialGradient>
+        </defs>
+        {/* 8 light rays emanating from breach center */}
+        {Array.from({ length: 8 }, (_, i) => {
+          const angle = (i * 45) * Math.PI / 180
+          const cx = 0.50, cy = 0.40  // fractional of viewBox
+          const len = 0.55
+          const ex = cx + Math.cos(angle) * len
+          const ey = cy + Math.sin(angle) * len
+          return (
+            <line
+              key={i}
+              x1={`${cx * 100}%`} y1={`${cy * 100}%`}
+              x2={`${ex * 100}%`} y2={`${ey * 100}%`}
+              stroke="url(#ray-fade)"
+              strokeWidth={i % 2 === 0 ? '1.5' : '0.8'}
+              opacity={i % 2 === 0 ? '0.55' : '0.28'}
+            />
+          )
+        })}
+      </svg>
+
+      {/* 5 — Edge vignette */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse 90% 90% at 50% 50%, transparent 30%, rgba(0,0,0,0.72) 100%)',
+        background: `radial-gradient(ellipse 95% 95% at ${HOLE_X} ${HOLE_Y},
+          transparent 25%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.85) 100%)`,
       }} />
-      {/* Bottom fade for text legibility */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%)',
+        background: 'linear-gradient(to top, rgba(0,0,0,0.70) 0%, transparent 50%)',
       }} />
 
-      {/* 4 — Orbital rings + glowing favicon cube */}
+      {/* 6 — The glowing favicon cube — NO rings, just the logo bursting through */}
       <div style={{
-        position: 'absolute', top: '38%', left: '58%',
+        position: 'absolute', top: HOLE_Y, left: HOLE_X,
         transform: 'translate(-50%, -50%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        zIndex: 2,
+        zIndex: 3,
       }}>
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 48, repeat: Infinity, ease: 'linear' }}
-          style={{ position: 'absolute', width: 420, height: 420, borderRadius: '50%',
-            border: '1px dashed rgba(0,175,255,0.22)',
-            boxShadow: '0 0 8px rgba(0,155,255,0.08) inset' }} />
-
-        <motion.div animate={{ rotate: -360 }} transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-          style={{ position: 'absolute', width: 318, height: 318, borderRadius: '50%',
-            border: '1.5px solid rgba(0,195,255,0.28)',
-            boxShadow: '0 0 16px rgba(0,175,255,0.14) inset, 0 0 16px rgba(0,175,255,0.12)' }} />
-
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}
-          style={{ position: 'absolute', width: 218, height: 218, borderRadius: '50%',
-            border: '1px solid rgba(80,225,255,0.32)',
-            boxShadow: '0 0 12px rgba(60,205,255,0.18) inset' }} />
-
         <motion.div
-          animate={{ opacity: [0.88, 1, 0.88], scale: [1, 1.04, 1] }}
-          transition={{ duration: 3.0, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ opacity: [0.90, 1, 0.90], scale: [1, 1.04, 1] }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-reactor.png" alt="" width={255} height={255}
-            style={{ objectFit: 'contain', display: 'block' }} />
+          <img
+            src="/logo-reactor.png"
+            alt=""
+            width={240}
+            height={240}
+            style={{ objectFit: 'contain', display: 'block' }}
+          />
         </motion.div>
       </div>
 
       <style>{`
-        @keyframes reactor-bg-pulse {
-          0%, 100% { opacity: 0.70; }
+        @keyframes hole-pulse {
+          0%, 100% { opacity: 0.75; }
           50%       { opacity: 1.00; }
         }
       `}</style>
