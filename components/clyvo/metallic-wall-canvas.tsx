@@ -58,17 +58,17 @@ export function MetallicWallCanvas() {
     for (let c = 1; c < COLS; c++) {
       const x = c * 185
       // seam shadow
-      ctx.strokeStyle = 'rgba(0,0,0,0.70)'; ctx.lineWidth = 2
+      ctx.strokeStyle = 'rgba(0,0,0,0.22)'; ctx.lineWidth = 1
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke()
       // recessed top highlight (left edge of seam catches light)
-      ctx.strokeStyle = 'rgba(255,255,255,0.055)'; ctx.lineWidth = 1
+      ctx.strokeStyle = 'rgba(255,255,255,0.025)'; ctx.lineWidth = 0.5
       ctx.beginPath(); ctx.moveTo(x - 1, 0); ctx.lineTo(x - 1, H); ctx.stroke()
     }
     for (let r = 1; r < ROWS; r++) {
       const y = r * 128
-      ctx.strokeStyle = 'rgba(0,0,0,0.65)'; ctx.lineWidth = 2
+      ctx.strokeStyle = 'rgba(0,0,0,0.20)'; ctx.lineWidth = 1
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke()
-      ctx.strokeStyle = 'rgba(255,255,255,0.040)'; ctx.lineWidth = 1
+      ctx.strokeStyle = 'rgba(255,255,255,0.020)'; ctx.lineWidth = 0.5
       ctx.beginPath(); ctx.moveTo(0, y - 1); ctx.lineTo(W, y - 1); ctx.stroke()
     }
 
@@ -91,21 +91,21 @@ export function MetallicWallCanvas() {
 
     // ── 6. Rust stains at fracture stress points ──────────────────────────
     const rustPoints = [
-      { x: 295, y: 155, rx: 55, ry: 40 },
-      { x: 265, y: 710, rx: 60, ry: 45 },
-      { x: 1185, y: 200, rx: 48, ry: 36 },
-      { x: 1338, y: 715, rx: 52, ry: 40 },
-      { x: 820,  y: 120, rx: 30, ry: 24 },
-      { x: 478,  y: 636, rx: 22, ry: 16 },
+      { x: 295, y: 155, rx: 32, ry: 24 },
+      { x: 265, y: 710, rx: 36, ry: 28 },
+      { x: 1185, y: 200, rx: 28, ry: 22 },
+      { x: 1338, y: 715, rx: 30, ry: 24 },
+      { x: 820,  y: 120, rx: 18, ry: 14 },
+      { x: 478,  y: 636, rx: 14, ry: 10 },
     ]
     rustPoints.forEach(({ x, y, rx, ry }) => {
       ctx.save()
       ctx.translate(x, y)
       ctx.scale(rx, ry)
       const rg = ctx.createRadialGradient(0, 0, 0, 0, 0, 1)
-      rg.addColorStop(0.00, 'rgba(130,55,14,0.55)')
-      rg.addColorStop(0.40, 'rgba(100,40,10,0.28)')
-      rg.addColorStop(0.75, 'rgba(70,28,8,0.12)')
+      rg.addColorStop(0.00, 'rgba(90,50,20,0.30)')
+      rg.addColorStop(0.40, 'rgba(70,38,14,0.15)')
+      rg.addColorStop(0.75, 'rgba(48,28,10,0.06)')
       rg.addColorStop(1.00, 'transparent')
       ctx.fillStyle = rg
       ctx.beginPath(); ctx.arc(0, 0, 1, 0, Math.PI * 2); ctx.fill()

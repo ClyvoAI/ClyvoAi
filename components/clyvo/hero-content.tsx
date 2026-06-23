@@ -70,7 +70,7 @@ export function HeroContent() {
     <section
       ref={ref}
       className="relative w-full h-[78vh] md:h-screen"
-      style={{ background: '#111318', overflow: 'clip' }}
+      style={{ background: '#111318', overflow: 'clip', isolation: 'isolate' }}
     >
       {/* ── Metallic cracked wall + centered favicon reactor ── */}
       <HeroBackground />
