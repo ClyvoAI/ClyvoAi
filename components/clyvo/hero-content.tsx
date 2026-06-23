@@ -76,8 +76,10 @@ export function HeroContent() {
       {/* ── Metallic cracked wall + centered favicon reactor ── */}
       <HeroBackground />
 
-      {/* ── Neural canvas — green mesh, sits on top of wall ── */}
-      <NeuralCanvas />
+      {/* Neural canvas — reduced opacity on dark background */}
+      <div style={{ opacity: 0.28 }} className="absolute inset-0">
+        <NeuralCanvas />
+      </div>
 
       {/* ── Main text content — bottom-left, light on dark ── */}
       <motion.div

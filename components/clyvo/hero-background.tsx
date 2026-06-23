@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'motion/react'
 
 /**
@@ -71,72 +70,96 @@ export function HeroBackground() {
           </radialGradient>
         </defs>
 
-        {/* ── Rust stains at crack terminals ── */}
-        <ellipse cx="340" cy="165" rx="55" ry="42" fill="url(#rust-a)" />
-        <ellipse cx="190" cy="680" rx="60" ry="48" fill="url(#rust-a)" />
-        <ellipse cx="1120" cy="200" rx="48" ry="38" fill="url(#rust-b)" />
-        <ellipse cx="1260" cy="760" rx="55" ry="44" fill="url(#rust-b)" />
-        <ellipse cx="500"  cy="120" rx="30" ry="24" fill="url(#rust-c)" />
-        {/* Rust bleed along lower-left main crack */}
-        <ellipse cx="455" cy="572" rx="20" ry="14" fill="url(#rust-c)" />
+        {/* ── Rust stains at fracture terminals and stress points ── */}
+        <ellipse cx="295" cy="155" rx="48" ry="36" fill="url(#rust-a)" />
+        <ellipse cx="260" cy="710" rx="55" ry="42" fill="url(#rust-a)" />
+        <ellipse cx="1185" cy="202" rx="44" ry="34" fill="url(#rust-b)" />
+        <ellipse cx="1340" cy="714" rx="50" ry="38" fill="url(#rust-b)" />
+        <ellipse cx="820"  cy="122" rx="28" ry="22" fill="url(#rust-c)" />
+        {/* Rust bleed at branch junction lower-left */}
+        <ellipse cx="478" cy="636" rx="18" ry="13" fill="url(#rust-c)" />
+        {/* Rust at left horizontal terminal */}
+        <ellipse cx="336" cy="390" rx="22" ry="16" fill="url(#rust-c)" />
 
-        {/* ── Main cracks — wide, close to center ── */}
-        <g filter="url(#crack-glow)" strokeLinecap="round" fill="none">
+        {/* ── Organic fracture network — all originate from reactor impact (840,390) upper-right center ── */}
+        <g filter="url(#crack-glow)" strokeLinecap="round" strokeLinejoin="round" fill="none">
 
-          {/* Upper-left primary crack */}
-          <path d="M720,450 L520,290 L340,165" stroke="rgba(160,180,200,0.55)" strokeWidth="1.8" />
-          {/* UL branch 1 */}
-          <path d="M560,320 L480,355 L400,340" stroke="rgba(140,160,180,0.35)" strokeWidth="0.9" />
-          {/* UL branch 2 — hairline */}
-          <path d="M460,240 L420,210 L400,230" stroke="rgba(120,140,160,0.25)" strokeWidth="0.5" />
-          {/* UL tertiary */}
-          <path d="M340,165 L290,140 L260,155" stroke="rgba(110,130,150,0.30)" strokeWidth="0.6" />
+          {/* === PRIMARY FRACTURES === */}
 
-          {/* Upper-right primary crack */}
-          <path d="M720,450 L940,295 L1120,200" stroke="rgba(155,175,195,0.50)" strokeWidth="1.5" />
-          {/* UR branch */}
-          <path d="M850,365 L900,390 L960,375" stroke="rgba(130,150,170,0.30)" strokeWidth="0.8" />
-          <path d="M1000,255 L1060,240" stroke="rgba(120,140,160,0.22)" strokeWidth="0.5" />
+          {/* Fracture 1 — sweeps upper-left, biggest crack */}
+          <path d="M840,390 C790,360 720,320 640,275 C590,248 520,220 440,190 C400,175 355,162 310,155"
+            stroke="rgba(170,190,210,0.60)" strokeWidth="1.8" />
+          {/* F1 branch A — splits at mid-point */}
+          <path d="M680,292 C650,305 615,318 575,325 C545,330 510,328"
+            stroke="rgba(150,170,190,0.38)" strokeWidth="0.9" />
+          {/* F1 branch B — hairline from near-terminal */}
+          <path d="M420,182 C400,170 375,165 345,168"
+            stroke="rgba(130,150,170,0.25)" strokeWidth="0.55" />
+          {/* F1 terminal micro-crack */}
+          <path d="M310,155 C288,148 265,152 245,160"
+            stroke="rgba(120,140,160,0.30)" strokeWidth="0.6" />
 
-          {/* Lower-left primary crack — longest, most dramatic */}
-          <path d="M720,450 L455,572 L190,680" stroke="rgba(150,170,190,0.55)" strokeWidth="1.8" />
-          {/* LL branch 1 */}
-          <path d="M590,514 L530,490 L470,510" stroke="rgba(130,150,170,0.35)" strokeWidth="0.9" />
-          {/* LL branch 2 */}
-          <path d="M320,630 L260,640 L230,620" stroke="rgba(120,140,160,0.28)" strokeWidth="0.7" />
+          {/* Fracture 2 — upper-right diagonal */}
+          <path d="M840,390 C880,355 940,310 1010,270 C1065,240 1120,218 1180,205"
+            stroke="rgba(160,180,200,0.52)" strokeWidth="1.5" />
+          {/* F2 branch */}
+          <path d="M965,288 C990,305 1020,318 1055,320"
+            stroke="rgba(135,155,175,0.30)" strokeWidth="0.8" />
+          {/* F2 hairline */}
+          <path d="M1120,210 C1145,200 1170,195 1195,198"
+            stroke="rgba(120,140,160,0.22)" strokeWidth="0.5" />
 
-          {/* Lower-right primary crack */}
-          <path d="M720,450 L990,615 L1260,760" stroke="rgba(150,170,185,0.48)" strokeWidth="1.5" />
-          {/* LR branch */}
-          <path d="M860,535 L920,515 L970,538" stroke="rgba(130,150,170,0.30)" strokeWidth="0.8" />
-          <path d="M1100,660 L1140,640" stroke="rgba(110,130,150,0.22)" strokeWidth="0.5" />
+          {/* Fracture 3 — sweeps lower-left, longest */}
+          <path d="M840,390 C800,425 750,468 690,510 C630,552 560,592 480,635 C420,665 350,690 270,710"
+            stroke="rgba(165,185,205,0.58)" strokeWidth="1.8" />
+          {/* F3 branch A — splits mid */}
+          <path d="M720,490 C695,480 665,475 630,478 C605,480 580,488"
+            stroke="rgba(140,160,180,0.35)" strokeWidth="0.9" />
+          {/* F3 branch B — lower section */}
+          <path d="M430,648 C405,658 378,665 348,668"
+            stroke="rgba(125,145,165,0.28)" strokeWidth="0.65" />
+          {/* F3 tertiary — hairline */}
+          <path d="M560,595 C540,610 520,618 495,615"
+            stroke="rgba(115,135,155,0.20)" strokeWidth="0.4" />
 
-          {/* Straight-up crack */}
-          <path d="M720,450 L715,280 L720,130" stroke="rgba(140,160,180,0.35)" strokeWidth="1.0" />
-          <path d="M710,330 L680,310 L670,290" stroke="rgba(120,140,160,0.22)" strokeWidth="0.5" />
+          {/* Fracture 4 — lower-right */}
+          <path d="M840,390 C885,430 940,478 1000,525 C1060,572 1130,618 1205,658 C1250,682 1295,700 1335,712"
+            stroke="rgba(158,178,198,0.50)" strokeWidth="1.5" />
+          {/* F4 branch */}
+          <path d="M1025,540 C1050,530 1078,526 1105,530"
+            stroke="rgba(132,152,172,0.28)" strokeWidth="0.75" />
+          <path d="M1200,660 C1220,650 1242,645"
+            stroke="rgba(115,135,155,0.20)" strokeWidth="0.45" />
 
-          {/* Short left-side crack */}
-          <path d="M720,450 L500,430 L340,420" stroke="rgba(140,160,180,0.28)" strokeWidth="0.9" />
-          <path d="M600,440 L580,460 L550,455" stroke="rgba(120,140,160,0.18)" strokeWidth="0.45" />
+          {/* Fracture 5 — straight up, short */}
+          <path d="M840,390 C836,345 832,290 828,235 C825,195 822,158 820,125"
+            stroke="rgba(148,168,188,0.40)" strokeWidth="1.1" />
+          <path d="M828,280 C812,268 795,262 775,265"
+            stroke="rgba(125,145,165,0.22)" strokeWidth="0.5" />
 
-          {/* Short right-side crack */}
-          <path d="M720,450 L950,462 L1130,450" stroke="rgba(140,160,180,0.25)" strokeWidth="0.8" />
-        </g>
+          {/* Fracture 6 — left horizontal sweep */}
+          <path d="M840,390 C795,388 740,385 680,382 C620,379 555,378 485,380 C440,381 390,385 340,390"
+            stroke="rgba(142,162,182,0.35)" strokeWidth="1.0" />
+          <path d="M630,382 C615,395 598,402 578,400"
+            stroke="rgba(120,140,160,0.20)" strokeWidth="0.45" />
 
-        {/* ── Hairline surface scratches (non-structural) ── */}
-        <g stroke="rgba(200,210,220,0.10)" strokeWidth="0.4" fill="none">
-          <path d="M200,150 L350,180 L380,200" />
-          <path d="M1100,100 L1050,150 L1080,180" />
-          <path d="M100,400 L160,380 L200,400" />
-          <path d="M1300,350 L1250,370 L1280,400" />
-          <path d="M400,750 L450,730 L480,750" />
-          <path d="M900,820 L860,800 L890,780" />
+          {/* === SURFACE STRESS HAIRLINES (non-structural, from normal metal fatigue) === */}
+          <g stroke="rgba(200,215,225,0.10)" strokeWidth="0.35">
+            <path d="M150,140 C180,148 210,152 235,148" />
+            <path d="M1200,110 C1175,128 1155,142 1150,158" />
+            <path d="M90,380 C115,372 140,368 162,372" />
+            <path d="M1340,320 C1318,335 1300,348 1298,365" />
+            <path d="M380,780 C408,768 430,762 450,765" />
+            <path d="M950,840 C928,825 910,815 898,820" />
+            <path d="M60,560 C88,552 110,548 128,554" />
+            <path d="M1380,580 C1355,568 1335,562 1325,568" />
+          </g>
         </g>
       </svg>
 
-      {/* 6 — Ambient reactor glow (CSS, not SVG — can bleed beyond any SVG clip) */}
+      {/* 6 — Ambient reactor glow — centered on cube position (upper-right center) */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
+        position: 'absolute', top: '38%', left: '58%',
         transform: 'translate(-50%, -50%)',
         width: 700, height: 700,
         borderRadius: '50%',
@@ -144,9 +167,8 @@ export function HeroBackground() {
         filter: 'blur(35px)',
         animation: 'reactor-bg-pulse 2.8s ease-in-out infinite',
       }} />
-      {/* Tighter secondary glow */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
+        position: 'absolute', top: '38%', left: '58%',
         transform: 'translate(-50%, -50%)',
         width: 360, height: 360,
         borderRadius: '50%',
@@ -155,74 +177,48 @@ export function HeroBackground() {
         animation: 'reactor-bg-pulse 2.8s ease-in-out infinite 0.7s',
       }} />
 
-      {/* 7 + 8 — Favicon cube (the reactor) + orbital rings */}
+      {/* GlobalBackground bleed kill — fixed elements show above absolute positioned divs in some stacking contexts */}
+      <div style={{ position: 'absolute', inset: 0, background: 'transparent', zIndex: 0 }} />
+
+      {/* 7 + 8 — Favicon cube + orbital rings — upper-right center */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
+        position: 'absolute', top: '38%', left: '58%',
         transform: 'translate(-50%, -50%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         zIndex: 2,
       }}>
+        {/* Outer orbital ring */}
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
+          style={{ position: 'absolute', width: 420, height: 420, borderRadius: '50%',
+            border: '1px dashed rgba(0,170,255,0.18)' }} />
+        {/* Segmented mid ring */}
+        <motion.div animate={{ rotate: -360 }} transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+          style={{ position: 'absolute', width: 320, height: 320, borderRadius: '50%',
+            border: '1.5px solid rgba(0,190,255,0.22)',
+            boxShadow: '0 0 12px rgba(0,160,255,0.10) inset, 0 0 12px rgba(0,160,255,0.10)' }} />
+        {/* Inner ring — tightest, fastest */}
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}
+          style={{ position: 'absolute', width: 220, height: 220, borderRadius: '50%',
+            border: '1px solid rgba(80,220,255,0.28)',
+            boxShadow: '0 0 8px rgba(60,200,255,0.15) inset' }} />
 
-        {/* Outer orbital ring — slow CW */}
+        {/* Favicon cube — 260px, layered neon drop-shadow */}
         <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
+          animate={{ opacity: [0.82, 1, 0.82], scale: [1, 1.03, 1] }}
+          transition={{ duration: 3.0, repeat: Infinity, ease: 'easeInOut' }}
           style={{
-            position: 'absolute',
-            width: 380, height: 380,
-            borderRadius: '50%',
-            border: '1px solid rgba(0,160,255,0.12)',
-            borderStyle: 'dashed',
-          }}
-        />
-        {/* Middle ring — CCW, slightly faster */}
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-          style={{
-            position: 'absolute',
-            width: 290, height: 290,
-            borderRadius: '50%',
-            border: '1px solid rgba(0,180,255,0.18)',
-          }}
-        />
-        {/* Inner ring — CW fast */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-          style={{
-            position: 'absolute',
-            width: 205, height: 205,
-            borderRadius: '50%',
-            border: '1px solid rgba(60,210,255,0.22)',
-          }}
-        />
-
-        {/* The favicon cube — THE reactor core */}
-        <motion.div
-          animate={{ opacity: [0.80, 1, 0.80] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-          style={{
-            position: 'relative',
-            width: 200, height: 200,
+            position: 'relative', width: 260, height: 260,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            // Layered neon blue glow matching the favicon
             filter: [
-              'drop-shadow(0 0 8px  rgba(0,180,255,1.0))',
-              'drop-shadow(0 0 24px rgba(0,150,255,0.75))',
-              'drop-shadow(0 0 60px rgba(0,100,220,0.45))',
-              'drop-shadow(0 0 100px rgba(0,60,180,0.25))',
+              'drop-shadow(0 0 6px  rgba(0,190,255,1.0))',
+              'drop-shadow(0 0 20px rgba(0,160,255,0.80))',
+              'drop-shadow(0 0 50px rgba(0,120,230,0.50))',
+              'drop-shadow(0 0 90px rgba(0,80,200,0.28))',
             ].join(' '),
           }}
         >
-          <Image
-            src="/logo.png"
-            alt=""
-            width={200}
-            height={200}
-            style={{ objectFit: 'contain' }}
-            priority
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="" width={260} height={260} style={{ objectFit: 'contain' }} />
         </motion.div>
       </div>
 
