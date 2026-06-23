@@ -1,10 +1,10 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
-import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { ArrowRight } from 'lucide-react'
 import { NeuralCanvas } from '@/components/clyvo/neural-canvas'
+import { ArcReactor }   from '@/components/clyvo/arc-reactor'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 const LOGO_FILTER = 'brightness(0) saturate(100%)'
@@ -108,17 +108,14 @@ export function HeroContent() {
         background: 'radial-gradient(ellipse at center, transparent 50%, rgba(245,240,232,0.8) 100%)',
       }} />
 
-      {/* Logo orb */}
+      {/* Arc Reactor — replaces logo orb */}
       <motion.div style={{ y: logoY, opacity: logoOpacity }}
-        className="pointer-events-none absolute top-24 right-[8%] hidden md:block">
+        className="pointer-events-none absolute top-16 right-[6%] hidden md:block">
         <motion.div
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex h-36 w-36 items-center justify-center"
-          style={{ ...GLASS, borderRadius: '50%', boxShadow: '0 0 60px rgba(201,168,76,0.15)' }}
         >
-          <Image src="/logo.png" alt="Clyvo AI" width={56} height={56}
-            style={{ objectFit: 'contain', filter: LOGO_FILTER, opacity: 0.7 }} />
+          <ArcReactor />
         </motion.div>
       </motion.div>
 
