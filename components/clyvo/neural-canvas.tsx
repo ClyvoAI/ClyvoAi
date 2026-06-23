@@ -11,14 +11,21 @@ interface Node {
 
 interface Packet {
   fromNode: number; toNode: number
-  progress: number   // 0→1 along the edge
+  progress: number
   speed: number
 }
 
 const NODE_COUNT  = 38
-const EDGE_DIST   = 180   // max px to draw an edge
-const MOUSE_REPEL = 120   // px radius mouse repels nodes
-const MAX_PACKETS = 14    // simultaneous data packets
+const EDGE_DIST   = 180
+const MOUSE_REPEL = 120
+const MAX_PACKETS = 14
+
+// Neon green palette — pops against cream without clashing with gold brand
+const C_EDGE_BASE   = '80,255,120'
+const C_PACKET_CORE = '0,255,100'
+const C_PACKET_HALO = '0,200,80'
+const C_NODE_CORE   = '0,255,110'
+const C_NODE_HALO   = '40,220,90'
 
 export function NeuralCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -58,7 +65,6 @@ export function NeuralCanvas() {
 
     const spawnPacket = () => {
       if (packets.length >= MAX_PACKETS) return
-      // pick a random edge that exists
       for (let attempt = 0; attempt < 20; attempt++) {
         const a = Math.floor(Math.random() * nodes.length)
         const b = Math.floor(Math.random() * nodes.length)
@@ -76,9 +82,8 @@ export function NeuralCanvas() {
       t += 0.008
       ctx.clearRect(0, 0, W, H)
 
-      // ── Move nodes ──
+      // Move nodes with mouse repel + bounce
       nodes.forEach(n => {
-        // mouse repel
         const mdx = n.x - mouse.current.x
         const mdy = n.y - mouse.current.y
         const md  = Math.sqrt(mdx*mdx + mdy*mdy)
@@ -87,36 +92,32 @@ export function NeuralCanvas() {
           n.vx += (mdx / md) * force
           n.vy += (mdy / md) * force
         }
-        // dampen
-        n.vx *= 0.98
-        n.vy *= 0.98
-        n.x  += n.vx
-        n.y  += n.vy
-        // bounce
+        n.vx *= 0.98; n.vy *= 0.98
+        n.x  += n.vx; n.y  += n.vy
         if (n.x < 0)  { n.x = 0;  n.vx = Math.abs(n.vx) }
         if (n.x > W)  { n.x = W;  n.vx = -Math.abs(n.vx) }
         if (n.y < 0)  { n.y = 0;  n.vy = Math.abs(n.vy) }
         if (n.y > H)  { n.y = H;  n.vy = -Math.abs(n.vy) }
       })
 
-      // ── Draw edges ──
+      // Edges
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx   = nodes[i].x - nodes[j].x
           const dy   = nodes[i].y - nodes[j].y
           const dist = Math.sqrt(dx*dx + dy*dy)
           if (dist > EDGE_DIST) continue
-          const alpha = (1 - dist / EDGE_DIST) * 0.18
+          const alpha = (1 - dist / EDGE_DIST) * 0.22
           ctx.beginPath()
           ctx.moveTo(nodes[i].x, nodes[i].y)
           ctx.lineTo(nodes[j].x, nodes[j].y)
-          ctx.strokeStyle = `rgba(201,168,76,${alpha})`
+          ctx.strokeStyle = `rgba(${C_EDGE_BASE},${alpha})`
           ctx.lineWidth   = 0.8
           ctx.stroke()
         }
       }
 
-      // ── Draw data packets ──
+      // Data packets travelling along edges
       packets = packets.filter(p => p.progress <= 1)
       packets.forEach(p => {
         p.progress += p.speed
@@ -126,41 +127,38 @@ export function NeuralCanvas() {
         if (!a || !b) return
         const px = a.x + (b.x - a.x) * p.progress
         const py = a.y + (b.y - a.y) * p.progress
-        // glowing dot
-        const grd = ctx.createRadialGradient(px, py, 0, px, py, 6)
-        grd.addColorStop(0, 'rgba(255,200,60,0.9)')
-        grd.addColorStop(0.4, 'rgba(255,170,0,0.4)')
-        grd.addColorStop(1, 'rgba(255,140,0,0)')
+        const grd = ctx.createRadialGradient(px, py, 0, px, py, 7)
+        grd.addColorStop(0,   `rgba(${C_PACKET_CORE},0.95)`)
+        grd.addColorStop(0.4, `rgba(${C_PACKET_HALO},0.40)`)
+        grd.addColorStop(1,   'rgba(0,180,60,0)')
         ctx.beginPath()
-        ctx.arc(px, py, 6, 0, Math.PI * 2)
+        ctx.arc(px, py, 7, 0, Math.PI * 2)
         ctx.fillStyle = grd
         ctx.fill()
       })
 
-      // ── Draw nodes ──
+      // Nodes with pulsing glow
       nodes.forEach(n => {
         const pulse = 0.6 + 0.4 * Math.sin(t * 2 + n.pulseOffset)
-        const alpha = 0.25 + 0.35 * pulse
-        const grd   = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 3)
-        grd.addColorStop(0, `rgba(255,190,40,${alpha})`)
-        grd.addColorStop(1, 'rgba(201,168,76,0)')
+        const alpha = 0.30 + 0.40 * pulse
+        const grd   = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4)
+        grd.addColorStop(0, `rgba(${C_NODE_HALO},${alpha})`)
+        grd.addColorStop(1, 'rgba(0,180,60,0)')
         ctx.beginPath()
-        ctx.arc(n.x, n.y, n.r * 3, 0, Math.PI * 2)
+        ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2)
         ctx.fillStyle = grd
         ctx.fill()
-        // hard dot
         ctx.beginPath()
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(201,168,76,${0.5 + 0.3 * pulse})`
+        ctx.fillStyle = `rgba(${C_NODE_CORE},${0.55 + 0.35 * pulse})`
         ctx.fill()
       })
 
-      // Spawn packets occasionally
       if (Math.random() < 0.04) spawnPacket()
-
       animId = requestAnimationFrame(draw)
     }
 
+    // Track mouse via window so pointer-events-none on canvas still works
     const onMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
       mouse.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
@@ -168,7 +166,7 @@ export function NeuralCanvas() {
     const onLeave = () => { mouse.current = { x: -999, y: -999 } }
 
     window.addEventListener('resize', resize)
-    canvas.addEventListener('mousemove', onMove)
+    window.addEventListener('mousemove', onMove)
     canvas.addEventListener('mouseleave', onLeave)
     resize()
     draw()
@@ -176,7 +174,7 @@ export function NeuralCanvas() {
     return () => {
       cancelAnimationFrame(animId)
       window.removeEventListener('resize', resize)
-      canvas.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mousemove', onMove)
       canvas.removeEventListener('mouseleave', onLeave)
     }
   }, [])
@@ -184,8 +182,9 @@ export function NeuralCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-auto absolute inset-0 h-full w-full"
-      style={{ opacity: 0.55 }}
+      // pointer-events-none: canvas never blocks clicks/text-selection
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      style={{ opacity: 0.60 }}
       aria-hidden="true"
     />
   )
