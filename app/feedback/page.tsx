@@ -111,12 +111,12 @@ export default function FeedbackPage() {
                 <div>
                   <label style={labelStyle}>Your Name *</label>
                   <input type="text" required value={name} onChange={(e) => setName(e.target.value)}
-                    style={inputStyle} placeholder="Yusuf Bhai" />
+                    style={inputStyle} placeholder="Alex Morgan" />
                 </div>
                 <div>
                   <label style={labelStyle}>Company</label>
                   <input type="text" value={company} onChange={(e) => setCompany(e.target.value)}
-                    style={inputStyle} placeholder="Yusuf Bhai Perfumes" />
+                    style={inputStyle} placeholder="Meridian Group" />
                 </div>
               </div>
 
