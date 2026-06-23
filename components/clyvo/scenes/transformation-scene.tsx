@@ -7,6 +7,10 @@ import { Bot, Workflow, Brain, Phone, Plug, ChevronLeft, ChevronRight } from 'lu
 const EASE = [0.16, 1, 0.3, 1] as const
 const VP   = { once: true, margin: '-60px' } as const
 
+const CARD_W = 320   // px — card width
+const GAP    = 28    // px — gap between cards
+const STEP   = CARD_W + GAP  // px per card slot
+
 const SERVICES = [
   { num: '01', icon: Bot,      title: 'AI Chatbots & Assistants',      description: 'Custom-trained agents for support, sales qualification, and onboarding — integrated into your existing platforms.' },
   { num: '02', icon: Workflow, title: 'Workflow & Process Automation',  description: 'End-to-end automation of repetitive processes — lead routing, document handling, approvals, data entry elimination.' },
@@ -20,52 +24,54 @@ const SERVICE_HREFS: Record<string, string> = {
   '04': 'voice-agents', '05': 'system-integrations',
 }
 
-// Per-offset transform config:  offset = cardIndex - activeIndex
-// offset 0  = front/active card
-// offset ±1 = immediate neighbours
-// offset ±2 = outer neighbours
-// |offset| >= 3 = hidden
-const SLOT: Record<number, {
-  rotateY: number
-  translateZ: number
-  translateX: number
-  scale: number
-  opacity: number
-  zIndex: number
-}> = {
-   0: { rotateY:   0, translateZ: 160, translateX:   0, scale: 1.00, opacity: 1.00, zIndex: 5 },
-   1: { rotateY: -32, translateZ:  40, translateX:  60, scale: 0.82, opacity: 0.70, zIndex: 4 },
-  '-1':{ rotateY:  32, translateZ:  40, translateX: -60, scale: 0.82, opacity: 0.70, zIndex: 4 },
-   2: { rotateY: -54, translateZ: -80, translateX: 110, scale: 0.64, opacity: 0.35, zIndex: 3 },
-  '-2':{ rotateY:  54, translateZ: -80, translateX:-110, scale: 0.64, opacity: 0.35, zIndex: 3 },
+// Z-depth config per offset from active card
+// Active pops forward, neighbours step back in Z — no rotation, no overlap
+const DEPTH: Record<number, { z: number; scale: number; opacity: number }> = {
+   0: { z:  80, scale: 1.00, opacity: 1.00 },
+   1: { z:  -8, scale: 0.93, opacity: 0.72 },
+  '-1':{ z:  -8, scale: 0.93, opacity: 0.72 },
+   2: { z: -40, scale: 0.86, opacity: 0.42 },
+  '-2':{ z: -40, scale: 0.86, opacity: 0.42 },
 }
 
-function getSlot(offset: number) {
-  const clamped = Math.max(-2, Math.min(2, offset))
-  return SLOT[clamped] ?? SLOT[2]
+function getDepth(offset: number) {
+  const key = Math.max(-2, Math.min(2, offset))
+  return DEPTH[key] ?? DEPTH[2]
 }
 
 export function TransformationScene() {
-  const [active, setActive] = useState(0)
-  const total = SERVICES.length
+  const [active, setActive]     = useState(0)
+  const [mounted, setMounted]   = useState(false)
+  const [stageW, setStageW]     = useState(0)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const autoRef  = useRef<ReturnType<typeof setInterval> | null>(null)
   const dragStartX = useRef<number | null>(null)
-  const autoRef    = useRef<ReturnType<typeof setInterval> | null>(null)
+  const total = SERVICES.length
 
-  const prev = useCallback(() => setActive(i => (i - 1 + total) % total), [total])
-  const next = useCallback(() => setActive(i => (i + 1) % total), [total])
+  // Measure stage width for centering calculation
+  useEffect(() => {
+    setMounted(true)
+    const measure = () => {
+      if (stageRef.current) setStageW(stageRef.current.offsetWidth)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
 
-  // Auto-advance every 4 s, pauses on interaction
+  const prev = useCallback(() => setActive(i => Math.max(0, i - 1)), [])
+  const next = useCallback(() => setActive(i => Math.min(total - 1, i + 1)), [total])
+
   const resetAuto = useCallback(() => {
     if (autoRef.current) clearInterval(autoRef.current)
-    autoRef.current = setInterval(next, 4000)
-  }, [next])
+    autoRef.current = setInterval(
+      () => setActive(i => (i + 1) % total),
+      4500
+    )
+  }, [total])
 
-  useEffect(() => {
-    resetAuto()
-    return () => { if (autoRef.current) clearInterval(autoRef.current) }
-  }, [resetAuto])
+  useEffect(() => { resetAuto(); return () => { if (autoRef.current) clearInterval(autoRef.current) } }, [resetAuto])
 
-  // Keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')  { prev(); resetAuto() }
@@ -75,30 +81,26 @@ export function TransformationScene() {
     return () => window.removeEventListener('keydown', onKey)
   }, [prev, next, resetAuto])
 
-  // Touch/drag swipe
-  const onPointerDown = (e: React.PointerEvent) => {
-    dragStartX.current = e.clientX
-  }
-  const onPointerUp = (e: React.PointerEvent) => {
+  const onPointerDown = (e: React.PointerEvent) => { dragStartX.current = e.clientX }
+  const onPointerUp   = (e: React.PointerEvent) => {
     if (dragStartX.current === null) return
     const delta = e.clientX - dragStartX.current
-    if (Math.abs(delta) > 40) {
-      delta < 0 ? next() : prev()
-      resetAuto()
-    }
+    if (Math.abs(delta) > 40) { delta < 0 ? next() : prev(); resetAuto() }
     dragStartX.current = null
   }
 
+  // How far left to shift the track so the active card sits centred in the stage
+  // Formula: offset that places card[active].left edge at (stageW/2 - CARD_W/2)
+  const trackShift = stageW > 0
+    ? stageW / 2 - CARD_W / 2 - active * STEP
+    : 0
+
   return (
-    <section
-      id="services"
-      className="relative overflow-hidden pb-16 pt-0"
-      style={{ background: '#EDE6D6' }}
-    >
+    <section id="services" className="relative overflow-hidden pb-20 pt-0" style={{ background: '#EDE6D6' }}>
       <div className="gold-rule absolute inset-x-0 top-0" />
 
-      {/* Section header */}
-      <div className="relative px-5 pb-10 pt-16 md:px-16 md:pt-24">
+      {/* Header */}
+      <div className="relative px-5 pb-12 pt-16 md:px-16 md:pt-24">
         <div className="section-divider" />
         <span className="eyebrow">What We Build</span>
         <h2 className="mt-6 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
@@ -109,69 +111,64 @@ export function TransformationScene() {
         </p>
       </div>
 
-      {/* 3-D carousel stage */}
+      {/* Stage — clips overflow so only visible cards show, perspective for Z-depth */}
       <div
-        className="relative mx-auto select-none"
-        style={{ height: 380, maxWidth: 900 }}
+        ref={stageRef}
+        className="relative w-full overflow-hidden"
+        style={{ height: 380, perspective: '900px', perspectiveOrigin: '50% 50%' }}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
       >
-        {/* Perspective container — do NOT add overflow:hidden here or the side cards clip */}
+        {/* Sliding track — translate X to centre active card */}
         <div
-          className="relative h-full w-full"
-          style={{ perspective: '1100px', perspectiveOrigin: '50% 45%' }}
+          className="absolute top-0 flex items-center"
+          style={{
+            gap: GAP,
+            height: '100%',
+            paddingTop: 16,
+            paddingBottom: 16,
+            left: mounted ? trackShift : `calc(50% - ${CARD_W / 2}px)`,
+            transition: 'left 0.55s cubic-bezier(0.16,1,0.3,1)',
+            willChange: 'left',
+          }}
         >
           {SERVICES.map((s, i) => {
             const offset   = i - active
-            // Wrap-around: pick the shortest path around the ring
-            const wrapped  = ((offset + total + Math.floor(total / 2)) % total) - Math.floor(total / 2)
-            const slot     = getSlot(wrapped)
-            const isActive = wrapped === 0
+            const depth    = getDepth(offset)
+            const isActive = offset === 0
 
             return (
               <div
                 key={s.num}
                 onClick={() => { if (!isActive) { setActive(i); resetAuto() } }}
                 style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  width: 300,
-                  marginLeft: -150,
-                  marginTop: -160,
+                  width: CARD_W,
+                  flexShrink: 0,
                   cursor: isActive ? 'default' : 'pointer',
-                  transform: `
-                    translateX(${slot.translateX}px)
-                    translateZ(${slot.translateZ}px)
-                    rotateY(${slot.rotateY}deg)
-                    scale(${slot.scale})
-                  `,
-                  opacity: slot.opacity,
-                  zIndex: slot.zIndex,
-                  transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease',
+                  transform: `translateZ(${depth.z}px) scale(${depth.scale})`,
+                  opacity: depth.opacity,
+                  transition: 'transform 0.55s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease',
+                  willChange: 'transform, opacity',
                   transformStyle: 'preserve-3d',
-                  willChange: 'transform',
-                  // Only allow pointer events on active or immediate neighbours
-                  pointerEvents: Math.abs(wrapped) <= 1 ? 'auto' : 'none',
                 }}
               >
-                {/* Card surface */}
                 <div
-                  className="glass-card h-full p-7 flex flex-col"
+                  className="glass-card flex h-full flex-col p-7"
                   style={{
-                    height: 320,
-                    // Active card gets brighter edges
+                    height: 328,
+                    // Kill the CSS float animation — carousel owns the motion
+                    animation: 'none',
+                    // Active card: brighter top edge highlight
                     borderTopColor: isActive ? 'rgba(255,255,255,0.95)' : undefined,
                     boxShadow: isActive
                       ? '0 40px 80px -20px rgba(26,26,26,0.22), 0 20px 40px -10px rgba(26,26,26,0.14), inset 0 2px 0 rgba(255,255,255,0.85), inset 2px 0 0 rgba(255,255,255,0.55)'
                       : undefined,
-                    animation: 'none', // kill the base glass-float; carousel handles motion
                   }}
                 >
                   <span className="font-syne text-2xl font-bold text-[#C9A84C]/80">{s.num}</span>
 
                   <div
-                    className="mt-4 flex h-10 w-10 items-center justify-center"
+                    className="mt-5 flex h-10 w-10 items-center justify-center"
                     style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}
                   >
                     <s.icon className="h-4 w-4 text-[#C9A84C]" />
@@ -198,8 +195,9 @@ export function TransformationScene() {
       <div className="mt-8 flex items-center justify-center gap-6">
         <button
           onClick={() => { prev(); resetAuto() }}
-          aria-label="Previous service"
-          className="flex h-10 w-10 items-center justify-center transition-all"
+          disabled={active === 0}
+          aria-label="Previous"
+          className="flex h-10 w-10 items-center justify-center transition-all disabled:opacity-30"
           style={{ border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C' }}
           onMouseEnter={e => (e.currentTarget.style.background = 'rgba(201,168,76,0.08)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
@@ -207,13 +205,12 @@ export function TransformationScene() {
           <ChevronLeft className="h-4 w-4" />
         </button>
 
-        {/* Dot indicators */}
         <div className="flex items-center gap-2">
           {SERVICES.map((_, i) => (
             <button
               key={i}
               onClick={() => { setActive(i); resetAuto() }}
-              aria-label={`Go to service ${i + 1}`}
+              aria-label={`Go to ${SERVICES[i].title}`}
               className="rounded-full transition-all duration-300"
               style={{
                 width:  active === i ? 20 : 6,
@@ -226,8 +223,9 @@ export function TransformationScene() {
 
         <button
           onClick={() => { next(); resetAuto() }}
-          aria-label="Next service"
-          className="flex h-10 w-10 items-center justify-center transition-all"
+          disabled={active === total - 1}
+          aria-label="Next"
+          className="flex h-10 w-10 items-center justify-center transition-all disabled:opacity-30"
           style={{ border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C' }}
           onMouseEnter={e => (e.currentTarget.style.background = 'rgba(201,168,76,0.08)')}
           onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
