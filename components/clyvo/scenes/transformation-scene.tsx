@@ -119,6 +119,101 @@ export function TransformationScene() {
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
       >
+        {/* ── Cyberpunk glow layer ────────────────────────────────────────────
+            Three concentric radial glows behind the active card (always 50% X)
+            + two dim satellite glows at the ±1 neighbour positions.
+            All pointer-events-none so they never interfere with card clicks.
+        ─────────────────────────────────────────────────────────────────────── */}
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          {/* Outer diffuse halo — widest, lowest opacity, slow pulse */}
+          <div style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 700, height: 500,
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.18) 0%, rgba(180,120,30,0.08) 45%, transparent 75%)',
+            filter: 'blur(32px)',
+            animation: 'glow-pulse 4s ease-in-out infinite',
+          }} />
+
+          {/* Mid ring — tighter, warmer amber core */}
+          <div style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -52%)',
+            width: 400, height: 280,
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at center, rgba(255,185,50,0.28) 0%, rgba(201,168,76,0.14) 50%, transparent 75%)',
+            filter: 'blur(18px)',
+            animation: 'glow-pulse 4s ease-in-out infinite 0.6s',
+          }} />
+
+          {/* Tight bright core — simulates neon hotspot on the card face */}
+          <div style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -58%)',
+            width: 200, height: 120,
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at center, rgba(255,210,90,0.45) 0%, rgba(201,168,76,0.20) 60%, transparent 100%)',
+            filter: 'blur(8px)',
+            animation: 'glow-pulse 4s ease-in-out infinite 1.2s',
+          }} />
+
+          {/* Floor reflection — subtle warm pool under the cards */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0, left: '50%',
+            transform: 'translateX(-50%)',
+            width: 500, height: 80,
+            borderRadius: '50%',
+            background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.22) 0%, transparent 70%)',
+            filter: 'blur(20px)',
+            animation: 'glow-pulse 4s ease-in-out infinite 2s',
+          }} />
+
+          {/* Satellite glow — left neighbour card (offset -1), dimmer */}
+          {stageW > 0 && (
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: `calc(50% - ${STEP}px)`,
+              transform: 'translate(-50%, -50%)',
+              width: 260, height: 200,
+              borderRadius: '50%',
+              background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.10) 0%, transparent 70%)',
+              filter: 'blur(24px)',
+              transition: 'opacity 0.5s ease',
+              opacity: active > 0 ? 1 : 0,
+            }} />
+          )}
+
+          {/* Satellite glow — right neighbour card (offset +1), dimmer */}
+          {stageW > 0 && (
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: `calc(50% + ${STEP}px)`,
+              transform: 'translate(-50%, -50%)',
+              width: 260, height: 200,
+              borderRadius: '50%',
+              background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.10) 0%, transparent 70%)',
+              filter: 'blur(24px)',
+              transition: 'opacity 0.5s ease',
+              opacity: active < total - 1 ? 1 : 0,
+            }} />
+          )}
+        </div>
+
+        {/* Keyframes injected once — can't use globals.css @keyframes inside JSX easily */}
+        <style>{`
+          @keyframes glow-pulse {
+            0%, 100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+            50%       { opacity: 1.00; transform: translate(-50%, -50%) scale(1.08); }
+          }
+        `}</style>
+
         {/* Sliding track — translate X to centre active card */}
         <div
           className="absolute top-0 flex items-center"
