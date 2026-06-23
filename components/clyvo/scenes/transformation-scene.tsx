@@ -156,13 +156,14 @@ export function TransformationScene() {
                   className="glass-card flex h-full flex-col p-7"
                   style={{
                     height: 328,
-                    // Kill the CSS float animation — carousel owns the motion
+                    // Kill CSS float — carousel owns the motion
                     animation: 'none',
-                    // Active card: brighter top edge highlight
-                    borderTopColor: isActive ? 'rgba(255,255,255,0.95)' : undefined,
+                    // Active = full neon gold burst. Inactive = plain shadow, no ring.
+                    borderTopColor: isActive ? 'rgba(255, 200, 50, 0.50)' : 'rgba(255,255,255,0.20)',
+                    borderLeftColor: isActive ? 'rgba(255, 190, 0, 0.30)' : 'rgba(255,255,255,0.15)',
                     boxShadow: isActive
-                      ? '0 40px 80px -20px rgba(26,26,26,0.22), 0 20px 40px -10px rgba(26,26,26,0.14), inset 0 2px 0 rgba(255,255,255,0.85), inset 2px 0 0 rgba(255,255,255,0.55)'
-                      : undefined,
+                      ? '0 50px 100px -20px rgba(26,26,26,0.22), 0 25px 50px -10px rgba(26,26,26,0.14), 0 0 0 1.5px rgba(255,190,0,0.70), 0 0 28px rgba(255,180,0,0.40), 0 0 60px rgba(255,150,0,0.22), 0 0 100px rgba(200,100,0,0.12), inset 0 2px 0 rgba(255,245,200,0.90), inset 2px 0 0 rgba(255,230,150,0.60), inset 0 -1px 12px rgba(255,210,80,0.12), inset -1px 0 12px rgba(255,240,180,0.08)'
+                      : '0 20px 40px -12px rgba(26,26,26,0.10), 0 8px 20px -8px rgba(26,26,26,0.06), inset 0 2px 0 rgba(255,255,255,0.60)',
                   }}
                 >
                   <span className="font-syne text-2xl font-bold text-[#C9A84C]/80">{s.num}</span>
