@@ -178,7 +178,7 @@ export function HeroContent() {
 
       {/* ── Live AI dashboard card ─────────────────────────────────────────── */}
       <motion.div
-        style={{ x: cardX, opacity: cardOpacity, position: 'absolute', right: '2rem', top: '50%', translateY: '-50%' } as any}
+        style={{ x: cardX, opacity: cardOpacity, position: 'absolute', right: '2rem', top: '58%', translateY: '-50%' } as any}
         className="pointer-events-none hidden xl:block"
       >
         <motion.div
