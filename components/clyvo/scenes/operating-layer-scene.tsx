@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { Check } from 'lucide-react'
 
@@ -15,6 +15,92 @@ const STEPS = [
   { num: '06', title: 'Retainer & Optimisation',  description: 'Ongoing monitoring, model updates, retraining, and new feature development as your business evolves.' },
 ]
 
+// ── Data packet canvas ────────────────────────────────────────────────────────
+// Renders travelling dots on the timeline line.
+// lineHeight = actual rendered px height of the gold line.
+// progress   = 0→1 scroll progress (how far the gold line has grown).
+interface PacketCanvasProps {
+  lineHeight: number
+  progress: number
+}
+
+interface Packet { y: number; speed: number; alpha: number; size: number }
+
+function PacketCanvas({ lineHeight, progress }: PacketCanvasProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const packets   = useRef<Packet[]>([])
+  const rafRef    = useRef<number>(0)
+  const prevProgress = useRef(0)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx    = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Spawn new packet when progress advances
+    if (progress > prevProgress.current + 0.04 && lineHeight > 20) {
+      packets.current.push({
+        y:     0,
+        speed: 1.2 + Math.random() * 1.4,
+        alpha: 0.7 + Math.random() * 0.3,
+        size:  3 + Math.random() * 2,
+      })
+      prevProgress.current = progress
+    }
+
+    canvas.width  = 20
+    canvas.height = lineHeight
+
+    const draw = () => {
+      ctx.clearRect(0, 0, 20, lineHeight)
+      packets.current = packets.current.filter(p => p.y < lineHeight)
+
+      packets.current.forEach(p => {
+        p.y     += p.speed
+        p.alpha *= 0.998
+
+        // Glow halo
+        const grd = ctx.createRadialGradient(10, p.y, 0, 10, p.y, p.size * 3)
+        grd.addColorStop(0, `rgba(255,190,0,${p.alpha * 0.9})`)
+        grd.addColorStop(0.5, `rgba(201,168,76,${p.alpha * 0.4})`)
+        grd.addColorStop(1, 'rgba(201,168,76,0)')
+        ctx.beginPath()
+        ctx.arc(10, p.y, p.size * 3, 0, Math.PI * 2)
+        ctx.fillStyle = grd
+        ctx.fill()
+
+        // Hard dot
+        ctx.beginPath()
+        ctx.arc(10, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255,210,50,${p.alpha})`
+        ctx.fill()
+      })
+
+      rafRef.current = requestAnimationFrame(draw)
+    }
+
+    cancelAnimationFrame(rafRef.current)
+    draw()
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [lineHeight, progress])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        top: 0, left: -4,
+        width: 20,
+        height: lineHeight,
+        pointerEvents: 'none',
+        zIndex: 2,
+      }}
+    />
+  )
+}
+
 function StepItem({ progress, step, index, total }: { progress: MotionValue<number>; step: typeof STEPS[0]; index: number; total: number }) {
   const s = 0.08 + (index / total) * 0.78
   const e = s + 0.10
@@ -28,7 +114,7 @@ function StepItem({ progress, step, index, total }: { progress: MotionValue<numb
       style={{ borderTop: '1px solid rgba(201,168,76,0.15)' }}>
       <style>{`div:first-child { border-top: none; }`}</style>
       <motion.div className="absolute -left-[1.375rem] top-10 hidden h-2.5 w-2.5 rounded-full sm:block"
-        style={{ scale: dotSc, background: '#C9A84C' }} />
+        style={{ scale: dotSc, background: '#C9A84C', zIndex: 3 }} />
       <motion.div className="flex items-center gap-2" style={{ opacity: numOp }}>
         <span className="font-playfair text-3xl font-bold italic text-[#1A1A1A]">{step.num}</span>
         <motion.div style={{ opacity: doneOp }}>
@@ -44,9 +130,21 @@ function StepItem({ progress, step, index, total }: { progress: MotionValue<numb
 }
 
 export function OperatingLayerScene() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const sectionRef  = useRef<HTMLElement>(null)
+  const lineRef     = useRef<HTMLDivElement>(null)
+  const [lineH, setLineH] = useState(0)
+
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const lineScaleY = useTransform(scrollYProgress, [0.05, 0.90], [0, 1])
+
+  // Measure rendered line height for packet canvas
+  const [progressVal, setProgressVal] = useState(0)
+  useEffect(() => {
+    return lineScaleY.on('change', v => {
+      setProgressVal(v)
+      if (lineRef.current) setLineH(lineRef.current.offsetHeight * v)
+    })
+  }, [lineScaleY])
 
   return (
     <section ref={sectionRef} id="how-it-works" className="relative section-padding" style={{ background: '#F5F0E8' }}>
@@ -66,11 +164,20 @@ export function OperatingLayerScene() {
         </motion.div>
 
         <div className="flex gap-6 sm:gap-16">
+          {/* Timeline line + packet canvas */}
           <div className="relative hidden shrink-0 flex-col items-center sm:flex" style={{ width: 2 }}>
+            {/* Track (background) */}
             <div className="absolute inset-0 rounded-full" style={{ background: 'rgba(201,168,76,0.15)' }} />
-            <motion.div className="absolute top-0 w-full rounded-full will-change-transform"
-              style={{ scaleY: lineScaleY, transformOrigin: 'top', height: '100%', background: '#C9A84C' }} />
+            {/* Filling gold line */}
+            <motion.div
+              ref={lineRef}
+              className="absolute top-0 w-full rounded-full will-change-transform"
+              style={{ scaleY: lineScaleY, transformOrigin: 'top', height: '100%', background: '#C9A84C' }}
+            />
+            {/* Packet canvas — overlaid on top of the line */}
+            <PacketCanvas lineHeight={lineH} progress={progressVal} />
           </div>
+
           <div className="flex-1">
             {STEPS.map((step, i) => (
               <StepItem key={step.num} progress={scrollYProgress} step={step} index={i} total={STEPS.length} />
