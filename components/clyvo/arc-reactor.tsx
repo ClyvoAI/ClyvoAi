@@ -11,27 +11,27 @@ export function ArcReactor() {
     <div style={{ position: 'relative', width: 200, height: 200 }}>
       {/* Outer ambient glow — pulses slowly */}
       <motion.div
-        animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.08, 1] }}
+        animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.06, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           position: 'absolute',
-          inset: -50,
+          inset: -24,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(80,200,255,0.22) 0%, rgba(0,140,255,0.10) 45%, transparent 70%)',
-          filter: 'blur(18px)',
+          background: 'radial-gradient(circle, rgba(80,200,255,0.18) 0%, rgba(0,140,255,0.08) 50%, transparent 75%)',
+          filter: 'blur(10px)',
         }}
       />
 
       {/* Secondary tight glow — offset phase */}
       <motion.div
-        animate={{ opacity: [1, 0.55, 1], scale: [1.04, 1, 1.04] }}
+        animate={{ opacity: [1, 0.55, 1], scale: [1.03, 1, 1.03] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           position: 'absolute',
-          inset: -20,
+          inset: -10,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(120,220,255,0.18) 0%, rgba(0,180,255,0.08) 55%, transparent 75%)',
-          filter: 'blur(10px)',
+          background: 'radial-gradient(circle, rgba(120,220,255,0.14) 0%, rgba(0,180,255,0.06) 55%, transparent 75%)',
+          filter: 'blur(6px)',
         }}
       />
 
