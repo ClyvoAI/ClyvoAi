@@ -71,13 +71,6 @@ function useCardState(): CardState {
 
   return state
 }
-        return [prev[1], prev[2], next]
-      })
-    }, 2200)
-    return () => clearInterval(id)
-  }, [])
-  return active
-}
 
 export function HeroContent() {
   const ref = useRef<HTMLElement>(null)
@@ -90,17 +83,8 @@ export function HeroContent() {
   const logoOpacity    = useTransform(scrollYProgress, [0, 0.5], [1, 0])
   const logoY          = useTransform(scrollYProgress, [0, 0.5], [0, -30])
 
-  // Live metrics
-  const latency   = useLiveMetric(42, 12, 800)
-  const accuracy  = useLiveMetric(98.4, 0.8, 1200)
-  const throughput = useLiveMetric(1240, 180, 700)
-  const bars      = useSparkline()
-  const taskIdx   = useCyclingTasks()
-  const [processed, setProcessed] = useState(12)
-  useEffect(() => {
-    const id = setInterval(() => setProcessed(p => Math.min(p + 1, 20)), 4700)
-    return () => clearInterval(id)
-  }, [])
+  // Single consolidated state — one interval, one re-render per 800ms
+  const { latency, accuracy, throughput, bars, taskIdx, processed } = useCardState()
 
   return (
     <section ref={ref} className="relative w-full h-[78vh] md:h-screen" style={{ background: '#F5F0E8', overflow: 'clip' }}>
