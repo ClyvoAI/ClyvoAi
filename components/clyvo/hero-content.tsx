@@ -110,10 +110,11 @@ export function HeroContent() {
 
       {/* Arc Reactor — replaces logo orb */}
       <motion.div style={{ y: logoY, opacity: logoOpacity }}
-        className="pointer-events-none absolute top-16 right-[6%] hidden md:block">
+        className="pointer-events-none absolute hidden md:block"
+        style={{ top: '50%', left: '58%', transform: 'translate(-50%, -50%)' }}>
         <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ y: [0, -14, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
         >
           <ArcReactor />
         </motion.div>
@@ -175,12 +176,12 @@ export function HeroContent() {
 
       {/* ── Live AI dashboard card ─────────────────────────────────────────── */}
       <motion.div
-        style={{ x: cardX, opacity: cardOpacity, position: 'absolute', right: '2rem', top: '58%', translateY: '-50%' } as any}
+        style={{ x: cardX, opacity: cardOpacity, position: 'absolute', right: '2rem', top: '8%' } as any}
         className="pointer-events-none hidden xl:block"
       >
         <motion.div
-          animate={{ y: [0, -14, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ y: [0, -12, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
           style={{ ...GLASS, padding: '20px 24px', width: 272 }}
         >
           {/* Header */}
