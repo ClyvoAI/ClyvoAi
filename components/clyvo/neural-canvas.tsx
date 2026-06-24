@@ -13,8 +13,8 @@ import { useEffect, useRef } from 'react'
 // - Mouse interaction: gentle attraction rather than violent repel
 // ─────────────────────────────────────────────────────────────────────────────
 
-const NODE_COUNT  = 65
-const EDGE_DIST   = 130   // tighter = denser network = more edges visible
+const NODE_COUNT  = 42       // was 65 — cuts O(n²) edge checks from 4225 to 1764/frame
+const EDGE_DIST   = 120      // was 130 — fewer edges per node
 const MAX_PACKETS = 20
 const SPEED       = 0.28  // node drift speed
 
@@ -142,15 +142,27 @@ export function NeuralCanvas() {
       raf = requestAnimationFrame(tick)
     }
 
+    // Track mouse via window — throttled to 30fps so it doesn't eat main thread
+    let lastMouseUpdate = 0
     const onMove = (e: MouseEvent) => {
+      const now = performance.now()
+      if (now - lastMouseUpdate < 33) return  // ~30fps cap
+      lastMouseUpdate = now
       const r = canvas.getBoundingClientRect()
       mouse.current = { x: e.clientX - r.left, y: e.clientY - r.top }
     }
     const onLeave = () => { mouse.current = { x: -9999, y: -9999 } }
 
-    window.addEventListener('resize', resize)
-    window.addEventListener('mousemove', onMove)
-    window.addEventListener('mouseleave', onLeave)
+    // Pause animation when tab is hidden — major CPU/GPU saving
+    const onVisibility = () => {
+      if (document.hidden) cancelAnimationFrame(raf)
+      else { raf = requestAnimationFrame(tick) }
+    }
+
+    window.addEventListener('resize', resize, { passive: true })
+    window.addEventListener('mousemove', onMove, { passive: true })
+    window.addEventListener('mouseleave', onLeave, { passive: true })
+    document.addEventListener('visibilitychange', onVisibility)
     resize()
     tick()
 
@@ -159,6 +171,7 @@ export function NeuralCanvas() {
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseleave', onLeave)
+      document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [])
 

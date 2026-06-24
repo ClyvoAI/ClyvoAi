@@ -17,47 +17,60 @@ const GLASS = {
   boxShadow: '0 8px 40px rgba(26,26,26,0.08)',
 }
 
-// ── Live metric hook ──────────────────────────────────────────────────────────
-// Each metric ticks randomly within a realistic range, simulating live inference
-function useLiveMetric(base: number, variance: number, interval: number) {
-  const [value, setValue] = useState(base)
-  useEffect(() => {
-    const id = setInterval(() => {
-      setValue(base + (Math.random() - 0.5) * variance * 2)
-    }, interval)
-    return () => clearInterval(id)
-  }, [base, variance, interval])
-  return value
-}
+// ── Single consolidated tick — replaces 6 separate setInterval hooks ─────────
+// Old: 6 intervals at 700/800/900/1200/2200/4700ms = 6 re-renders on 6 schedules
+// New: 1 interval at 800ms, all state updated in one batch = 1 re-render/800ms
 
-// ── Spark line data (7 bars, rolling) ────────────────────────────────────────
-function useSparkline() {
-  const [bars, setBars] = useState([40, 70, 50, 90, 60, 80, 45])
-  useEffect(() => {
-    const id = setInterval(() => {
-      setBars(prev => [...prev.slice(1), 20 + Math.random() * 75])
-    }, 900)
-    return () => clearInterval(id)
-  }, [])
-  return bars
-}
-
-// ── Task list cycling ─────────────────────────────────────────────────────────
 const TASKS = [
-  'Lead qualification',
-  'Data sync',
-  'Workflow trigger',
-  'CRM update',
-  'Invoice processed',
-  'Email routed',
+  'Lead qualification', 'Data sync', 'Workflow trigger',
+  'CRM update', 'Invoice processed', 'Email routed',
 ]
 
-function useCyclingTasks() {
-  const [active, setActive] = useState([0, 1, 2])
+interface CardState {
+  latency:    number
+  accuracy:   number
+  throughput: number
+  bars:       number[]
+  taskIdx:    [number, number, number]
+  processed:  number
+  taskTick:   number   // internal counter for slower task cycling
+}
+
+function useCardState(): CardState {
+  const [state, setState] = useState<CardState>({
+    latency:    42,
+    accuracy:   98.4,
+    throughput: 1240,
+    bars:       [40, 70, 50, 90, 60, 80, 45],
+    taskIdx:    [0, 1, 2],
+    processed:  12,
+    taskTick:   0,
+  })
+
   useEffect(() => {
     const id = setInterval(() => {
-      setActive(prev => {
-        const next = (prev[2] + 1) % TASKS.length
+      setState(prev => {
+        const taskTick  = prev.taskTick + 1
+        const cycleTasks = taskTick % 3 === 0  // cycle tasks every 3 ticks (~2.4s)
+        const incProc    = taskTick % 6 === 0  // increment counter every 6 ticks (~4.8s)
+        return {
+          latency:    42  + (Math.random() - 0.5) * 24,
+          accuracy:   98.4 + (Math.random() - 0.5) * 1.6,
+          throughput: 1240 + (Math.random() - 0.5) * 360,
+          bars:       [...prev.bars.slice(1), 20 + Math.random() * 75],
+          taskIdx:    cycleTasks
+            ? [prev.taskIdx[1], prev.taskIdx[2], (prev.taskIdx[2] + 1) % TASKS.length] as [number,number,number]
+            : prev.taskIdx,
+          processed:  incProc ? Math.min(prev.processed + 1, 20) : prev.processed,
+          taskTick,
+        }
+      })
+    }, 800)
+    return () => clearInterval(id)
+  }, [])
+
+  return state
+}
         return [prev[1], prev[2], next]
       })
     }, 2200)
@@ -109,9 +122,9 @@ export function HeroContent() {
       }} />
 
       {/* Arc Reactor — replaces logo orb */}
-      <motion.div style={{ y: logoY, opacity: logoOpacity }}
-        className="pointer-events-none absolute hidden md:block"
-        style={{ top: '50%', left: '58%', transform: 'translate(-50%, -50%)' }}>
+      <motion.div
+        style={{ y: logoY, opacity: logoOpacity, position: 'absolute', top: '50%', left: '58%', translateX: '-50%', translateY: '-50%' }}
+        className="pointer-events-none hidden md:block">
         <motion.div
           animate={{ y: [0, -14, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', repeatType: 'mirror' }}
