@@ -107,7 +107,7 @@ export function HeroContent() {
 
       {/* Arc Reactor — replaces logo orb */}
       <motion.div
-        style={{ y: logoY, opacity: logoOpacity, position: 'absolute', top: '42%', left: '70%', translateX: '-50%', translateY: '-50%' }}
+        style={{ y: logoY, opacity: logoOpacity, position: 'absolute', top: '38%', left: '75%', translateX: '-50%', translateY: '-50%' }}
         className="pointer-events-none hidden md:block">
         <motion.div
           animate={{ y: [0, -14, 0] }}
@@ -173,7 +173,7 @@ export function HeroContent() {
 
       {/* ── Live AI dashboard card ─────────────────────────────────────────── */}
       <motion.div
-        style={{ x: cardX, opacity: cardOpacity, position: 'absolute', right: '2rem', top: '22%' } as any}
+        style={{ x: cardX, opacity: cardOpacity, position: 'absolute', right: '2rem', top: '55%' } as any}
         className="pointer-events-none hidden xl:block"
       >
         <motion.div
