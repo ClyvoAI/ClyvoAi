@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers'
 import { AppLoader } from '@/components/clyvo/app-loader'
 import { BookingModal } from '@/components/clyvo/booking-modal'
 import { CookieBanner } from '@/components/clyvo/cookie-banner'
+import { SmoothScroll } from '@/components/clyvo/smooth-scroll'
 import { GoogleAnalytics } from '@/components/analytics'
 
 const syne = Syne({ subsets: ['latin'], weight: ['400','600','700','800'], variable: '--font-syne', display: 'swap' })
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
             <BookingModal />
             <CookieBanner />
+            <SmoothScroll />
           </AppLoader>
         </Providers>
       </body>

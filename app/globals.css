@@ -561,6 +561,45 @@ button, a { cursor: pointer; }
 
 
 
+
+/* Scan line that sweeps — ambient energy effect */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent calc(var(--scan-pos, 0%) - 2px),
+    rgba(255, 180, 30, 0.06) calc(var(--scan-pos, 0%) - 2px),
+    rgba(255, 180, 30, 0.06) var(--scan-pos, 0%),
+    transparent var(--scan-pos, 0%)
+  );
+  pointer-events: none;
+  animation: scan-line 8s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Scanline texture — barely visible warm grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255, 180, 0, 0.012) 3px,
+    rgba(255, 180, 0, 0.012) 4px
+  );
+  pointer-events: none;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
 /* ── Space Mono — applied site-wide as the primary body font ── */
 body, .font-inter, .font-syne {
   font-family: var(--font-mono), 'Space Mono', monospace !important;
