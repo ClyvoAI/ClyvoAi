@@ -54,7 +54,7 @@ export function ContactForm() {
         <p className="max-w-sm font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">
           We&apos;ll review your details and be in touch within 24 hours.
         </p>
-        <button onClick={openCalendly} className="btn-primary">
+        <button onClick={openBookingModal} className="btn-primary">
           Book Your Call Now <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </motion.div>
