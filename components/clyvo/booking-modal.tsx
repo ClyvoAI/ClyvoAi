@@ -73,6 +73,7 @@ export function BookingModal() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [company, setCompany] = useState('')
+  const [termsAccepted, setTermsAccepted] = useState(false)
   const [status, setStatus] = useState<'idle'|'loading'|'success'|'error'>('idle')
   const [error, setError] = useState('')
 
@@ -90,7 +91,7 @@ export function BookingModal() {
 
   const reset = () => {
     setStep(1); setSelectedDate(null); setSelectedTime(null)
-    setName(''); setEmail(''); setCompany(''); setStatus('idle'); setError('')
+    setName(''); setEmail(''); setCompany(''); setTermsAccepted(false); setStatus('idle'); setError('')
   }
 
   const close = () => { setOpen(false); setTimeout(reset, 400) }
@@ -362,8 +363,28 @@ export function BookingModal() {
 
                     {error && <p className="mt-3 font-inter text-sm text-red-600">{error}</p>}
 
-                    <button type="submit" disabled={status === 'loading'} className="btn-primary mt-5 w-full justify-center"
-                      style={{ opacity: status === 'loading' ? 0.7 : 1 }}>
+                    {/* Terms checkbox */}
+                    <label className="mt-4 flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        required
+                        checked={termsAccepted}
+                        onChange={e => setTermsAccepted(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 flex-shrink-0 accent-[#C9A84C]"
+                      />
+                      <span className="font-inter text-[11px] leading-[1.7] text-[#4A4A4A]">
+                        I agree to the{' '}
+                        <a href="/terms" target="_blank" rel="noopener noreferrer"
+                          className="text-[#C9A84C] hover:underline">Terms of Service</a>
+                        {' '}and{' '}
+                        <a href="/privacy" target="_blank" rel="noopener noreferrer"
+                          className="text-[#C9A84C] hover:underline">Privacy Policy</a>.
+                        I understand that bookings are subject to confirmation and that Clyvo AI retains ownership of all systems and deliverables built.
+                      </span>
+                    </label>
+
+                    <button type="submit" disabled={status === 'loading' || !termsAccepted} className="btn-primary mt-5 w-full justify-center"
+                      style={{ opacity: (status === 'loading' || !termsAccepted) ? 0.5 : 1 }}>
                       {status === 'loading'
                         ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Confirming...</>
                         : 'Confirm Booking'}

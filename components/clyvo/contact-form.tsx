@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react'
-import { openBookingModal } from '@/components/clyvo/booking-modal'
+import { openCalendly } from '@/components/clyvo/calendly-button'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -17,6 +17,7 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
   const [form, setForm] = useState({ name: '', email: '', company: '', employees: '', message: '' })
+  const [termsAccepted, setTermsAccepted] = useState(false)
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
@@ -37,7 +38,7 @@ export function ContactForm() {
       }
       setStatus('success')
       // Open Calendly so they can book right after submitting
-      setTimeout(() => openBookingModal(), 600)
+      setTimeout(() => openCalendly(), 600)
     } catch (err: any) {
       setStatus('error')
       setError(err.message || 'Something went wrong. Please try again.')
@@ -53,7 +54,7 @@ export function ContactForm() {
         <p className="max-w-sm font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">
           We&apos;ll review your details and be in touch within 24 hours.
         </p>
-        <button onClick={openBookingModal} className="btn-primary">
+        <button onClick={openCalendly} className="btn-primary">
           Book Your Call Now <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </motion.div>
@@ -136,8 +137,28 @@ export function ContactForm() {
       {error && <p className="font-inter text-sm text-red-600">{error}</p>}
 
       <div className="flex flex-col gap-3">
-        <button type="submit" disabled={status === 'loading'} className="btn-primary"
-          style={{ opacity: status === 'loading' ? 0.7 : 1 }}>
+        {/* Terms checkbox */}
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            required
+            checked={termsAccepted}
+            onChange={e => setTermsAccepted(e.target.checked)}
+            className="mt-0.5 h-4 w-4 flex-shrink-0 accent-[#C9A84C]"
+          />
+          <span className="font-inter text-[11px] leading-[1.7] text-[#4A4A4A]">
+            I agree to the{' '}
+            <a href="/terms" target="_blank" rel="noopener noreferrer"
+              className="text-[#C9A84C] hover:underline">Terms of Service</a>
+            {' '}and{' '}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer"
+              className="text-[#C9A84C] hover:underline">Privacy Policy</a>.
+            I understand Clyvo AI retains IP ownership of all deliverables.
+          </span>
+        </label>
+
+        <button type="submit" disabled={status === 'loading' || !termsAccepted} className="btn-primary"
+          style={{ opacity: (status === 'loading' || !termsAccepted) ? 0.5 : 1 }}>
           {status === 'loading'
             ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Sending...</>
             : <><span>Send Message</span><ArrowRight className="h-3.5 w-3.5" /></>
