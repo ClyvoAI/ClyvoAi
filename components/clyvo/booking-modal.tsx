@@ -380,6 +380,8 @@ export function BookingModal() {
                         <a href="/privacy" target="_blank" rel="noopener noreferrer"
                           className="text-[#C9A84C] hover:underline">Privacy Policy</a>.
                         I understand that bookings are subject to confirmation and that Clyvo AI retains ownership of all systems and deliverables built.
+                        {' '}<a href="/terms" target="_blank" rel="noopener noreferrer"
+                          className="text-[#C9A84C]/60 hover:text-[#C9A84C] hover:underline text-[10px]">Read more →</a>
                       </span>
                     </label>
 
