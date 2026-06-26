@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react'
-import { openCalendly } from '@/components/clyvo/calendly-button'
+import { openBookingModal } from '@/components/clyvo/booking-modal'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -38,7 +38,7 @@ export function ContactForm() {
       }
       setStatus('success')
       // Open Calendly so they can book right after submitting
-      setTimeout(() => openCalendly(), 600)
+      setTimeout(() => openBookingModal(), 600)
     } catch (err: any) {
       setStatus('error')
       setError(err.message || 'Something went wrong. Please try again.')
