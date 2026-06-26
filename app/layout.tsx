@@ -3,6 +3,7 @@ import { Syne, Inter, Space_Mono, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { AppLoader } from '@/components/clyvo/app-loader'
+import { BookingModal } from '@/components/clyvo/booking-modal'
 import { GoogleAnalytics } from '@/components/analytics'
 
 const syne = Syne({ subsets: ['latin'], weight: ['400','600','700','800'], variable: '--font-syne', display: 'swap' })
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <AppLoader>
             {children}
+            <BookingModal />
           </AppLoader>
         </Providers>
       </body>

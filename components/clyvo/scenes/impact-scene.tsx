@@ -1,5 +1,5 @@
 'use client'
-import { CalendlyButton } from '@/components/clyvo/calendly-button'
+import { BookingButton } from '@/components/clyvo/booking-modal'
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'motion/react'
@@ -103,9 +103,9 @@ export function ImpactScene() {
           <p className="font-inter text-sm font-light text-[#8A8A8A]">
             No fixed package tiers. Every solution is scoped to your real problem.
           </p>
-          <CalendlyButton className="btn-primary">
+          <BookingButton className="btn-primary">
             Book a Discovery Call — it&apos;s free <ArrowRight className="h-3.5 w-3.5" />
-          </CalendlyButton>
+          </BookingButton>
         </motion.div>
       </div>
     </section>

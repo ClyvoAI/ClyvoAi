@@ -1,5 +1,5 @@
 'use client'
-import { CalendlyButton } from '@/components/clyvo/calendly-button'
+import { BookingButton } from '@/components/clyvo/booking-modal'
 
 import { useRef, useEffect, useCallback } from 'react'
 import { motion } from 'motion/react'

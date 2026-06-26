@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Menu, X, ChevronDown, MessageSquare, GitBranch, Cpu, Phone, Link2 } from 'lucide-react'
-import { CalendlyButton } from '@/components/clyvo/calendly-button'
+import { BookingButton } from '@/components/clyvo/booking-modal'
 
 const LOGO_FILTER = 'brightness(0) saturate(100%)'
 
@@ -120,9 +120,9 @@ export function Navigation() {
               </a>
             ))}
 
-            <CalendlyButton className="btn-primary ml-2" style={{ fontSize: '10px', padding: '10px 16px' }}>
+            <BookingButton className="btn-primary ml-2" style={{ fontSize: '10px', padding: '10px 16px' }}>
               Book a Discovery Call
-            </CalendlyButton>
+            </BookingButton>
           </nav>
 
           {/* Mobile toggle */}
@@ -181,9 +181,9 @@ export function Navigation() {
             </nav>
 
             <div className="mt-auto pt-8">
-              <CalendlyButton className="btn-primary w-full justify-center" onClick={() => setMobileOpen(false)}>
+              <BookingButton className="btn-primary w-full justify-center" onClick={() => setMobileOpen(false)}>
                 Book a Discovery Call
-              </CalendlyButton>
+              </BookingButton>
             </div>
           </motion.div>
         )}
