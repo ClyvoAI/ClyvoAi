@@ -562,6 +562,8 @@ button, a { cursor: pointer; }
 /* Scanline texture — barely visible warm grain */
 body::after {
   content: '';
+  will-change: transform;
+  transform: translateZ(0);
   position: fixed;
   inset: 0;
   z-index: 9999;
