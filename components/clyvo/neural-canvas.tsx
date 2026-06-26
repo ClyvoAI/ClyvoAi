@@ -67,6 +67,18 @@ export function NeuralCanvas() {
       }
     }
 
+    let isVisible = true
+
+    // Stop RAF entirely when canvas is off-screen — biggest scroll perf win
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting
+        if (isVisible && raf === 0) raf = requestAnimationFrame(tick)
+      },
+      { threshold: 0.01 }
+    )
+    observer.observe(canvas)
+
     const tick = () => {
       ctx.clearRect(0, 0, W, H)
 
@@ -139,7 +151,7 @@ export function NeuralCanvas() {
       }
 
       if (Math.random() < 0.06) spawnPkt()
-      raf = requestAnimationFrame(tick)
+      raf = isVisible ? requestAnimationFrame(tick) : 0
     }
 
     // Track mouse via window — throttled to 30fps so it doesn't eat main thread
@@ -168,6 +180,7 @@ export function NeuralCanvas() {
 
     return () => {
       cancelAnimationFrame(raf)
+      observer.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseleave', onLeave)

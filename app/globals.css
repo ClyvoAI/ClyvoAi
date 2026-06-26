@@ -579,3 +579,33 @@ body::after {
 body, .font-inter, .font-syne {
   font-family: var(--font-mono), 'Space Mono', monospace !important;
 }
+
+/* ── Scroll performance — USB mouse jank fixes ──────────────────────────────
+   USB mice fire discrete wheel events with no browser interpolation.
+   These rules move heavy elements to GPU compositor thread so scroll
+   events don't trigger main-thread repaints.                              */
+
+/* Force GPU layer on fixed/animated elements */
+.global-background,
+[style*="position: fixed"],
+[style*="position:fixed"] {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* content-visibility: auto skips layout/paint for off-screen sections.
+   contain-intrinsic-size prevents layout shift when sections enter view. */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 700px;
+}
+
+/* Hero section is always visible — don't skip it */
+section:first-of-type {
+  content-visibility: visible;
+}
+
+/* Prevent scroll chaining and momentum bounce that compounds jank */
+html {
+  overscroll-behavior-y: none;
+}
