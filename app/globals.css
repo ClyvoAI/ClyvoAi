@@ -559,23 +559,7 @@ button, a { cursor: pointer; }
   opacity: 0.9;
 }
 
-/* Scanline texture — barely visible warm grain */
-body::after {
-  content: '';
-  will-change: transform;
-  transform: translateZ(0);
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 3px,
-    rgba(255, 180, 0, 0.012) 3px,
-    rgba(255, 180, 0, 0.012) 4px
-  );
-  pointer-events: none;
-}
+
 
 /* ── Space Mono — applied site-wide as the primary body font ── */
 body, .font-inter, .font-syne {
