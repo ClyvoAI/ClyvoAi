@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react'
+import { openCalendly } from '@/components/clyvo/calendly-button'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -35,6 +36,8 @@ export function ContactForm() {
         throw new Error(d.error || 'Submission failed')
       }
       setStatus('success')
+      // Open Calendly so they can book right after submitting
+      setTimeout(() => openCalendly(), 600)
     } catch (err: any) {
       setStatus('error')
       setError(err.message || 'Something went wrong. Please try again.')
@@ -48,8 +51,11 @@ export function ContactForm() {
         <CheckCircle className="h-12 w-12 text-[#C9A84C]" />
         <h3 className="font-playfair text-2xl font-semibold italic text-[#1A1A1A]">Message Received</h3>
         <p className="max-w-sm font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">
-          We&apos;ll review your details and be in touch within 24 hours to schedule your discovery call.
+          We&apos;ll review your details and be in touch within 24 hours.
         </p>
+        <button onClick={openCalendly} className="btn-primary">
+          Book Your Call Now <ArrowRight className="h-3.5 w-3.5" />
+        </button>
       </motion.div>
     )
   }
@@ -59,9 +65,9 @@ export function ContactForm() {
     border: '1px solid rgba(201,168,76,0.2)',
     borderRadius: 0,
     padding: '14px 16px',
-    fontFamily: 'var(--font-inter)',
-    fontSize: '14px',
-    fontWeight: 300,
+    fontFamily: 'var(--font-mono)',
+    fontSize: '13px',
+    fontWeight: 400,
     color: '#1A1A1A',
     width: '100%',
     outline: 'none',
@@ -69,9 +75,9 @@ export function ContactForm() {
   }
 
   const labelStyle = {
-    fontFamily: 'var(--font-inter)',
+    fontFamily: 'var(--font-mono)',
     fontSize: '10px',
-    fontWeight: 500,
+    fontWeight: 700,
     letterSpacing: '0.15em',
     textTransform: 'uppercase' as const,
     color: '#C9A84C',
@@ -85,14 +91,14 @@ export function ContactForm() {
         <div>
           <label style={labelStyle}>Full Name *</label>
           <input type="text" value={form.name} onChange={set('name')} required
-            style={inputStyle} placeholder="James Richardson"
+            style={inputStyle} placeholder="Alex Morgan"
             onFocus={e => (e.target.style.borderColor = '#C9A84C')}
             onBlur={e => (e.target.style.borderColor = 'rgba(201,168,76,0.2)')} />
         </div>
         <div>
           <label style={labelStyle}>Email Address *</label>
           <input type="email" value={form.email} onChange={set('email')} required
-            style={inputStyle} placeholder="james@company.com"
+            style={inputStyle} placeholder="alex@company.com"
             onFocus={e => (e.target.style.borderColor = '#C9A84C')}
             onBlur={e => (e.target.style.borderColor = 'rgba(201,168,76,0.2)')} />
         </div>
@@ -102,7 +108,7 @@ export function ContactForm() {
         <div>
           <label style={labelStyle}>Company</label>
           <input type="text" value={form.company} onChange={set('company')}
-            style={inputStyle} placeholder="Acme Corporation"
+            style={inputStyle} placeholder="Meridian Group"
             onFocus={e => (e.target.style.borderColor = '#C9A84C')}
             onBlur={e => (e.target.style.borderColor = 'rgba(201,168,76,0.2)')} />
         </div>
@@ -127,9 +133,7 @@ export function ContactForm() {
           onBlur={e => (e.target.style.borderColor = 'rgba(201,168,76,0.2)')} />
       </div>
 
-      {error && (
-        <p className="font-inter text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="font-inter text-sm text-red-600">{error}</p>}
 
       <div className="flex flex-col gap-3">
         <button type="submit" disabled={status === 'loading'} className="btn-primary"
@@ -139,7 +143,9 @@ export function ContactForm() {
             : <><span>Send Message</span><ArrowRight className="h-3.5 w-3.5" /></>
           }
         </button>
-        <p className="font-inter text-[11px] text-[#8A8A8A]">Free consultation · No commitment</p>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#8A8A8A' }}>
+          Free consultation · No commitment
+        </p>
       </div>
     </form>
   )
