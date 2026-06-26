@@ -44,16 +44,17 @@ export function openCalendly() {
 interface CalendlyButtonProps {
   className?: string
   style?: React.CSSProperties
+  onClick?: () => void
   children: React.ReactNode
 }
 
-export function CalendlyButton({ className, style, children }: CalendlyButtonProps) {
+export function CalendlyButton({ className, style, onClick, children }: CalendlyButtonProps) {
   useEffect(() => { loadCalendlyScript() }, [])
 
   return (
     <button
       type="button"
-      onClick={openCalendly}
+      onClick={() => { onClick?.(); openCalendly() }}
       className={className}
       style={style}
     >
