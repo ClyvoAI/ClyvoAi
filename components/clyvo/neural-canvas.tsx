@@ -10,11 +10,10 @@ import { useEffect, useRef } from 'react'
 // - Color: deep teal-silver. Not neon green (algae), not gold (brand clash).
 //   rgba(160,220,200) reads as "tech/AI" on cream without screaming.
 // - All halos removed from nodes. They were creating the blob effect.
-// - Mouse interaction: gentle attraction rather than violent repel
 // ─────────────────────────────────────────────────────────────────────────────
 
-const NODE_COUNT  = 42       // was 65 — cuts O(n²) edge checks from 4225 to 1764/frame
-const EDGE_DIST   = 120      // was 130 — fewer edges per node
+const NODE_COUNT  = 65
+const EDGE_DIST   = 130
 const MAX_PACKETS = 20
 const SPEED       = 0.28  // node drift speed
 
@@ -84,13 +83,14 @@ export function NeuralCanvas() {
 
       // ── Move nodes ──────────────────────────────────────────────────────
       for (const n of nodes) {
-        // Gentle mouse attraction (opposite of repel — feels more organic)
-        const dx = mouse.current.x - n.x, dy = mouse.current.y - n.y
-        const d2 = dx*dx + dy*dy
-        if (d2 < 14400) { // 120px radius
-          const d = Math.sqrt(d2)
-          n.vx += (dx / d) * 0.018
-          n.vy += (dy / d) * 0.018
+        // Mouse repel
+        const mdx = n.x - mouse.current.x
+        const mdy = n.y - mouse.current.y
+        const md  = Math.sqrt(mdx*mdx + mdy*mdy)
+        if (md < 120 && md > 0) {
+          const force = (120 - md) / 120 * 0.8
+          n.vx += (mdx / md) * force
+          n.vy += (mdy / md) * force
         }
         n.vx *= 0.97; n.vy *= 0.97
         n.x += n.vx;  n.y += n.vy

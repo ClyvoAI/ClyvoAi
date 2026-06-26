@@ -14,15 +14,12 @@ export function SectionConnector({ fromLabel, toLabel, height = 100 }: Props) {
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    // Tight window: only active when connector is near the viewport centre.
-    // Previously ['start end','end start'] kept all 8 instances computing
-    // across the full page scroll — main thread killer on USB mice.
-    offset: ['start 0.85', 'end 0.15'],
+    offset: ['start end', 'end start'],
   })
 
-  const pathLength    = useTransform(scrollYProgress, [0.05, 0.80], [0, 1])
-  const topOpacity    = useTransform(scrollYProgress, [0.02, 0.20], [0, 1])
-  const bottomOpacity = useTransform(scrollYProgress, [0.60, 0.85], [0, 1])
+  const pathLength    = useTransform(scrollYProgress, [0.10, 0.70], [0, 1])
+  const topOpacity    = useTransform(scrollYProgress, [0.05, 0.25], [0, 1])
+  const bottomOpacity = useTransform(scrollYProgress, [0.55, 0.80], [0, 1])
 
   const W  = 120
   const cx = W / 2
