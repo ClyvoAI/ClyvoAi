@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Syne, Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google'
+import { Syne, Inter, Space_Mono, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { AppLoader } from '@/components/clyvo/app-loader'
@@ -7,7 +7,7 @@ import { GoogleAnalytics } from '@/components/analytics'
 
 const syne = Syne({ subsets: ['latin'], weight: ['400','600','700','800'], variable: '--font-syne', display: 'swap' })
 const inter = Inter({ subsets: ['latin'], weight: ['300','400','500','600'], variable: '--font-inter', display: 'swap' })
-const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], weight: ['400','500'], variable: '--font-mono', display: 'swap' })
+const spaceMono = Space_Mono({ subsets: ['latin'], weight: ['400','700'], variable: '--font-mono', display: 'swap' })
 const playfairDisplay = Playfair_Display({ subsets: ['latin'], weight: ['400','500','600','700'], style: ['normal','italic'], variable: '--font-playfair', display: 'swap' })
 
 export const viewport: Viewport = {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable} ${playfairDisplay.variable}`}
+    <html lang="en" className={`${syne.variable} ${inter.variable} ${spaceMono.variable} ${playfairDisplay.variable}`}
       style={{ background: '#F5F0E8' }}>
       <body className="antialiased" style={{ background: '#F5F0E8', color: '#1A1A1A', minHeight: '100vh' }}>
         <GoogleAnalytics />

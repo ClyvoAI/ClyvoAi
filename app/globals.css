@@ -574,3 +574,8 @@ body::after {
   );
   pointer-events: none;
 }
+
+/* ── Space Mono — applied site-wide as the primary body font ── */
+body, .font-inter, .font-syne {
+  font-family: var(--font-mono), 'Space Mono', monospace !important;
+}
