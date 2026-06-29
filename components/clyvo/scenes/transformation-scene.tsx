@@ -101,22 +101,25 @@ export function TransformationScene() {
               style={{
                 flex: isActive ? '0 0 320px' : '0 0 260px',
                 minHeight: '380px',
-                background: '#FAF7F0',
+                // Glass: radial warm-white center fading to cream edges
+                background: isActive
+                  ? 'radial-gradient(ellipse at 50% 30%, #FFFFFF 0%, #FDF9F0 45%, #F5EDD8 100%)'
+                  : 'radial-gradient(ellipse at 50% 30%, #FEFCF5 0%, #F7F2E4 60%, #EFE8D4 100%)',
                 border: isActive
-                  ? '1px solid rgba(201,168,76,0.6)'
-                  : '1px solid rgba(201,168,76,0.2)',
-                borderRadius: '12px',
+                  ? '1.5px solid rgba(201,168,76,0.75)'
+                  : '1px solid rgba(201,168,76,0.25)',
+                borderRadius: '16px',
                 padding: '2rem',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '1rem',
                 cursor: isActive ? 'default' : 'pointer',
                 transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
-                opacity: isActive ? 1 : 0.7,
+                opacity: isActive ? 1 : 0.75,
                 transform: isActive ? 'translateY(-10px) scale(1.02)' : 'translateY(0) scale(1)',
-                // Active card: gold glow. Inactive: flat.
+                // Warm amber glow bleeding outward like image 2
                 boxShadow: isActive
-                  ? '0 0 0 1.5px rgba(201,168,76,0.5), 0 0 24px rgba(201,168,76,0.35), 0 0 60px rgba(201,168,76,0.2), 0 16px 48px rgba(201,168,76,0.15)'
+                  ? '0 0 0 1px rgba(201,168,76,0.3), 0 0 20px 4px rgba(255,200,80,0.28), 0 0 60px 12px rgba(255,180,40,0.18), 0 0 100px 20px rgba(255,160,0,0.10), 0 8px 32px rgba(201,168,76,0.12)'
                   : 'none',
                 position: 'relative',
               }}
