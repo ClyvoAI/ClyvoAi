@@ -1,40 +1,38 @@
 'use client'
 
-import { useRef, useEffect, useState, useCallback } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { useState, useEffect, useCallback } from 'react'
 import { Bot, Workflow, Brain, Phone, Plug, ChevronLeft, ChevronRight } from 'lucide-react'
-import { BookingButton } from '@/components/clyvo/booking-modal'
-
-const EASE = [0.16, 1, 0.3, 1] as const
-const VP   = { once: true, margin: '-60px' } as const
 
 const SERVICES = [
-  { num: '01', icon: Bot,      title: 'AI Chatbots & Assistants',      description: 'Custom-trained agents for support, sales qualification, and onboarding — integrated into your existing platforms.' },
-  { num: '02', icon: Workflow, title: 'Workflow & Process Automation',  description: 'End-to-end automation of repetitive processes — lead routing, document handling, approvals, data entry elimination.' },
-  { num: '03', icon: Brain,    title: 'Custom AI Model Development',    description: 'Bespoke ML and LLM models trained on your data — predictive analytics, classification, content generation.' },
-  { num: '04', icon: Phone,    title: 'AI Voice Agents',                description: 'Intelligent voice systems for inbound and outbound calls — customer service, appointment booking, qualification.' },
-  { num: '05', icon: Plug,     title: 'System Integrations',            description: 'AI connected into your existing stack — Salesforce, HubSpot, SAP, NetSuite, APIs, and databases.' },
+  { num: '01', icon: Bot,      title: 'AI Chatbots & Assistants',     description: 'Custom-trained agents for support, sales qualification, and onboarding — integrated into your existing platforms.' },
+  { num: '02', icon: Workflow, title: 'Workflow & Process Automation', description: 'End-to-end automation of repetitive processes — lead routing, document handling, approvals, data entry elimination.' },
+  { num: '03', icon: Brain,    title: 'Custom AI Model Development',   description: 'Bespoke ML and LLM models trained on your data — predictive analytics, classification, content generation.' },
+  { num: '04', icon: Phone,    title: 'AI Voice Agents',               description: 'Intelligent voice systems for inbound and outbound calls — customer service, appointment booking, qualification.' },
+  { num: '05', icon: Plug,     title: 'System Integrations',           description: 'AI connected into your existing stack — Salesforce, HubSpot, SAP, NetSuite, APIs, and databases.' },
 ]
 
 const SERVICE_HREFS: Record<string, string> = {
-  '01': 'ai-chatbots', '02': 'workflow-automation', '03': 'custom-ai-models',
-  '04': 'voice-agents', '05': 'system-integrations',
+  '01': '/solutions/ai-chatbots',
+  '02': '/solutions/workflow-automation',
+  '03': '/solutions/custom-ai-models',
+  '04': '/solutions/voice-agents',
+  '05': '/solutions/system-integrations',
 }
 
 export function TransformationScene() {
-  const [active, setActive] = useState(2) // start on middle card
+  const [active, setActive] = useState(0)
   const total = SERVICES.length
 
   const prev = useCallback(() => setActive(a => (a - 1 + total) % total), [total])
   const next = useCallback(() => setActive(a => (a + 1) % total), [total])
 
-  // Auto-advance every 3.5s
+  // Auto-advance every 4s — resets on manual interaction
   useEffect(() => {
-    const id = setInterval(next, 3500)
+    const id = setInterval(next, 4000)
     return () => clearInterval(id)
   }, [next])
 
-  // Keyboard navigation
+  // Keyboard nav
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') prev()
@@ -44,157 +42,214 @@ export function TransformationScene() {
     return () => window.removeEventListener('keydown', onKey)
   }, [prev, next])
 
-  return (
-    <section id="services" className="relative section-has-glass pb-12 md:pb-20"
-      style={{ background: '#EDE6D6' }}>
-      <div className="gold-rule absolute inset-x-0 top-0" />
+  // Compute which 3 cards to show: [prev, active, next]
+  const slots = [
+    (active - 1 + total) % total,
+    active,
+    (active + 1) % total,
+  ]
 
-      <div className="relative px-5 pb-8 pt-16 md:px-16 md:pb-10 md:pt-24">
-        <div className="section-divider" />
-        <span className="eyebrow">What We Build</span>
-        <h2 className="mt-6 headline-luxury" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 3rem)' }}>
+  return (
+    <section
+      id="services"
+      className="relative overflow-hidden pb-20 pt-16 md:pb-28 md:pt-24"
+      style={{ background: '#EDE6D6' }}
+    >
+      {/* Section header */}
+      <div className="px-5 pb-12 md:px-16">
+        <div className="mb-4 h-px w-10" style={{ background: '#C9A84C' }} />
+        <span
+          className="mb-6 block font-inter text-xs font-medium uppercase tracking-[0.2em]"
+          style={{ color: '#C9A84C' }}
+        >
+          What We Build
+        </span>
+        <h2
+          className="font-playfair text-4xl italic md:text-5xl"
+          style={{ color: '#1A1A1A' }}
+        >
           Five capabilities. Infinite applications.
         </h2>
-        <p className="mt-4 max-w-lg font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">
+        <p
+          className="mt-4 max-w-md font-inter text-sm font-light leading-[1.8]"
+          style={{ color: '#4A4A4A' }}
+        >
           Every engagement is built from scratch around your business.
         </p>
       </div>
 
-      {/* Desktop dial carousel — no scrollbar, arrow navigation */}
-      <div className="hidden md:block">
-        <div className="relative flex items-center justify-center gap-5 px-16 pb-10"
-          style={{ perspective: '1200px' }}>
+      {/* Card track */}
+      <div className="flex items-stretch justify-center gap-4 px-5 md:gap-6 md:px-16">
+        {slots.map((cardIdx, slotPos) => {
+          const s = SERVICES[cardIdx]
+          const isActive = slotPos === 1
+          const Icon = s.icon
 
-          {SERVICES.map((s, i) => {
-            const offset = i - active
-            const isActive = offset === 0
-            const isAdjacent = Math.abs(offset) === 1
-            const isHidden = Math.abs(offset) > 2
+          return (
+            <div
+              key={cardIdx}
+              onClick={() => !isActive && setActive(cardIdx)}
+              style={{
+                flex: isActive ? '0 0 340px' : '0 0 260px',
+                minHeight: isActive ? '420px' : '380px',
+                background: isActive ? '#FAF7F0' : 'rgba(26,26,26,0.82)',
+                border: isActive
+                  ? '1.5px solid #C9A84C'
+                  : '1px solid rgba(201,168,76,0.15)',
+                borderRadius: '12px',
+                padding: '2rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+                cursor: isActive ? 'default' : 'pointer',
+                transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
+                opacity: isActive ? 1 : 0.72,
+                transform: isActive ? 'translateY(-8px)' : 'translateY(0)',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Number */}
+              <span
+                className="font-inter text-sm font-medium"
+                style={{ color: '#C9A84C', letterSpacing: '0.05em' }}
+              >
+                {s.num}
+              </span>
 
-            if (isHidden) return null
-
-            const scale   = isActive ? 1 : isAdjacent ? 0.88 : 0.76
-            const opacity = isActive ? 1 : isAdjacent ? 0.65 : 0.35
-            const zIndex  = isActive ? 10 : isAdjacent ? 5 : 1
-            const translateX = offset * 340
-            const rotateY = offset * -8
-
-            return (
-              <motion.div
-                key={s.num}
-                onClick={() => !isActive && setActive(i)}
-                animate={{ scale, opacity, x: translateX, rotateY, zIndex }}
-                transition={{ duration: 0.55, ease: EASE }}
+              {/* Icon box */}
+              <div
                 style={{
-                  position: 'absolute',
-                  width: 320,
-                  cursor: isActive ? 'default' : 'pointer',
-                  transformStyle: 'preserve-3d',
+                  width: 44,
+                  height: 44,
+                  border: '1px solid #C9A84C',
+                  borderRadius: 6,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#C9A84C',
                 }}
               >
-                <div style={{
-                  background: isActive
-                    ? 'rgba(255,248,230,0.98)'
-                    : 'rgba(245,240,232,0.75)',
-                  border: isActive
-                    ? '1.5px solid rgba(201,168,76,0.55)'
-                    : '1px solid rgba(201,168,76,0.18)',
-                  boxShadow: isActive
-                    ? '0 0 40px rgba(201,168,76,0.20), 0 16px 48px rgba(26,26,26,0.10)'
-                    : '0 4px 20px rgba(26,26,26,0.06)',
-                  padding: '32px',
-                  minHeight: 300,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease',
-                }}>
-                  {/* Warm golden glow overlay on active card */}
-                  {isActive && (
-                    <div style={{
-                      position: 'absolute', inset: 0,
-                      background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%)',
-                      pointerEvents: 'none',
-                    }} />
-                  )}
+                <Icon size={20} />
+              </div>
 
-                  <span className="font-syne text-2xl font-bold" style={{ color: isActive ? '#C9A84C' : 'rgba(201,168,76,0.45)' }}>
-                    {s.num}
-                  </span>
-                  <div className="mt-5 flex h-10 w-10 items-center justify-center"
+              {/* Title */}
+              <p
+                className="font-inter text-base font-semibold leading-snug"
+                style={{ color: isActive ? '#1A1A1A' : '#F5F0E8' }}
+              >
+                {s.title}
+              </p>
+
+              {/* Description */}
+              <p
+                className="font-inter text-sm font-light leading-[1.75]"
+                style={{ color: isActive ? '#4A4A4A' : 'rgba(245,240,232,0.65)', flex: 1 }}
+              >
+                {s.description}
+              </p>
+
+              {/* CTA row */}
+              <div style={{ marginTop: 'auto' }}>
+                {isActive && (
+                  <div
                     style={{
-                      border: `1px solid ${isActive ? 'rgba(201,168,76,0.5)' : 'rgba(201,168,76,0.2)'}`,
-                      background: isActive ? 'rgba(201,168,76,0.10)' : 'rgba(201,168,76,0.04)',
-                    }}>
-                    <s.icon className="h-4 w-4" style={{ color: isActive ? '#C9A84C' : 'rgba(201,168,76,0.5)' }} />
+                      background: '#1A1A1A',
+                      padding: '0.85rem 1.25rem',
+                      marginBottom: '0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => window.location.href = '/book'}
+                  >
+                    <span
+                      className="font-inter text-xs font-medium uppercase tracking-[0.15em]"
+                      style={{ color: '#F5F0E8' }}
+                    >
+                      Build Your Custom AI System
+                    </span>
+                    <span style={{ color: '#C9A84C' }}>→</span>
                   </div>
-                  <h3 className="mt-5 font-syne text-base font-semibold" style={{ color: isActive ? '#1A1A1A' : '#4A4A4A' }}>
-                    {s.title}
-                  </h3>
-                  <p className="mt-3 font-inter text-sm font-light leading-[1.8]" style={{ color: isActive ? '#4A4A4A' : '#8A8A8A' }}>
-                    {s.description}
-                  </p>
-                  <a href={`/services/${SERVICE_HREFS[s.num]}`}
-                    className="mt-auto pt-6 font-inter text-[11px] uppercase tracking-[0.12em] transition-opacity hover:opacity-70"
-                    style={{ color: isActive ? '#C9A84C' : 'rgba(201,168,76,0.45)' }}>
-                    Learn more →
-                  </a>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
+                )}
 
-        {/* Dot indicators + arrow controls */}
-        <div className="flex items-center justify-center gap-6 pb-6">
-          <button onClick={prev} className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:text-[#C9A84C]"
-            style={{ border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C' }}>
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-
-          <div className="flex gap-2">
-            {SERVICES.map((_, i) => (
-              <button key={i} onClick={() => setActive(i)}
-                className="rounded-full transition-all"
-                style={{
-                  width: i === active ? 24 : 6,
-                  height: 6,
-                  background: i === active ? '#C9A84C' : 'rgba(201,168,76,0.25)',
-                }} />
-            ))}
-          </div>
-
-          <button onClick={next} className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:text-[#C9A84C]"
-            style={{ border: '1px solid rgba(201,168,76,0.3)', color: '#C9A84C' }}>
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile: vertical stack */}
-      <div className="flex flex-col gap-3 px-5 pb-8 md:hidden">
-        {SERVICES.map((s, i) => (
-          <motion.div key={s.num} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={VP} transition={{ duration: 0.7, delay: i * 0.07, ease: EASE }}
-            className="glass-card flex flex-col p-6">
-            <span className="font-syne text-2xl font-bold text-[#C9A84C]/80">{s.num}</span>
-            <div className="mt-5 flex h-10 w-10 items-center justify-center"
-              style={{ border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(201,168,76,0.06)' }}>
-              <s.icon className="h-4 w-4 text-[#C9A84C]" />
+                <a
+                  href={SERVICE_HREFS[s.num]}
+                  className="font-inter text-xs font-medium uppercase tracking-[0.15em]"
+                  style={{ color: '#C9A84C', textDecoration: 'none' }}
+                  onClick={e => e.stopPropagation()}
+                >
+                  Learn More →
+                </a>
+              </div>
             </div>
-            <h3 className="mt-5 font-syne text-base font-semibold text-[#1A1A1A]">{s.title}</h3>
-            <p className="mt-3 font-inter text-sm font-light leading-[1.8] text-[#4A4A4A]">{s.description}</p>
-            <a href={`/services/${SERVICE_HREFS[s.num]}`}
-              className="mt-auto pt-6 font-inter text-[11px] uppercase tracking-[0.12em] text-[#C9A84C] hover:opacity-70">
-              Learn more →
-            </a>
-          </motion.div>
-        ))}
+          )
+        })}
       </div>
 
-      <div className="px-5 pb-4 text-center md:px-16">
-        <BookingButton className="btn-primary">
-          Build Your Custom AI System <span className="ml-1">→</span>
-        </BookingButton>
+      {/* Nav row */}
+      <div
+        className="mt-10 flex items-center justify-center gap-4"
+      >
+        <button
+          onClick={prev}
+          aria-label="Previous"
+          style={{
+            width: 40,
+            height: 40,
+            border: '1px solid rgba(201,168,76,0.35)',
+            background: 'transparent',
+            borderRadius: 6,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#C9A84C',
+          }}
+        >
+          <ChevronLeft size={16} />
+        </button>
+
+        {/* Dots */}
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {SERVICES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              style={{
+                height: 4,
+                width: i === active ? 28 : 16,
+                borderRadius: 2,
+                background: i === active ? '#C9A84C' : 'rgba(201,168,76,0.3)',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                transition: 'all 0.25s ease',
+              }}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={next}
+          aria-label="Next"
+          style={{
+            width: 40,
+            height: 40,
+            border: '1px solid rgba(201,168,76,0.35)',
+            background: 'transparent',
+            borderRadius: 6,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#C9A84C',
+          }}
+        >
+          <ChevronRight size={16} />
+        </button>
       </div>
     </section>
   )
