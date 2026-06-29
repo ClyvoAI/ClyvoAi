@@ -134,7 +134,7 @@ export function HeroContent() {
               <motion.span key={w} className="mr-[0.15em] inline-block last:mr-0"
                 style={{ overflow: 'visible', display: 'inline-block' }}
                 initial={{ clipPath: 'inset(0 100% 0 -10%)' }}
-                animate={{ clipPath: 'inset(0 0% 0 -10%)' }}
+                animate={{ clipPath: 'inset(0 -5% 0 -10%)' }}
                 transition={{ duration: 1.1, delay: 0.5 + i * 0.12, ease: EASE }}
               >{w}</motion.span>
             ))}
@@ -144,7 +144,7 @@ export function HeroContent() {
               <motion.span key={w} className="mr-[0.15em] inline-block last:mr-0"
                 style={{ overflow: 'visible', display: 'inline-block' }}
                 initial={{ clipPath: 'inset(0 100% 0 -10%)' }}
-                animate={{ clipPath: 'inset(0 0% 0 -10%)' }}
+                animate={{ clipPath: 'inset(0 -5% 0 -10%)' }}
                 transition={{ duration: 1.1, delay: 0.75 + i * 0.12, ease: EASE }}
               >{w}</motion.span>
             ))}
