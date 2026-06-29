@@ -21,18 +21,18 @@ const SERVICE_HREFS: Record<string, string> = {
 
 export function TransformationScene() {
   const [active, setActive] = useState(0)
+  const [autoPlay, setAutoPlay] = useState(true)
   const total = SERVICES.length
 
-  const prev = useCallback(() => setActive(a => (a - 1 + total) % total), [total])
-  const next = useCallback(() => setActive(a => (a + 1) % total), [total])
+  const prev = useCallback(() => { setActive(a => (a - 1 + total) % total); setAutoPlay(false) }, [total])
+  const next = useCallback(() => { setActive(a => (a + 1) % total); setAutoPlay(false) }, [total])
 
-  // Auto-advance every 4s — resets on manual interaction
   useEffect(() => {
-    const id = setInterval(next, 4000)
+    if (!autoPlay) return
+    const id = setInterval(() => setActive(a => (a + 1) % total), 4000)
     return () => clearInterval(id)
-  }, [next])
+  }, [autoPlay, total])
 
-  // Keyboard nav
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') prev()
@@ -42,7 +42,7 @@ export function TransformationScene() {
     return () => window.removeEventListener('keydown', onKey)
   }, [prev, next])
 
-  // Compute which 3 cards to show: [prev, active, next]
+  // 3 visible slots: left-peek, active, right-peek
   const slots = [
     (active - 1 + total) % total,
     active,
@@ -78,8 +78,17 @@ export function TransformationScene() {
         </p>
       </div>
 
-      {/* Card track */}
-      <div className="flex items-stretch justify-center gap-4 px-5 md:gap-6 md:px-16">
+      {/* Cards — overflow visible so peek cards show at edges */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'stretch',
+          justifyContent: 'center',
+          gap: '20px',
+          padding: '0 40px',
+          overflowX: 'visible',
+        }}
+      >
         {slots.map((cardIdx, slotPos) => {
           const s = SERVICES[cardIdx]
           const isActive = slotPos === 1
@@ -88,25 +97,28 @@ export function TransformationScene() {
           return (
             <div
               key={cardIdx}
-              onClick={() => !isActive && setActive(cardIdx)}
+              onClick={() => { if (!isActive) { setActive(cardIdx); setAutoPlay(false) } }}
               style={{
-                flex: isActive ? '0 0 340px' : '0 0 260px',
-                minHeight: isActive ? '420px' : '380px',
-                background: isActive ? '#FAF7F0' : 'rgba(26,26,26,0.82)',
+                flex: isActive ? '0 0 320px' : '0 0 260px',
+                minHeight: '380px',
+                background: '#FAF7F0',
                 border: isActive
-                  ? '1.5px solid #C9A84C'
-                  : '1px solid rgba(201,168,76,0.15)',
+                  ? '1px solid rgba(201,168,76,0.6)'
+                  : '1px solid rgba(201,168,76,0.2)',
                 borderRadius: '12px',
                 padding: '2rem',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '1rem',
                 cursor: isActive ? 'default' : 'pointer',
-                transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
-                opacity: isActive ? 1 : 0.72,
-                transform: isActive ? 'translateY(-8px)' : 'translateY(0)',
+                transition: 'all 0.4s cubic-bezier(0.16,1,0.3,1)',
+                opacity: isActive ? 1 : 0.7,
+                transform: isActive ? 'translateY(-10px) scale(1.02)' : 'translateY(0) scale(1)',
+                // Active card: gold glow. Inactive: no glow.
+                boxShadow: isActive
+                  ? '0 0 0 1px rgba(201,168,76,0.25), 0 8px 32px rgba(201,168,76,0.18), 0 24px 64px rgba(201,168,76,0.12), 0 2px 8px rgba(0,0,0,0.06)'
+                  : '0 2px 8px rgba(0,0,0,0.04)',
                 position: 'relative',
-                overflow: 'hidden',
               }}
             >
               {/* Number */}
@@ -122,12 +134,13 @@ export function TransformationScene() {
                 style={{
                   width: 44,
                   height: 44,
-                  border: '1px solid #C9A84C',
+                  border: '1px solid rgba(201,168,76,0.5)',
                   borderRadius: 6,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#C9A84C',
+                  background: 'rgba(201,168,76,0.05)',
                 }}
               >
                 <Icon size={20} />
@@ -135,8 +148,11 @@ export function TransformationScene() {
 
               {/* Title */}
               <p
-                className="font-inter text-base font-semibold leading-snug"
-                style={{ color: isActive ? '#1A1A1A' : '#F5F0E8' }}
+                className="font-inter text-base leading-snug"
+                style={{
+                  color: '#1A1A1A',
+                  fontWeight: isActive ? 600 : 500,
+                }}
               >
                 {s.title}
               </p>
@@ -144,54 +160,27 @@ export function TransformationScene() {
               {/* Description */}
               <p
                 className="font-inter text-sm font-light leading-[1.75]"
-                style={{ color: isActive ? '#4A4A4A' : 'rgba(245,240,232,0.65)', flex: 1 }}
+                style={{ color: '#4A4A4A', flex: 1 }}
               >
                 {s.description}
               </p>
 
-              {/* CTA row */}
-              <div style={{ marginTop: 'auto' }}>
-                {isActive && (
-                  <div
-                    style={{
-                      background: '#1A1A1A',
-                      padding: '0.85rem 1.25rem',
-                      marginBottom: '0.75rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => window.location.href = '/book'}
-                  >
-                    <span
-                      className="font-inter text-xs font-medium uppercase tracking-[0.15em]"
-                      style={{ color: '#F5F0E8' }}
-                    >
-                      Build Your Custom AI System
-                    </span>
-                    <span style={{ color: '#C9A84C' }}>→</span>
-                  </div>
-                )}
-
-                <a
-                  href={SERVICE_HREFS[s.num]}
-                  className="font-inter text-xs font-medium uppercase tracking-[0.15em]"
-                  style={{ color: '#C9A84C', textDecoration: 'none' }}
-                  onClick={e => e.stopPropagation()}
-                >
-                  Learn More →
-                </a>
-              </div>
+              {/* Learn more */}
+              <a
+                href={SERVICE_HREFS[s.num]}
+                className="font-inter text-xs font-medium uppercase tracking-[0.15em]"
+                style={{ color: '#C9A84C', textDecoration: 'none', marginTop: 'auto' }}
+                onClick={e => e.stopPropagation()}
+              >
+                Learn More →
+              </a>
             </div>
           )
         })}
       </div>
 
-      {/* Nav row */}
-      <div
-        className="mt-10 flex items-center justify-center gap-4"
-      >
+      {/* Nav */}
+      <div className="mt-10 flex items-center justify-center gap-4">
         <button
           onClick={prev}
           aria-label="Previous"
@@ -211,12 +200,11 @@ export function TransformationScene() {
           <ChevronLeft size={16} />
         </button>
 
-        {/* Dots */}
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           {SERVICES.map((_, i) => (
             <button
               key={i}
-              onClick={() => setActive(i)}
+              onClick={() => { setActive(i); setAutoPlay(false) }}
               aria-label={`Go to slide ${i + 1}`}
               style={{
                 height: 4,
